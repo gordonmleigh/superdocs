@@ -1,0 +1,11 @@
+{
+  "name": "@w/test-pkg",
+  "version": "0.1.0",
+  "private": "true",
+  "exports": {
+    ".": {
+      "types": "./lib/index.d.ts",
+      "import": "./lib/index.js"
+    }
+  }
+}

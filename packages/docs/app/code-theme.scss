@@ -1,0 +1,239 @@
+code[class*='language-'] {
+  color: #24292f;
+  font-size: 13px;
+  text-shadow: none;
+  font-family: Consolas, Monaco, 'Andale Mono', 'Ubuntu Mono', monospace;
+  direction: ltr;
+  text-align: left;
+  white-space: pre;
+  word-spacing: normal;
+  word-break: normal;
+  line-height: 1.5;
+  tab-size: 4;
+  hyphens: none;
+}
+
+code[class*='language-']::selection {
+  text-shadow: none;
+  background: #9fc6e9;
+}
+
+pre[class*='language-'] {
+  padding: 1em;
+  margin: 0.5em 0;
+  overflow: auto;
+  background: #f6f8fa;
+}
+
+:not(pre) > code[class*='language-'] {
+  padding: 0.1em 0.3em;
+  border-radius: 0.3em;
+  color: #24292f;
+  background: #eff1f3;
+}
+
+/* Line highlighting */
+
+pre {
+  &[data-line] {
+    position: relative;
+  }
+
+  &[class*='language-'] > code[class*='language-'] {
+    position: relative;
+    z-index: 1;
+  }
+}
+
+.line-highlight {
+  position: absolute;
+  left: 0;
+  right: 0;
+  padding: inherit 0;
+  margin-top: 1em;
+  background: #fff8c5;
+  box-shadow: inset 5px 0 0 #eed888;
+  z-index: 0;
+  pointer-events: none;
+  line-height: inherit;
+  white-space: pre;
+}
+
+/* Tokens */
+
+.namespace {
+  opacity: 0.7;
+}
+
+.token {
+  &.comment,
+  &.prolog,
+  &.doctype,
+  &.cdata {
+    color: #6e7781;
+  }
+
+  &.punctuation {
+    color: #24292f;
+  }
+
+  &.property,
+  &.tag,
+  &.boolean,
+  &.number,
+  &.constant,
+  &.symbol,
+  &.deleted {
+    color: #0550ae;
+  }
+
+  &.selector,
+  &.attr-name,
+  &.string,
+  &.char,
+  &.builtin,
+  &.inserted {
+    color: #0a3069;
+  }
+
+  &.operator,
+  &.entity,
+  &.url {
+    color: #0550ae;
+  }
+
+  &.atrule,
+  &.attr-value,
+  &.keyword {
+    color: #cf222e;
+  }
+
+  &.function {
+    color: #8250df;
+  }
+
+  &.regex,
+  &.important,
+  &.variable {
+    color: #0a3069;
+  }
+
+  &.important,
+  &.bold {
+    font-weight: bold;
+  }
+
+  &.italic {
+    font-style: italic;
+  }
+
+  &.entity {
+    cursor: help;
+  }
+}
+
+@media print {
+  code[class*='language-'] {
+    text-shadow: none;
+  }
+}
+
+@mixin dark-theme {
+  code[class*='language-'] {
+    color: #c9d1d9;
+  }
+
+  code[class*='language-']::selection {
+    background: #9fc6e9;
+  }
+
+  pre[class*='language-'] {
+    background: #161b22;
+  }
+
+  :not(pre) > code[class*='language-'] {
+    color: #c9d1d9;
+    background: #343942;
+  }
+
+  .line-highlight {
+    background: #2f2a1e;
+    box-shadow: inset 5px 0 0 #674c16;
+  }
+
+  .token {
+    &.comment,
+    &.prolog,
+    &.doctype,
+    &.cdata {
+      color: #8b949e;
+    }
+
+    &.punctuation {
+      color: #c9d1d9;
+    }
+
+    &.property,
+    &.tag,
+    &.boolean,
+    &.number,
+    &.constant,
+    &.symbol,
+    &.deleted {
+      color: #79c0ff;
+    }
+
+    &.selector,
+    &.attr-name,
+    &.string,
+    &.char,
+    &.builtin,
+    &.inserted {
+      color: #a5d6ff;
+    }
+
+    &.operator,
+    &.entity,
+    &.url {
+      color: #a5d6ff;
+      background: #161b22;
+    }
+
+    &.atrule,
+    &.attr-value,
+    &.keyword {
+      color: #a5d6ff;
+    }
+
+    &.function {
+      color: #d2a8ff;
+    }
+
+    &.regex,
+    &.important,
+    &.variable {
+      color: #a8daff;
+    }
+
+    &.important,
+    &.bold {
+      font-weight: bold;
+    }
+
+    &.italic {
+      font-style: italic;
+    }
+
+    &.entity {
+      cursor: help;
+    }
+  }
+}
+
+.dark {
+  @include dark-theme();
+}
+
+@media (prefers-color-scheme: dark) {
+  @include dark-theme();
+}
