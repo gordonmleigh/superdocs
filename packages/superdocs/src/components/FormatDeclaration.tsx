@@ -1,8 +1,8 @@
-import { styled } from "@/util/styled";
 import Link from "next/link";
 import { Fragment, ReactNode } from "react";
-import { Declaration, useLibraryLoader } from "superdocs";
 import ts from "typescript";
+import { Declaration, useLibraryLoader } from "../core/LibraryLoader.js";
+import { styled } from "../internal/styled.js";
 
 const CodeBlock = styled("code", "my-5 block whitespace-normal p-2");
 const Keyword = styled("span", "text-code-keyword");
@@ -68,7 +68,7 @@ function Join<T>({ delimiter, items, render }: JoinProps<T>) {
   return <>{children}</>;
 }
 
-async function TypeNode({ node }: NodeProps<ts.TypeNode>) {
+function TypeNode({ node }: NodeProps<ts.TypeNode>) {
   if (ts.isTypeReferenceNode(node)) {
     return (
       <>
@@ -83,7 +83,7 @@ async function TypeNode({ node }: NodeProps<ts.TypeNode>) {
   return <>{node.getText()}</>;
 }
 
-async function TypeArguments({ node }: NodeProps<readonly ts.TypeNode[]>) {
+function TypeArguments({ node }: NodeProps<readonly ts.TypeNode[]>) {
   return (
     <>
       {"<"}
@@ -115,7 +115,7 @@ export function TypeParameter({
   );
 }
 
-async function TypeParameters({
+function TypeParameters({
   node,
 }: NodeProps<readonly ts.TypeParameterDeclaration[]>) {
   return (

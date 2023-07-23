@@ -3,6 +3,9 @@
   "references": [
     {
       "path": "packages/test-pkg"
+    },
+    {
+      "path": "packages/superdocs"
     }
   ],
   "files": []

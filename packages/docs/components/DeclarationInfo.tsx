@@ -1,25 +1,21 @@
-import { getGitSha } from '@/util/getGitSha';
-import {
-  Declaration,
-  loadLibraryDefinition,
-} from '@/util/loadLibraryDefinition';
-import { SiteMeta } from '@/util/metadata';
-import { slugifyDeclarationName } from '@/util/slugifyDeclarationName';
-import { FormatDeclaration } from './FormatDeclaration';
-import { JSDoc } from './JSDoc';
+import { getGitSha } from "@/util/getGitSha";
+import { SiteMeta } from "@/util/metadata";
+import { Declaration, useLibraryLoader } from "superdocs";
+import { FormatDeclaration } from "./FormatDeclaration";
+import { JSDoc } from "./JSDoc";
 
 export interface DeclarationInfoProps {
   declaration: Declaration;
 }
 
-export async function DeclarationInfo({ declaration }: DeclarationInfoProps) {
-  const lib = await loadLibraryDefinition();
+export function DeclarationInfo({ declaration }: DeclarationInfoProps) {
+  const lib = useLibraryLoader();
   const description = lib.getDocumentation(declaration);
   const pos = lib.getPosition(declaration);
 
   return (
     <>
-      <h2 className="mb-0" id={slugifyDeclarationName(declaration)}>
+      <h2 className="mb-0" id={lib.getDeclarationFragment(declaration)}>
         {declaration.name?.text}
       </h2>
       <a

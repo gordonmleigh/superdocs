@@ -2,14 +2,25 @@ import clsx from "clsx";
 import { Inter } from "next/font/google";
 import "./globals.css";
 
+import { getGitSha } from "@/util/getGitSha.js";
+import { getWorkspaceRoot } from "@/util/getWorkspaceRoot.js";
+import { SiteMeta } from "@/util/metadata.js";
+import { initLibraryLoader } from "superdocs";
 import "./code-theme.scss";
 
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata = {
-  title: "SuperLibrary",
+  title: SiteMeta.title,
   description: "A test of some documentation",
 };
+
+initLibraryLoader({
+  entrypoint: "../test-pkg/lib/index.d.ts",
+  gitSha: getGitSha(),
+  repositoryUrl: SiteMeta.repo,
+  workspaceRoot: getWorkspaceRoot(),
+});
 
 export default function RootLayout({
   children,

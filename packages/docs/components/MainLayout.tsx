@@ -1,14 +1,13 @@
-import { fetchAllContent } from '@/util/content';
-import { getDeclarationUrl } from '@/util/getDeclarationUrl';
-import { loadLibraryDefinition } from '@/util/loadLibraryDefinition';
-import { styled } from '@/util/styled';
-import slugify from '@sindresorhus/slugify';
-import { ReactNode } from 'react';
-import { Navigation } from './Navigation';
-import { NavigationLink } from './NavigationLink';
-import { Prose } from './Prose';
+import { fetchAllContent } from "@/util/content";
+import { styled } from "@/util/styled";
+import slugify from "@sindresorhus/slugify";
+import { ReactNode } from "react";
+import { useLibraryLoader } from "superdocs";
+import { Navigation } from "./Navigation";
+import { NavigationLink } from "./NavigationLink";
+import { Prose } from "./Prose";
 
-const NavigationSection = styled('div', 'text-xs uppercase mt-8');
+const NavigationSection = styled("div", "text-xs uppercase mt-8");
 
 export interface MainLayoutProps {
   children?: ReactNode;
@@ -16,7 +15,7 @@ export interface MainLayoutProps {
 
 export async function MainLayout({ children }: MainLayoutProps) {
   const pages = await fetchAllContent();
-  const lib = await loadLibraryDefinition();
+  const lib = useLibraryLoader();
 
   return (
     <div className="lg:ml-72 xl:ml-80">
@@ -25,7 +24,7 @@ export async function MainLayout({ children }: MainLayoutProps) {
           <NavigationSection>Getting Started</NavigationSection>
           {pages.map((page) => (
             <NavigationLink
-              href={'/docs' + page.meta.slug}
+              href={"/docs" + page.meta.slug}
               key={page.meta.slug}
               title={page.meta.title}
             />
@@ -39,7 +38,7 @@ export async function MainLayout({ children }: MainLayoutProps) {
             >
               {defs.map((def) => (
                 <NavigationLink
-                  href={getDeclarationUrl(lib, def)}
+                  href={lib.getDeclarationUrl(def)}
                   key={def.name?.text}
                   title={def.name?.text}
                 />

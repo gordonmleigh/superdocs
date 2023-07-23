@@ -1,7 +1,10 @@
 {
   "name": "superdocs",
   "version": "0.1.0",
-  "private": "true",
+  "dependencies": {},
+  "scripts": {
+    "index": "node ../../makeIndex.js src/"
+  },
   "exports": {
     ".": {
       "types": "./lib/index.d.ts",

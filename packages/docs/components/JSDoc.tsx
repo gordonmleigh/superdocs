@@ -1,7 +1,6 @@
-import { getDeclarationUrl } from '@/util/getDeclarationUrl';
-import { loadLibraryDefinition } from '@/util/loadLibraryDefinition';
-import Link from 'next/link';
-import ts from 'typescript';
+import Link from "next/link";
+import { useLibraryLoader } from "superdocs";
+import ts from "typescript";
 
 type JSDocNode = ts.JSDoc | ts.JSDocTag | ts.JSDocComment | string;
 
@@ -9,10 +8,10 @@ export interface JSDocCommentProps {
   comment: JSDocNode | readonly JSDocNode[];
 }
 
-export async function JSDoc({ comment }: JSDocCommentProps) {
-  const lib = await loadLibraryDefinition();
+export function JSDoc({ comment }: JSDocCommentProps) {
+  const lib = useLibraryLoader();
 
-  if (typeof comment === 'string') {
+  if (typeof comment === "string") {
     return comment;
   }
   if (isArray(comment)) {
@@ -35,7 +34,7 @@ export async function JSDoc({ comment }: JSDocCommentProps) {
       const def = lib.getDeclaration(comment.name);
       if (def) {
         return (
-          <Link href={getDeclarationUrl(lib, def)}>
+          <Link href={lib.getDeclarationUrl(def)}>
             <code>{comment.name.getText()}</code>
           </Link>
         );

@@ -1,24 +1,15 @@
-import { DeclarationInfo } from '@/components/DeclarationInfo';
-import { MainLayout } from '@/components/MainLayout';
-import { loadLibraryDefinition } from '@/util/loadLibraryDefinition';
-import { slugifyDeclarationName } from '@/util/slugifyDeclarationName';
-import { notFound } from 'next/navigation';
-import ts from 'typescript';
-
-function getKey(node: ts.Node): string {
-  return `${node.getSourceFile().fileName}#${node.pos}`;
-}
+import { DeclarationInfo } from "@/components/DeclarationInfo";
+import { MainLayout } from "@/components/MainLayout";
+import { notFound } from "next/navigation";
+import { useLibraryLoader } from "superdocs";
 
 interface GroupPageParams {
   params: { groupName?: string };
 }
 
-export default async function GroupPage({
-  params: { groupName },
-}: GroupPageParams) {
-  const group = (await loadLibraryDefinition())
-    .entries()
-    .find(([name]) => name === groupName)?.[1];
+export default function GroupPage({ params: { groupName } }: GroupPageParams) {
+  const lib = useLibraryLoader();
+  const group = lib.entries().find(([name]) => name === groupName)?.[1];
 
   if (!group) {
     return notFound();
@@ -28,7 +19,10 @@ export default async function GroupPage({
     <MainLayout>
       <h1>{groupName}</h1>
       {group.map((def) => (
-        <DeclarationInfo declaration={def} key={slugifyDeclarationName(def)} />
+        <DeclarationInfo
+          declaration={def}
+          key={lib.getDeclarationFragment(def)}
+        />
       ))}
     </MainLayout>
   );

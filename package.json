@@ -1,9 +1,10 @@
 {
   "name": "@w/root",
   "private": "true",
-  "type": "module",
   "scripts": {
-    "compile": "node tsbuild.js"
+    "compile": "npm run index && node tsbuild.js",
+    "index": "npm run --workspaces --if-present index",
+    "watch:compile": "node tsbuild.js --watch"
   },
   "workspaces": [
     "packages/*"
@@ -21,7 +22,7 @@
     "eslint-config-next": "13.4.10",
     "eslint-plugin-prettier": "^5.0.0",
     "glob": "^10.3.3",
-    "next": "13.4.10",
+    "next": "13.4.12",
     "postcss": "8.4.26",
     "prettier": "^3.0.0",
     "react": "18.2.0",

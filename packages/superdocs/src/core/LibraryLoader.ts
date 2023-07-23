@@ -1,8 +1,10 @@
-import { basename, dirname, relative, resolve } from "path";
+import { basename, dirname, posix, relative, resolve } from "path";
 import ts from "typescript";
-import { assert } from "./assert";
-import { getWorkspaceRoot } from "./getWorkspaceRoot";
-import { loadProgram } from "./loadProgram";
+import { assert } from "../internal/assert.js";
+import { getSyntaxKindName } from "../internal/getSyntaxKindName.js";
+import { loadProgram } from "../internal/loadProgram.js";
+import { serverContext } from "../internal/serverContext.js";
+import { slugify } from "../internal/slugify.js";
 
 export interface NodePosition {
   path: string;
@@ -16,24 +18,45 @@ export type Declaration =
   | ts.InterfaceDeclaration
   | ts.TypeAliasDeclaration;
 
-let cached: LibraryLoader | undefined;
-
-export async function loadLibraryDefinition(): Promise<LibraryLoader> {
-  if (cached) {
-    return cached;
-  }
-  return (cached = new LibraryLoader(resolve("../test-pkg/lib/index.d.ts")));
+export interface LibraryLoaderOptions {
+  codeBaseRoute?: string;
+  entrypoint: string;
+  getGroupName?: (def: Declaration) => string;
+  gitSha?: string;
+  makeCodeLink?: (pos: NodePosition) => string;
+  repositoryUrl?: string;
+  workspaceRoot?: string;
 }
 
-export class LibraryLoader {
+type FullLibraryLoaderOptions = Required<LibraryLoaderOptions>;
+
+class LibraryLoader {
   private readonly checker: ts.TypeChecker;
   private readonly declarations = new Set<Declaration>();
   private readonly groups: Record<string, Declaration[]> = {};
+  private readonly options: FullLibraryLoaderOptions;
   private readonly program: ts.Program;
   private readonly resolveExtensions = [".ts", ".js", ".d.ts"];
   private readonly sourceMapCache = new Map<ts.SourceFile, string>();
 
-  constructor(entrypoint: string) {
+  constructor({
+    codeBaseRoute = "/code",
+    entrypoint,
+    getGroupName = defaultGetGroupName,
+    gitSha = "",
+    repositoryUrl = "",
+    makeCodeLink = defaultMakeCodeLink(repositoryUrl, gitSha),
+    workspaceRoot = resolve("."),
+  }: LibraryLoaderOptions) {
+    this.options = {
+      codeBaseRoute,
+      entrypoint,
+      getGroupName,
+      gitSha,
+      makeCodeLink,
+      repositoryUrl,
+      workspaceRoot,
+    };
     this.program = loadProgram(entrypoint);
     this.checker = this.program.getTypeChecker();
     const source = this.program.getSourceFile(entrypoint);
@@ -77,6 +100,36 @@ export class LibraryLoader {
     }
   }
 
+  public getDeclarationFragment(def: Declaration): string {
+    if (!def.name) {
+      throw new Error(`expected named definition`);
+    }
+    return slugify(getSyntaxKindName(def.kind) + " " + def.name.text);
+  }
+
+  public getDeclarationUrl(
+    name: Declaration | ts.EntityName | ts.JSDocMemberName
+  ): string {
+    const url = this.tryGetDeclarationUrl(name);
+    if (!url) {
+      throw new Error(`expected named definitions`);
+    }
+    return url;
+  }
+
+  public tryGetDeclarationUrl(
+    name: Declaration | ts.EntityName | ts.JSDocMemberName
+  ): string | undefined {
+    const def = isDeclaration(name) ? name : this.getDeclaration(name);
+    if (!def?.name) {
+      return;
+    }
+    return posix.join(
+      this.options.codeBaseRoute,
+      `${slugify(this.getGroupName(def))}#${this.getDeclarationFragment(def)}`
+    );
+  }
+
   public getDocumentation(
     declaration: Declaration
   ): readonly (ts.JSDoc | ts.JSDocTag)[] {
@@ -84,7 +137,7 @@ export class LibraryLoader {
   }
 
   public getGroupName(def: Declaration): string {
-    return basename(dirname(def.getSourceFile().fileName));
+    return this.options.getGroupName(def);
   }
 
   public getPosition(node: ts.Node): NodePosition {
@@ -92,12 +145,11 @@ export class LibraryLoader {
       node.getSourceFile(),
       node.pos
     );
-    const root = getWorkspaceRoot();
 
     return {
       char: pos.character + 1,
       line: pos.line + 1,
-      path: relative(root, node.getSourceFile().fileName),
+      path: relative(this.options.workspaceRoot, node.getSourceFile().fileName),
     };
   }
 
@@ -175,6 +227,47 @@ export class LibraryLoader {
     }
     console.warn(`WARN: failed to resolve ${moduleSpecifier}`);
   }
+}
+
+const [getLibraryLoader, setLibraryLoader] = serverContext<
+  LibraryLoader | undefined
+>(undefined, "LibraryLoader");
+
+export function initLibraryLoader(opts: LibraryLoaderOptions): void {
+  if (getLibraryLoader()) {
+    throw new Error("`initLibraryLoader` has already been called");
+  }
+  setLibraryLoader(new LibraryLoader(opts));
+}
+
+export function useLibraryLoader(): LibraryLoader {
+  const instance = getLibraryLoader();
+  if (!instance) {
+    throw new Error(
+      "no instance available for LibraryLoader (call `initLibraryLoader` somewhere)"
+    );
+  }
+  return instance;
+}
+
+function defaultGetGroupName(def: Declaration): string {
+  return basename(dirname(def.getSourceFile().fileName));
+}
+
+function defaultMakeCodeLink(
+  repositoryUrl: string,
+  gitSha: string
+): (pos: NodePosition) => string {
+  if (!repositoryUrl || !gitSha) {
+    throw new Error(
+      `expected either makeCodeLink to be given, or repositoryUrl and gitSha to be given`
+    );
+  }
+  return (pos) => {
+    const url = new URL(repositoryUrl);
+    url.pathname = posix.join(url.pathname, "blob", gitSha, pos.path);
+    return url.toString();
+  };
 }
 
 function isDeclaration(node: ts.Node): node is Declaration {
