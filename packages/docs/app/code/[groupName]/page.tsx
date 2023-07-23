@@ -4,12 +4,12 @@ import { notFound } from "next/navigation";
 import { useLibraryLoader } from "superdocs";
 
 interface GroupPageParams {
-  params: { groupName?: string };
+  params: { groupName: string };
 }
 
 export default function GroupPage({ params: { groupName } }: GroupPageParams) {
   const lib = useLibraryLoader();
-  const group = lib.entries().find(([name]) => name === groupName)?.[1];
+  const group = lib.getDeclarationsForGroupUrl(groupName);
 
   if (!group) {
     return notFound();

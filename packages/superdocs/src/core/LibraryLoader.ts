@@ -1,4 +1,4 @@
-import { basename, dirname, posix, relative, resolve } from "path";
+import { dirname, posix, relative, resolve } from "path";
 import ts from "typescript";
 import { assert } from "../internal/assert.js";
 import { getSyntaxKindName } from "../internal/getSyntaxKindName.js";
@@ -34,6 +34,7 @@ class LibraryLoader {
   private readonly checker: ts.TypeChecker;
   private readonly declarations = new Set<Declaration>();
   private readonly groups: Record<string, Declaration[]> = {};
+  private readonly groupsBySlug = new Map<string, string>();
   private readonly options: FullLibraryLoaderOptions;
   private readonly program: ts.Program;
   private readonly resolveExtensions = [".ts", ".js", ".d.ts"];
@@ -72,6 +73,7 @@ class LibraryLoader {
     const group = this.groups[groupName];
     if (!group) {
       this.groups[groupName] = [declaration];
+      this.groupsBySlug.set(slugify(groupName), groupName);
     } else {
       group.push(declaration);
     }
@@ -105,6 +107,14 @@ class LibraryLoader {
       throw new Error(`expected named definition`);
     }
     return slugify(getSyntaxKindName(def.kind) + " " + def.name.text);
+  }
+
+  public getDeclarationsForGroupUrl(slug: string): Declaration[] | undefined {
+    const group = this.groupsBySlug.get(slug);
+    if (!group) {
+      return;
+    }
+    return this.groups[group];
   }
 
   public getDeclarationUrl(
@@ -251,7 +261,15 @@ export function useLibraryLoader(): LibraryLoader {
 }
 
 function defaultGetGroupName(def: Declaration): string {
-  return basename(dirname(def.getSourceFile().fileName));
+  const groupTag = ts.getAllJSDocTags(
+    def,
+    (tag): tag is ts.JSDocTag => tag.tagName.text === "group"
+  )[0];
+
+  if (typeof groupTag.comment === "string") {
+    return groupTag.comment;
+  }
+  return "default";
 }
 
 function defaultMakeCodeLink(

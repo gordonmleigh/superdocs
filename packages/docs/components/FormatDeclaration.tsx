@@ -35,7 +35,7 @@ export function FormatDeclaration({ node }: FormatDeclarationProps) {
 
 function EntityName({ node }: NodeProps<ts.EntityName>) {
   const lib = useLibraryLoader();
-  const link = lib.getDeclarationUrl(node);
+  const link = lib.tryGetDeclarationUrl(node);
   const id: string[] = [];
 
   for (let curr = node; ; ) {
