@@ -1,5 +1,5 @@
-import { writeFileSync, readdirSync } from 'fs';
-import { relative, join, basename } from 'path';
+import { readdirSync, writeFileSync } from "fs";
+import { basename, extname, join, relative } from "path";
 
 const srcDir = process.argv[2];
 if (!srcDir) {
@@ -10,22 +10,22 @@ if (!srcDir) {
 const files = collectFiles(srcDir)
   .sort((a, b) => a.toLowerCase().localeCompare(b.toLowerCase()))
   .map((x) => relative(srcDir, x))
-  .filter((x) => x !== 'index');
+  .filter((x) => x !== "index");
 
-const index = ['// AUTO-GENERATED'].concat(
-  files.map((x) => `export * from './${x}.js';`),
+const index = ["// AUTO-GENERATED"].concat(
+  files.map((x) => `export * from './${x}.js';`)
 );
-writeFileSync(join(srcDir, 'index.ts'), index.join('\n') + '\n');
+writeFileSync(join(srcDir, "index.ts"), index.join("\n") + "\n");
 
 function collectFiles(dir) {
   const files = readdirSync(dir, { withFileTypes: true });
   const matches = [];
 
   for (const file of files) {
-    if (file.isDirectory() && file.name !== 'internal') {
+    if (file.isDirectory() && file.name !== "internal") {
       matches.push(...collectFiles(join(dir, file.name)));
     } else if (matchFile(file.name)) {
-      matches.push(join(dir, basename(file.name, '.ts')));
+      matches.push(join(dir, basename(file.name, extname(file.name))));
     }
   }
 
@@ -34,8 +34,8 @@ function collectFiles(dir) {
 
 function matchFile(fileName) {
   return (
-    fileName.endsWith('.ts') &&
-    !fileName.endsWith('.internal.ts') &&
-    !fileName.endsWith('.test.ts')
+    (fileName.endsWith(".ts") || fileName.endsWith(".tsx")) &&
+    !fileName.endsWith(".internal.ts") &&
+    !fileName.endsWith(".test.ts")
   );
 }

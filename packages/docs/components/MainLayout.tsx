@@ -1,8 +1,7 @@
 import { fetchAllContent } from "@/util/content";
 import { styled } from "@/util/styled";
-import slugify from "@sindresorhus/slugify";
 import { ReactNode } from "react";
-import { useLibraryLoader } from "superdocs";
+import { useDeclarationCollection } from "superdocs";
 import { Navigation } from "./Navigation";
 import { NavigationLink } from "./NavigationLink";
 import { Prose } from "./Prose";
@@ -15,7 +14,7 @@ export interface MainLayoutProps {
 
 export async function MainLayout({ children }: MainLayoutProps) {
   const pages = await fetchAllContent();
-  const lib = useLibraryLoader();
+  const lib = useDeclarationCollection();
 
   return (
     <div className="lg:ml-72 xl:ml-80">
@@ -30,17 +29,17 @@ export async function MainLayout({ children }: MainLayoutProps) {
             />
           ))}
           <NavigationSection>API</NavigationSection>
-          {lib.entries()?.map(([groupName, defs]) => (
+          {lib.groups.map((group) => (
             <NavigationLink
-              href={`/code/${slugify(groupName)}`}
-              key={groupName}
-              title={groupName}
+              href={`/code/${group.slug}`}
+              key={group.slug}
+              title={group.name}
             >
-              {defs.map((def) => (
+              {group.declarations.map((def) => (
                 <NavigationLink
-                  href={lib.getDeclarationUrl(def)}
-                  key={def.name?.text}
-                  title={def.name?.text}
+                  href={def.documentationLink}
+                  key={def.slug}
+                  title={def.name}
                 />
               ))}
             </NavigationLink>

@@ -1,7 +1,8 @@
 import Link from "next/link";
 import { Fragment, ReactNode } from "react";
 import ts from "typescript";
-import { Declaration, useLibraryLoader } from "../core/LibraryLoader.js";
+import { DeclarationNode } from "../core/DeclarationCollection.js";
+import { useDeclarationCollection } from "../core/useDeclarationCollection.js";
 import { styled } from "../internal/styled.js";
 
 const CodeBlock = styled("code", "my-5 block whitespace-normal p-2");
@@ -13,7 +14,7 @@ interface NodeProps<T> {
   node: T;
 }
 
-export type FormatDeclarationProps = NodeProps<Declaration>;
+export type FormatDeclarationProps = NodeProps<DeclarationNode>;
 
 export function FormatDeclaration({ node }: FormatDeclarationProps) {
   if (ts.isInterfaceDeclaration(node)) {
@@ -34,8 +35,8 @@ export function FormatDeclaration({ node }: FormatDeclarationProps) {
 }
 
 function EntityName({ node }: NodeProps<ts.EntityName>) {
-  const lib = useLibraryLoader();
-  const link = lib.getDeclarationUrl(node);
+  const lib = useDeclarationCollection();
+  const def = lib.getDeclaration(node);
   const id: string[] = [];
 
   for (let curr = node; ; ) {
@@ -48,7 +49,7 @@ function EntityName({ node }: NodeProps<ts.EntityName>) {
     }
   }
   const text = id.join(".");
-  return link ? <Link href={link}>{text}</Link> : <>{text}</>;
+  return def ? <Link href={def.documentationLink}>{text}</Link> : <>{text}</>;
 }
 
 interface JoinProps<T> {

@@ -1,9 +1,12 @@
 {
   "name": "superdocs",
   "version": "0.1.0",
-  "dependencies": {},
+  "dependencies": {
+    "convert-source-map": "^2.0.0",
+    "source-map": "^0.6.1"
+  },
   "scripts": {
-    "index": "node ../../makeIndex.js src/"
+    "index": "node ../../makeIndex.mjs src/"
   },
   "exports": {
     ".": {

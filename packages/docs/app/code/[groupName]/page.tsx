@@ -1,15 +1,15 @@
 import { DeclarationInfo } from "@/components/DeclarationInfo";
 import { MainLayout } from "@/components/MainLayout";
 import { notFound } from "next/navigation";
-import { useLibraryLoader } from "superdocs";
+import { useDeclarationCollection } from "superdocs";
 
 interface GroupPageParams {
   params: { groupName: string };
 }
 
 export default function GroupPage({ params: { groupName } }: GroupPageParams) {
-  const lib = useLibraryLoader();
-  const group = lib.getDeclarationsForGroupUrl(groupName);
+  const lib = useDeclarationCollection();
+  const group = lib.groups.find((x) => x.slug === groupName);
 
   if (!group) {
     return notFound();
@@ -17,12 +17,9 @@ export default function GroupPage({ params: { groupName } }: GroupPageParams) {
 
   return (
     <MainLayout>
-      <h1>{groupName}</h1>
-      {group.map((def) => (
-        <DeclarationInfo
-          declaration={def}
-          key={lib.getDeclarationFragment(def)}
-        />
+      <h1>{group.name}</h1>
+      {group.declarations.map((def) => (
+        <DeclarationInfo declaration={def} key={def.slug} />
       ))}
     </MainLayout>
   );

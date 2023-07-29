@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { useLibraryLoader } from "superdocs";
+import { useDeclarationCollection } from "superdocs";
 import ts from "typescript";
 
 type JSDocNode = ts.JSDoc | ts.JSDocTag | ts.JSDocComment | string;
@@ -9,7 +9,7 @@ export interface JSDocCommentProps {
 }
 
 export function JSDoc({ comment }: JSDocCommentProps) {
-  const lib = useLibraryLoader();
+  const lib = useDeclarationCollection();
 
   if (typeof comment === "string") {
     return comment;
@@ -34,7 +34,7 @@ export function JSDoc({ comment }: JSDocCommentProps) {
       const def = lib.getDeclaration(comment.name);
       if (def) {
         return (
-          <Link href={lib.getDeclarationUrl(def)}>
+          <Link href={def.documentationLink}>
             <code>{comment.name.getText()}</code>
           </Link>
         );

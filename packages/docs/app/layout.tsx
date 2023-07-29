@@ -5,7 +5,7 @@ import "./globals.css";
 import { getGitSha } from "@/util/getGitSha.js";
 import { getWorkspaceRoot } from "@/util/getWorkspaceRoot.js";
 import { SiteMeta } from "@/util/metadata.js";
-import { initLibraryLoader } from "superdocs";
+import { initDeclarationCollection } from "superdocs";
 import "./code-theme.scss";
 
 const inter = Inter({ subsets: ["latin"] });
@@ -15,18 +15,19 @@ export const metadata = {
   description: "A test of some documentation",
 };
 
-initLibraryLoader({
-  entrypoint: "../test-pkg/lib/index.d.ts",
-  gitSha: getGitSha(),
-  repositoryUrl: SiteMeta.repo,
-  workspaceRoot: getWorkspaceRoot(),
-});
-
 export default function RootLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
+  initDeclarationCollection({
+    entrypoint: "../test-pkg/lib/index.d.ts",
+    codeLinks: {
+      sha: getGitSha(),
+      url: SiteMeta.repo,
+    },
+    sourceRoot: getWorkspaceRoot(),
+  });
   return (
     <html lang="en" className="h-full scroll-pt-20 scroll-smooth bg-white">
       <head>
