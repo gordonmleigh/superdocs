@@ -26,9 +26,15 @@ export function DeclarationInfo({
           {declaration.location.path}:{declaration.location.line}
         </span>
       )}
-      <FormatDeclaration node={declaration.node} />
+      <FormatDeclaration
+        collection={declaration.collection}
+        node={declaration.node}
+      />
       <p>
-        <JSDoc comment={declaration.documentation} />
+        <JSDoc
+          collection={declaration.collection}
+          comment={declaration.documentation}
+        />
       </p>
     </>
   );

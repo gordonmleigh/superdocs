@@ -1,6 +1,7 @@
 import { MainLayout } from "@/components/MainLayout";
+import { fetchDeclarationCollection } from "@/util/declarations";
 import { notFound } from "next/navigation";
-import { DeclarationInfo, fetchDeclarationCollection } from "superdocs";
+import { DeclarationInfo } from "superdocs/components/DeclarationInfo";
 
 interface GroupPageParams {
   params: { groupName: string };
@@ -9,8 +10,8 @@ interface GroupPageParams {
 export default function GroupPage({
   params: { groupName },
 }: GroupPageParams): JSX.Element {
-  const lib = fetchDeclarationCollection();
-  const group = lib.groups.find((x) => x.slug === groupName);
+  const collection = fetchDeclarationCollection();
+  const group = collection.groups.find((x) => x.slug === groupName);
 
   if (!group) {
     return notFound();

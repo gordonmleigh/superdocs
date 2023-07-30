@@ -24,6 +24,7 @@ export interface DeclarationGroup {
 
 export interface Declaration<Node extends DeclarationNode = DeclarationNode> {
   codeLink?: string;
+  collection: DeclarationCollection;
   documentation: readonly (ts.JSDoc | ts.JSDocTag)[];
   documentationLink: string;
   group: DeclarationGroup;
@@ -73,7 +74,18 @@ export function makeDeclarationCollection({
   const program = loadProgram(entryPoints);
   const checker = program.getTypeChecker();
 
+  const self = {
+    getDeclaration,
+
+    get groups(): DeclarationGroup[] {
+      return [...groups.values()];
+    },
+  };
+
   init();
+
+  debugger;
+  return self;
 
   function init(): void {
     for (const entryPoint of entryPoints) {
@@ -104,6 +116,7 @@ export function makeDeclarationCollection({
 
     const declaration: Declaration = {
       codeLink: getCodeLink?.(location),
+      collection: self,
       documentation: ts.getJSDocCommentsAndTags(node),
       documentationLink: posix.join(documentationRoot, group.slug + "#" + slug),
       group,
@@ -200,11 +213,6 @@ export function makeDeclarationCollection({
       `- ${chalk.yellow("warn")} failed to resolve ${moduleSpecifier}`,
     );
   }
-
-  return {
-    getDeclaration,
-    groups: [...groups.values()],
-  };
 }
 
 function defaultGetGroupName(node: DeclarationNode): string {

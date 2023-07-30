@@ -2,8 +2,10 @@ import clsx from "clsx";
 import Link from "next/link";
 import { Fragment, ReactNode } from "react";
 import ts from "typescript";
-import { DeclarationNode } from "../core/DeclarationCollection.js";
-import { fetchDeclarationCollection } from "../core/fetchDeclarationCollection.js";
+import {
+  DeclarationCollection,
+  DeclarationNode,
+} from "../core/DeclarationCollection.js";
 import { getSyntaxKindName } from "../internal/getSyntaxKindName.js";
 import { styled } from "../internal/styled.js";
 
@@ -11,41 +13,45 @@ const CodeBlock = styled("code", "my-5 block whitespace-normal p-2");
 const LiteralType = styled("span", "text-code-literal-type");
 
 interface NodeProps<T> {
+  collection: DeclarationCollection;
   node: T;
 }
 
 export type FormatDeclarationProps = NodeProps<DeclarationNode>;
 
 export function FormatDeclaration({
+  collection,
   node,
 }: FormatDeclarationProps): JSX.Element {
   if (ts.isInterfaceDeclaration(node)) {
     return (
       <CodeBlock>
-        <InterfaceDeclaration node={node} />
+        <InterfaceDeclaration collection={collection} node={node} />
       </CodeBlock>
     );
   }
   if (ts.isClassDeclaration(node)) {
     return (
       <CodeBlock>
-        <ClassDeclaration node={node} />
+        <ClassDeclaration collection={collection} node={node} />
       </CodeBlock>
     );
   }
   if (ts.isTypeAliasDeclaration(node)) {
     return (
       <CodeBlock>
-        <TypeAliasDeclaration node={node} />
+        <TypeAliasDeclaration collection={collection} node={node} />
       </CodeBlock>
     );
   }
   return <CodeBlock className="code-unknown">{node.getText()}</CodeBlock>;
 }
 
-function EntityName({ node }: NodeProps<ts.EntityName>): JSX.Element {
-  const lib = fetchDeclarationCollection();
-  const def = lib.getDeclaration(node);
+function EntityName({
+  collection,
+  node,
+}: NodeProps<ts.EntityName>): JSX.Element {
+  const def = collection.getDeclaration(node);
   const id: string[] = [];
 
   for (let curr = node; ; ) {
@@ -84,12 +90,14 @@ function Join<T>({ delimiter, items, render }: JoinProps<T>): JSX.Element {
   return <>{children}</>;
 }
 
-function TypeNode({ node }: NodeProps<ts.TypeNode>): JSX.Element {
+function TypeNode({ collection, node }: NodeProps<ts.TypeNode>): JSX.Element {
   if (ts.isTypeReferenceNode(node)) {
     return (
       <>
-        <EntityName node={node.typeName} />
-        {node.typeArguments && <TypeArguments node={node.typeArguments} />}
+        <EntityName collection={collection} node={node.typeName} />
+        {node.typeArguments && (
+          <TypeArguments collection={collection} node={node.typeArguments} />
+        )}
       </>
     );
   }
@@ -101,7 +109,7 @@ function TypeNode({ node }: NodeProps<ts.TypeNode>): JSX.Element {
       <Join
         delimiter={<Operator text="|" spaceAround />}
         items={node.types}
-        render={(x) => <TypeNode node={x} />}
+        render={(x) => <TypeNode collection={collection} node={x} />}
       />
     );
   }
@@ -112,6 +120,7 @@ function TypeNode({ node }: NodeProps<ts.TypeNode>): JSX.Element {
 }
 
 function TypeArguments({
+  collection,
   node,
 }: NodeProps<readonly ts.TypeNode[]>): JSX.Element {
   return (
@@ -120,7 +129,7 @@ function TypeArguments({
       <Join
         delimiter={<Operator text="," spaceRight />}
         items={node}
-        render={(x) => <TypeNode node={x} />}
+        render={(x) => <TypeNode collection={collection} node={x} />}
       />
       <Operator text=">" />
     </>
@@ -128,21 +137,22 @@ function TypeArguments({
 }
 
 export function TypeParameter({
+  collection,
   node,
 }: NodeProps<ts.TypeParameterDeclaration>): JSX.Element {
   return (
     <>
-      <EntityName node={node.name} />
+      <EntityName collection={collection} node={node.name} />
       {node.constraint && (
         <>
           <Keyword>extends</Keyword>
-          <TypeNode node={node.constraint} />
+          <TypeNode collection={collection} node={node.constraint} />
         </>
       )}
       {node.default && (
         <>
           <Operator text="=" spaceAround />
-          <TypeNode node={node.default} />
+          <TypeNode collection={collection} node={node.default} />
         </>
       )}
     </>
@@ -150,6 +160,7 @@ export function TypeParameter({
 }
 
 function TypeParameters({
+  collection,
   node,
 }: NodeProps<readonly ts.TypeParameterDeclaration[]>): JSX.Element {
   return (
@@ -158,14 +169,17 @@ function TypeParameters({
       <Join
         delimiter=", "
         items={node}
-        render={(x) => <TypeParameter node={x} />}
+        render={(x) => <TypeParameter collection={collection} node={x} />}
       />
       <Operator>{">"}</Operator>
     </>
   );
 }
 
-function HeritageClause({ node }: NodeProps<ts.HeritageClause>): JSX.Element {
+function HeritageClause({
+  collection,
+  node,
+}: NodeProps<ts.HeritageClause>): JSX.Element {
   return (
     <>
       <br />
@@ -180,8 +194,16 @@ function HeritageClause({ node }: NodeProps<ts.HeritageClause>): JSX.Element {
         items={node.types}
         render={(type) => (
           <>
-            <EntityName node={type.expression as ts.EntityName} />
-            {type.typeArguments && <TypeArguments node={type.typeArguments} />}
+            <EntityName
+              collection={collection}
+              node={type.expression as ts.EntityName}
+            />
+            {type.typeArguments && (
+              <TypeArguments
+                collection={collection}
+                node={type.typeArguments}
+              />
+            )}
           </>
         )}
       />
@@ -190,53 +212,67 @@ function HeritageClause({ node }: NodeProps<ts.HeritageClause>): JSX.Element {
 }
 
 function HeritageClauses({
+  collection,
   node,
 }: NodeProps<ts.NodeArray<ts.HeritageClause>>): JSX.Element {
   return (
     <>
       {node.map((x, i) => (
-        <HeritageClause key={i} node={x} />
+        <HeritageClause collection={collection} key={i} node={x} />
       ))}
     </>
   );
 }
 
 function ClassDeclaration({
+  collection,
   node,
 }: NodeProps<ts.ClassDeclaration>): JSX.Element {
   return (
     <>
       <Keyword>class</Keyword>
       {node.name?.text}
-      {node.typeParameters && <TypeParameters node={node.typeParameters} />}
-      {node.heritageClauses && <HeritageClauses node={node.heritageClauses} />}
+      {node.typeParameters && (
+        <TypeParameters collection={collection} node={node.typeParameters} />
+      )}
+      {node.heritageClauses && (
+        <HeritageClauses collection={collection} node={node.heritageClauses} />
+      )}
     </>
   );
 }
 
 function InterfaceDeclaration({
+  collection,
   node,
 }: NodeProps<ts.InterfaceDeclaration>): JSX.Element {
   return (
     <>
       <Keyword>interface</Keyword>
       {node.name.text}
-      {node.typeParameters && <TypeParameters node={node.typeParameters} />}
-      {node.heritageClauses && <HeritageClauses node={node.heritageClauses} />}
+      {node.typeParameters && (
+        <TypeParameters collection={collection} node={node.typeParameters} />
+      )}
+      {node.heritageClauses && (
+        <HeritageClauses collection={collection} node={node.heritageClauses} />
+      )}
     </>
   );
 }
 
 function TypeAliasDeclaration({
+  collection,
   node,
 }: NodeProps<ts.TypeAliasDeclaration>): JSX.Element {
   return (
     <>
       <Keyword>type</Keyword>
       {node.name.text}
-      {node.typeParameters && <TypeParameters node={node.typeParameters} />}
+      {node.typeParameters && (
+        <TypeParameters collection={collection} node={node.typeParameters} />
+      )}
       <Operator text="=" spaceAround />
-      <TypeNode node={node.type} />
+      <TypeNode collection={collection} node={node.type} />
     </>
   );
 }

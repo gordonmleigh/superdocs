@@ -2,10 +2,7 @@ import clsx from "clsx";
 import { Inter } from "next/font/google";
 import "./globals.css";
 
-import { getGitSha } from "@/util/getGitSha.js";
-import { getWorkspaceRoot } from "@/util/getWorkspaceRoot.js";
 import { SiteMeta } from "@/util/metadata.js";
-import { initDeclarationCollection } from "superdocs";
 import "./code-theme.scss";
 
 const inter = Inter({ subsets: ["latin"] });
@@ -20,14 +17,6 @@ export default function RootLayout({
 }: {
   children: React.ReactNode;
 }): JSX.Element {
-  initDeclarationCollection({
-    codeLinks: {
-      sha: getGitSha(),
-      url: SiteMeta.repo,
-    },
-    packagePath: "superdocs",
-    sourceRoot: getWorkspaceRoot(),
-  });
   return (
     <html lang="en" className="h-full scroll-pt-20 scroll-smooth bg-white">
       <head>

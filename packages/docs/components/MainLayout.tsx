@@ -1,7 +1,7 @@
 import { fetchAllContent } from "@/util/content";
+import { fetchDeclarationCollection } from "@/util/declarations";
 import { styled } from "@/util/styled";
 import { ReactNode } from "react";
-import { fetchDeclarationCollection } from "superdocs";
 import { Navigation } from "./Navigation";
 import { NavigationLink } from "./NavigationLink";
 import { Prose } from "./Prose";
@@ -16,7 +16,7 @@ export async function MainLayout({
   children,
 }: MainLayoutProps): Promise<JSX.Element> {
   const pages = await fetchAllContent();
-  const lib = fetchDeclarationCollection();
+  const collection = fetchDeclarationCollection();
 
   return (
     <div className="lg:ml-72 xl:ml-80">
@@ -31,7 +31,7 @@ export async function MainLayout({
             />
           ))}
           <NavigationSection>API</NavigationSection>
-          {lib.groups.map((group) => (
+          {collection.groups.map((group) => (
             <NavigationLink
               href={`/code/${group.slug}`}
               key={group.slug}

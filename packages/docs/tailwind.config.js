@@ -7,8 +7,8 @@ module.exports = {
     "./components/**/*.{js,ts,jsx,tsx,mdx}",
     "./app/**/*.{js,ts,jsx,tsx,mdx}",
     join(
-      dirname(require.resolve("superdocs")),
-      "components/*.{js,ts,jsx,tsx,mdx}"
+      dirname(require.resolve("superdocs/tailwind")),
+      "components/*.{js,ts,jsx,tsx,mdx}",
     ),
   ],
   theme: {
@@ -22,8 +22,5 @@ module.exports = {
       typography: require("./typography.js"),
     },
   },
-  plugins: [
-    require("superdocs/tailwind-plugin"),
-    require("@tailwindcss/typography"),
-  ],
+  plugins: [require("superdocs/tailwind"), require("@tailwindcss/typography")],
 };

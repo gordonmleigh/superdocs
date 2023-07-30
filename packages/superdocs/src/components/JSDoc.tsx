@@ -1,16 +1,18 @@
 import Link from "next/link";
 import ts from "typescript";
-import { fetchDeclarationCollection } from "../core/fetchDeclarationCollection";
+import { DeclarationCollection } from "../core/DeclarationCollection";
 
 type JSDocNode = ts.JSDoc | ts.JSDocTag | ts.JSDocComment | string;
 
 export interface JSDocCommentProps {
+  collection: DeclarationCollection;
   comment: JSDocNode | readonly JSDocNode[];
 }
 
-export function JSDoc({ comment }: JSDocCommentProps): JSX.Element | null {
-  const lib = fetchDeclarationCollection();
-
+export function JSDoc({
+  collection,
+  comment,
+}: JSDocCommentProps): JSX.Element | null {
   if (typeof comment === "string") {
     return <>{comment}</>;
   }
@@ -18,20 +20,22 @@ export function JSDoc({ comment }: JSDocCommentProps): JSX.Element | null {
     return (
       <>
         {comment.map((tag, index) => (
-          <JSDoc comment={tag} key={index} />
+          <JSDoc collection={collection} comment={tag} key={index} />
         ))}
       </>
     );
   }
   if (ts.isJSDoc(comment)) {
-    return comment.comment ? <JSDoc comment={comment.comment} /> : null;
+    return comment.comment ? (
+      <JSDoc collection={collection} comment={comment.comment} />
+    ) : null;
   }
   if (isJSDocText(comment)) {
     return <>{comment.text}</>;
   }
   if (ts.isJSDocLink(comment)) {
     if (comment.name) {
-      const def = lib.getDeclaration(comment.name);
+      const def = collection.getDeclaration(comment.name);
       if (def) {
         return (
           <Link href={def.documentationLink}>

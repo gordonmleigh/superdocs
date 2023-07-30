@@ -7,15 +7,18 @@
     "source-map": "^0.6.1"
   },
   "scripts": {
-    "index": "node ../../makeIndex.mjs src/",
     "lint": "eslint src/ --ext=ts,tsx"
   },
   "exports": {
-    ".": {
-      "types": "./lib/index.d.ts",
-      "default": "./lib/index.js"
+    "./components/*": {
+      "types": "./lib/components/*.d.ts",
+      "default": "./lib/components/*.js"
     },
-    "./tailwind-plugin": {
+    "./core/*": {
+      "types": "./lib/core/*.d.ts",
+      "default": "./lib/core/*.js"
+    },
+    "./tailwind": {
       "default": "./lib/tailwind-plugin.js"
     }
   }
