@@ -1,3 +1,4 @@
+import chalk from "chalk";
 import { dirname, posix, resolve } from "path";
 import ts from "typescript";
 import { assert } from "../internal/assert";
@@ -190,7 +191,9 @@ export function makeDeclarationCollection({
         return source;
       }
     }
-    console.warn(`WARN: failed to resolve ${moduleSpecifier}`);
+    console.warn(
+      `- ${chalk.yellow("warn")} failed to resolve ${moduleSpecifier}`,
+    );
   }
 
   return {
@@ -205,7 +208,7 @@ function defaultGetGroupName(node: DeclarationNode): string {
     (tag): tag is ts.JSDocTag => tag.tagName.text === "group",
   )[0];
 
-  if (typeof groupTag.comment === "string") {
+  if (typeof groupTag?.comment === "string") {
     return groupTag.comment;
   }
   return "default";

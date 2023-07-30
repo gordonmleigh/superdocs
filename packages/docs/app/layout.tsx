@@ -21,7 +21,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }): JSX.Element {
   initDeclarationCollection({
-    entrypoint: "../test-pkg/lib/index.d.ts",
+    entrypoint: "../superdocs/lib/index.d.ts",
     codeLinks: {
       sha: getGitSha(),
       url: SiteMeta.repo,

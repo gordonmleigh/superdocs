@@ -1,3 +1,4 @@
+import chalk from "chalk";
 import { serverContext } from "../internal/serverContext";
 import {
   DeclarationCollection,
@@ -14,7 +15,9 @@ export function initDeclarationCollection(
 ): DeclarationCollection {
   if (getDeclarationCollection()) {
     console.warn(
-      "warning: `initDeclarationCollection` has already been called",
+      `- ${chalk.yellow(
+        "warn",
+      )} initDeclarationCollection() has already been called`,
     );
   }
   const instance = makeDeclarationCollection(opts);
