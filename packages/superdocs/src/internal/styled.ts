@@ -41,7 +41,9 @@ export function styled<T extends ElementType<StylableProps>>(
 
       return createElement(component, {
         className: clsx(
-          ...classes.map((x): any => (typeof x === "function" ? x(props) : x)),
+          ...(classes.map((x) =>
+            typeof x === "function" ? x(props) : x,
+          ) as any),
           className,
         ),
         ...restProps,
