@@ -7,14 +7,3 @@ Install `superlibrary` using your favourite package manager. Types are included!
 ```bash
 $ npm install superlibrary
 ```
-
-Create your first object decoder:
-
-```typescript
-import { is, object, string } from "dekode";
-
-const decodeDog = object({
-  type: is("dog"),
-  name: string,
-});
-```
