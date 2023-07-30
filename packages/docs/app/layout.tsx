@@ -21,11 +21,11 @@ export default function RootLayout({
   children: React.ReactNode;
 }): JSX.Element {
   initDeclarationCollection({
-    entrypoint: "../superdocs/lib/index.d.ts",
     codeLinks: {
       sha: getGitSha(),
       url: SiteMeta.repo,
     },
+    packagePath: "superdocs",
     sourceRoot: getWorkspaceRoot(),
   });
   return (

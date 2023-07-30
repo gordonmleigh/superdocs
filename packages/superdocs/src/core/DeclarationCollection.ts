@@ -3,6 +3,7 @@ import { dirname, posix, resolve } from "path";
 import ts from "typescript";
 import { assert } from "../internal/assert";
 import { makeGetNodeLocation } from "../internal/getNodeLocation";
+import { getPackageInfo } from "../internal/getPackageInfo";
 import { getSyntaxKindName } from "../internal/getSyntaxKindName";
 import { loadProgram } from "../internal/loadProgram";
 import { slugify } from "../internal/slugify";
@@ -42,8 +43,8 @@ export interface RepositoryInfo {
 export interface DeclarationCollectionOptions {
   codeLinks?: RepositoryInfo | CodeLinkFactory;
   documentationRoot?: string;
-  entrypoint: string;
   getGroupName?: (def: DeclarationNode) => string;
+  packagePath: string;
   sourceRoot?: string;
 }
 
@@ -55,27 +56,31 @@ export interface DeclarationCollection {
   groups: DeclarationGroup[];
 }
 
-const resolveExtensions = [".ts", ".js", ".d.ts"];
+const resolveExtensions = [".ts", ".d.ts"];
 
 export function makeDeclarationCollection({
   documentationRoot = "/code",
-  entrypoint,
   codeLinks,
   getGroupName = defaultGetGroupName,
+  packagePath,
   sourceRoot = resolve("."),
 }: DeclarationCollectionOptions): DeclarationCollection {
+  const packageInfo = getPackageInfo(packagePath);
+  const entryPoints = Object.values(packageInfo.entryPoints);
   const declarations = new Map<DeclarationNode, Declaration>();
   const getCodeLink = normaliseCodeLinkFactory(codeLinks);
   const groups = new Map<string, DeclarationGroup>();
-  const program = loadProgram(entrypoint);
+  const program = loadProgram(entryPoints);
   const checker = program.getTypeChecker();
 
   init();
 
   function init(): void {
-    const source = program.getSourceFile(entrypoint);
-    assert(source, `expected source file '${entrypoint}'`);
-    loadSourceFile(source);
+    for (const entryPoint of entryPoints) {
+      const source = program.getSourceFile(entryPoint);
+      assert(source, `expected source file '${entryPoint}'`);
+      loadSourceFile(source);
+    }
   }
 
   function addDeclaration(node: DeclarationNode, location: NodeLocation): void {

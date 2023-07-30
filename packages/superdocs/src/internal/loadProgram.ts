@@ -17,8 +17,11 @@ export class CompilationError extends Error {
   }
 }
 
-export function loadProgram(entrypoint: string): ts.Program {
-  const configPath = ts.findConfigFile(entrypoint, existsSync);
+export function loadProgram(entryPoints: string[]): ts.Program {
+  if (entryPoints.length === 0) {
+    throw new Error(`expected at least one entrypoint`);
+  }
+  const configPath = ts.findConfigFile(entryPoints[0], existsSync);
 
   let config: ts.ParsedCommandLine | undefined;
   if (configPath) {
@@ -32,7 +35,7 @@ export function loadProgram(entrypoint: string): ts.Program {
     config.options.composite = false;
   }
 
-  const program = ts.createProgram([entrypoint], config?.options ?? {});
+  const program = ts.createProgram(entryPoints, config?.options ?? {});
   const diagnostics = ts.getPreEmitDiagnostics(program);
 
   if (diagnostics.length) {
