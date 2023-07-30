@@ -2,7 +2,7 @@
   "name": "@w/root",
   "private": "true",
   "scripts": {
-    "compile": "npm run index && node tsbuild.mjs",
+    "compile": "node tsbuild.mjs",
     "dev:docs": "npm run -w @w/docs dev",
     "docs": "npm run -w @w/docs build",
     "lint": "npm run --workspaces --if-present lint",

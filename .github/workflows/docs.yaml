@@ -13,6 +13,7 @@ jobs:
         with:
           node-version: 18
       - run: npm ci
+      - run: npm run compile
       - run: npm run docs
       - uses: actions/upload-pages-artifact@v1
         with:
