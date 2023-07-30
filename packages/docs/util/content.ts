@@ -1,12 +1,12 @@
-import { mdxComponents } from '@/components/mdx';
-import rehypePrism from '@mapbox/rehype-prism';
-import { glob } from 'fast-glob';
-import { readFile } from 'fs/promises';
-import { compileMDX } from 'next-mdx-remote/rsc';
-import { join, resolve } from 'path';
-import { ReactNode, cache } from 'react';
+import { mdxComponents } from "@/components/mdx";
+import rehypePrism from "@mapbox/rehype-prism";
+import { glob } from "fast-glob";
+import { readFile } from "fs/promises";
+import { compileMDX } from "next-mdx-remote/rsc";
+import { join, resolve } from "path";
+import { ReactNode, cache } from "react";
 
-const ContentPath = resolve('./content');
+const ContentPath = resolve("./content");
 
 export interface ContentPage {
   content: ReactNode;
@@ -32,7 +32,7 @@ export const fetchContentBySlug = cache(
 export const fetchAllContent = cache(fetchAllContentInternal);
 
 async function fetchAllContentInternal(): Promise<ContentPage[]> {
-  const paths = await glob('**/*.mdx', { cwd: ContentPath });
+  const paths = await glob("**/*.mdx", { cwd: ContentPath });
   const pages: ContentPage[] = [];
 
   for (const path of paths) {
@@ -44,7 +44,7 @@ async function fetchAllContentInternal(): Promise<ContentPage[]> {
 async function fetchPage(path: string): Promise<ContentPage> {
   // https://github.com/vercel/neBySlugxt.js/discussions/50897#discussioncomment-6122518
   const fileContent = await readFile(join(ContentPath, path), {
-    encoding: 'utf-8',
+    encoding: "utf-8",
   });
   const { frontmatter, content } = await compileMDX({
     source: fileContent,
@@ -59,10 +59,10 @@ async function fetchPage(path: string): Promise<ContentPage> {
 
   return {
     meta: {
-      title: 'Untitled',
+      title: "Untitled",
       ...frontmatter,
       slug: normaliseSlug(
-        (frontmatter.slug as string) ?? path.replace(/\.mdx$/, ''),
+        (frontmatter.slug as string) ?? path.replace(/\.mdx$/, ""),
       ),
     },
     content,
@@ -72,10 +72,10 @@ async function fetchPage(path: string): Promise<ContentPage> {
 function normaliseSlug(slug: string | string[] | undefined): string {
   if (Array.isArray(slug)) {
     // join and split again in case array elements also need normalised
-    return normaliseSlug(slug.join('/'));
+    return normaliseSlug(slug.join("/"));
   }
   if (!slug) {
-    return '/';
+    return "/";
   }
-  return '/' + slug.split('/').filter(Boolean).join('/');
+  return "/" + slug.split("/").filter(Boolean).join("/");
 }

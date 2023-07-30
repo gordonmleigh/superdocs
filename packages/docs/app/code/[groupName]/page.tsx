@@ -7,6 +7,11 @@ interface GroupPageParams {
   params: { groupName: string };
 }
 
+export function generateStaticParams(): GroupPageParams["params"][] {
+  const collection = fetchDeclarationCollection();
+  return collection.groups.map(({ name }) => ({ groupName: name }));
+}
+
 export default function GroupPage({
   params: { groupName },
 }: GroupPageParams): JSX.Element {

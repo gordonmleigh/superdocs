@@ -18,9 +18,13 @@ export async function generateMetadata({
   };
 }
 
-export async function generateStaticParams(): Promise<(string | undefined)[]> {
+export async function generateStaticParams(): Promise<
+  DocsPageParams["params"][]
+> {
   const content = await fetchAllContent();
-  return content.map((x) => x.meta.slug);
+  return content.map((x) => ({
+    slug: (x.meta.slug as string).split("/").filter(Boolean),
+  }));
 }
 
 export default async function DocsPage({
