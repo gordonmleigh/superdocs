@@ -1,6 +1,6 @@
 export function serverContext<T>(
   initialValue: T,
-  name?: string
+  name?: string,
 ): [() => T, (v: T) => void] {
   // next is doing something weird with hot module reloading that interferes
   // with singletons not explicitly attached to the global scope

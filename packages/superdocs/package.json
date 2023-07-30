@@ -6,7 +6,8 @@
     "source-map": "^0.6.1"
   },
   "scripts": {
-    "index": "node ../../makeIndex.mjs src/"
+    "index": "node ../../makeIndex.mjs src/",
+    "lint": "eslint src/ --ext=ts,tsx"
   },
   "exports": {
     ".": {

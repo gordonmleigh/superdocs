@@ -1,13 +1,13 @@
-import { getSlots } from '@/util/getSlots';
-import Link from 'next/link';
-import { ReactNode } from 'react';
-import { NavigationClient } from './NavigationClient';
+import { getSlots } from "@/util/getSlots";
+import Link from "next/link";
+import { ReactNode } from "react";
+import { NavigationClient } from "./NavigationClient";
 
 export interface NavigationRootProps {
   children?: ReactNode;
 }
 
-export function NavigationRoot({ children }: NavigationRootProps) {
+export function NavigationRoot({ children }: NavigationRootProps): JSX.Element {
   const [pages] = getSlots(children, NavigationPages);
   return <NavigationClient pages={pages} />;
 }
@@ -16,7 +16,7 @@ export interface NavigationPagesProps {
   children?: ReactNode;
 }
 
-function NavigationPages({ children }: NavigationPagesProps) {
+function NavigationPages({ children }: NavigationPagesProps): JSX.Element {
   return <>{children}</>;
 }
 
@@ -25,7 +25,7 @@ export interface NavigationLinkProps {
   href: string;
 }
 
-function NavigationLink({ children, href }: NavigationLinkProps) {
+function NavigationLink({ children, href }: NavigationLinkProps): JSX.Element {
   return (
     <li>
       <Link

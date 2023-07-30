@@ -48,7 +48,7 @@ export interface DeclarationCollectionOptions {
 
 export interface DeclarationCollection {
   getDeclaration(
-    name: ts.EntityName | ts.JSDocMemberName
+    name: ts.EntityName | ts.JSDocMemberName,
   ): Declaration | undefined;
 
   groups: DeclarationGroup[];
@@ -71,7 +71,7 @@ export function makeDeclarationCollection({
 
   init();
 
-  async function init(): Promise<void> {
+  function init(): void {
     const source = program.getSourceFile(entrypoint);
     assert(source, `expected source file '${entrypoint}'`);
     loadSourceFile(source);
@@ -112,7 +112,7 @@ export function makeDeclarationCollection({
 
   function getDeclaration(
     name: ts.EntityName | ts.JSDocMemberName,
-    alias = false
+    alias = false,
   ): Declaration | undefined {
     let symbol = checker.getSymbolAtLocation(name);
     if (!symbol) {
@@ -135,7 +135,7 @@ export function makeDeclarationCollection({
     if (statement.moduleSpecifier) {
       const source = resolveSourceFile(
         statement.moduleSpecifier,
-        statement.getSourceFile().fileName
+        statement.getSourceFile().fileName,
       );
       if (source) {
         loadSourceFile(source);
@@ -157,7 +157,7 @@ export function makeDeclarationCollection({
 
   function resolveSourceFile(
     moduleSpecifier: string | ts.Expression,
-    from = "."
+    from = ".",
   ): ts.SourceFile | undefined {
     if (typeof moduleSpecifier !== "string") {
       if (!ts.isStringLiteral(moduleSpecifier)) {
@@ -177,14 +177,14 @@ export function makeDeclarationCollection({
     }
 
     const source = program.getSourceFile(
-      resolve(dirname(from), moduleSpecifier)
+      resolve(dirname(from), moduleSpecifier),
     );
     if (source) {
       return source;
     }
     for (const ext of resolveExtensions) {
       const source = program.getSourceFile(
-        resolve(dirname(from), moduleSpecifier + ext)
+        resolve(dirname(from), moduleSpecifier + ext),
       );
       if (source) {
         return source;
@@ -202,7 +202,7 @@ export function makeDeclarationCollection({
 function defaultGetGroupName(node: DeclarationNode): string {
   const groupTag = ts.getAllJSDocTags(
     node,
-    (tag): tag is ts.JSDocTag => tag.tagName.text === "group"
+    (tag): tag is ts.JSDocTag => tag.tagName.text === "group",
   )[0];
 
   if (typeof groupTag.comment === "string") {
@@ -229,7 +229,7 @@ function isLocal(path: string): boolean {
 }
 
 function normaliseCodeLinkFactory(
-  codeLinks: RepositoryInfo | CodeLinkFactory | undefined
+  codeLinks: RepositoryInfo | CodeLinkFactory | undefined,
 ): CodeLinkFactory | undefined {
   if (!codeLinks || typeof codeLinks === "function") {
     return codeLinks;
@@ -240,7 +240,7 @@ function normaliseCodeLinkFactory(
       url.pathname,
       "blob",
       codeLinks.sha,
-      location.path
+      location.path,
     );
     return `${url.toString()}#L${location.line}`;
   };

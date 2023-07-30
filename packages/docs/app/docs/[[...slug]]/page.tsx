@@ -1,7 +1,7 @@
-import { MainLayout } from '@/components/MainLayout';
-import { fetchAllContent, fetchContentBySlug } from '@/util/content';
-import { SiteMeta } from '@/util/metadata';
-import { Metadata } from 'next';
+import { MainLayout } from "@/components/MainLayout";
+import { fetchAllContent, fetchContentBySlug } from "@/util/content";
+import { SiteMeta } from "@/util/metadata";
+import { Metadata } from "next";
 
 interface DocsPageParams {
   params: { slug?: string[] };
@@ -14,16 +14,18 @@ export async function generateMetadata({
   return {
     title: [SiteMeta.title, meta.pageTitle ?? meta.title]
       .filter(Boolean)
-      .join(' – '),
+      .join(" – "),
   };
 }
 
-export async function generateStaticParams() {
+export async function generateStaticParams(): Promise<(string | undefined)[]> {
   const content = await fetchAllContent();
   return content.map((x) => x.meta.slug);
 }
 
-export default async function DocsPage({ params: { slug } }: DocsPageParams) {
+export default async function DocsPage({
+  params: { slug },
+}: DocsPageParams): Promise<JSX.Element> {
   const { content, meta } = await fetchContentBySlug(slug);
 
   return (

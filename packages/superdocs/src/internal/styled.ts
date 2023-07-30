@@ -1,4 +1,4 @@
-import clsx, { ClassValue } from 'clsx';
+import clsx, { ClassValue } from "clsx";
 import {
   ComponentPropsWithoutRef,
   createElement,
@@ -7,7 +7,7 @@ import {
   forwardRef,
   ReactElement,
   ReactNode,
-} from 'react';
+} from "react";
 
 type StylableProps = {
   className?: string;
@@ -41,7 +41,7 @@ export function styled<T extends ElementType<StylableProps>>(
 
       return createElement(component, {
         className: clsx(
-          ...classes.map((x) => (typeof x === 'function' ? x(props) : x)),
+          ...classes.map((x) => (typeof x === "function" ? x(props) : x)),
           className,
         ),
         ...restProps,
@@ -50,12 +50,12 @@ export function styled<T extends ElementType<StylableProps>>(
     },
   );
 
-  if (typeof component === 'string') {
+  if (typeof component === "string") {
     styled.displayName = `Styled_${component}`;
   } else if (component.displayName) {
     styled.displayName = `Styled${component.displayName}`;
   } else {
-    styled.displayName = 'StyledComponent';
+    styled.displayName = "StyledComponent";
   }
 
   // the ref will be the same type but typescript can't infer this

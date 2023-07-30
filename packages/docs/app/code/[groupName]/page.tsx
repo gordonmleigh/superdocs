@@ -1,13 +1,15 @@
 import { MainLayout } from "@/components/MainLayout";
 import { notFound } from "next/navigation";
-import { DeclarationInfo, useDeclarationCollection } from "superdocs";
+import { DeclarationInfo, fetchDeclarationCollection } from "superdocs";
 
 interface GroupPageParams {
   params: { groupName: string };
 }
 
-export default function GroupPage({ params: { groupName } }: GroupPageParams) {
-  const lib = useDeclarationCollection();
+export default function GroupPage({
+  params: { groupName },
+}: GroupPageParams): JSX.Element {
+  const lib = fetchDeclarationCollection();
   const group = lib.groups.find((x) => x.slug === groupName);
 
   if (!group) {

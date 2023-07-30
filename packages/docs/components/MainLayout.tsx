@@ -1,7 +1,7 @@
 import { fetchAllContent } from "@/util/content";
 import { styled } from "@/util/styled";
 import { ReactNode } from "react";
-import { useDeclarationCollection } from "superdocs";
+import { fetchDeclarationCollection } from "superdocs";
 import { Navigation } from "./Navigation";
 import { NavigationLink } from "./NavigationLink";
 import { Prose } from "./Prose";
@@ -12,9 +12,11 @@ export interface MainLayoutProps {
   children?: ReactNode;
 }
 
-export async function MainLayout({ children }: MainLayoutProps) {
+export async function MainLayout({
+  children,
+}: MainLayoutProps): Promise<JSX.Element> {
   const pages = await fetchAllContent();
-  const lib = useDeclarationCollection();
+  const lib = fetchDeclarationCollection();
 
   return (
     <div className="lg:ml-72 xl:ml-80">

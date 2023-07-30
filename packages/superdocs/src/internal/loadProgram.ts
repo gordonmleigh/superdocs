@@ -1,5 +1,5 @@
-import { existsSync } from 'fs';
-import ts from 'typescript';
+import { existsSync } from "fs";
+import ts from "typescript";
 
 export class CompilationError extends Error {
   static formatMessage(diagnostics: readonly ts.Diagnostic[]): string {

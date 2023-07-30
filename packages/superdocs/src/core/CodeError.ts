@@ -7,7 +7,7 @@ function formatLocation({ char, line, path }: NodeLocation): string {
 export class CodeError extends Error {
   constructor(
     public readonly description: string,
-    public readonly location: NodeLocation
+    public readonly location: NodeLocation,
   ) {
     super(`${formatLocation(location)}: ${description}`);
   }

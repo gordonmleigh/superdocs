@@ -3,7 +3,7 @@ import Link from "next/link";
 import { Fragment, ReactNode } from "react";
 import ts from "typescript";
 import { DeclarationNode } from "../core/DeclarationCollection.js";
-import { useDeclarationCollection } from "../core/useDeclarationCollection.js";
+import { fetchDeclarationCollection } from "../core/fetchDeclarationCollection.js";
 import { getSyntaxKindName } from "../internal/getSyntaxKindName.js";
 import { styled } from "../internal/styled.js";
 
@@ -16,7 +16,9 @@ interface NodeProps<T> {
 
 export type FormatDeclarationProps = NodeProps<DeclarationNode>;
 
-export function FormatDeclaration({ node }: FormatDeclarationProps) {
+export function FormatDeclaration({
+  node,
+}: FormatDeclarationProps): JSX.Element {
   if (ts.isInterfaceDeclaration(node)) {
     return (
       <CodeBlock>
@@ -41,8 +43,8 @@ export function FormatDeclaration({ node }: FormatDeclarationProps) {
   return <CodeBlock className="code-unknown">{node.getText()}</CodeBlock>;
 }
 
-function EntityName({ node }: NodeProps<ts.EntityName>) {
-  const lib = useDeclarationCollection();
+function EntityName({ node }: NodeProps<ts.EntityName>): JSX.Element {
+  const lib = fetchDeclarationCollection();
   const def = lib.getDeclaration(node);
   const id: string[] = [];
 
@@ -71,7 +73,7 @@ interface JoinProps<T> {
   render: (item: T) => ReactNode;
 }
 
-function Join<T>({ delimiter, items, render }: JoinProps<T>) {
+function Join<T>({ delimiter, items, render }: JoinProps<T>): JSX.Element {
   const children: ReactNode[] = [];
   for (const item of items) {
     if (children.length) {
@@ -82,7 +84,7 @@ function Join<T>({ delimiter, items, render }: JoinProps<T>) {
   return <>{children}</>;
 }
 
-function TypeNode({ node }: NodeProps<ts.TypeNode>) {
+function TypeNode({ node }: NodeProps<ts.TypeNode>): JSX.Element {
   if (ts.isTypeReferenceNode(node)) {
     return (
       <>
@@ -109,7 +111,9 @@ function TypeNode({ node }: NodeProps<ts.TypeNode>) {
   return <span className="code-unknown">{node.getText()}</span>;
 }
 
-function TypeArguments({ node }: NodeProps<readonly ts.TypeNode[]>) {
+function TypeArguments({
+  node,
+}: NodeProps<readonly ts.TypeNode[]>): JSX.Element {
   return (
     <>
       <Operator text="<" />
@@ -125,7 +129,7 @@ function TypeArguments({ node }: NodeProps<readonly ts.TypeNode[]>) {
 
 export function TypeParameter({
   node,
-}: NodeProps<ts.TypeParameterDeclaration>) {
+}: NodeProps<ts.TypeParameterDeclaration>): JSX.Element {
   return (
     <>
       <EntityName node={node.name} />
@@ -147,7 +151,7 @@ export function TypeParameter({
 
 function TypeParameters({
   node,
-}: NodeProps<readonly ts.TypeParameterDeclaration[]>) {
+}: NodeProps<readonly ts.TypeParameterDeclaration[]>): JSX.Element {
   return (
     <>
       <Operator>{"<"}</Operator>
@@ -161,7 +165,7 @@ function TypeParameters({
   );
 }
 
-function HeritageClause({ node }: NodeProps<ts.HeritageClause>) {
+function HeritageClause({ node }: NodeProps<ts.HeritageClause>): JSX.Element {
   return (
     <>
       <br />
@@ -185,7 +189,9 @@ function HeritageClause({ node }: NodeProps<ts.HeritageClause>) {
   );
 }
 
-function HeritageClauses({ node }: NodeProps<ts.NodeArray<ts.HeritageClause>>) {
+function HeritageClauses({
+  node,
+}: NodeProps<ts.NodeArray<ts.HeritageClause>>): JSX.Element {
   return (
     <>
       {node.map((x, i) => (
@@ -195,7 +201,9 @@ function HeritageClauses({ node }: NodeProps<ts.NodeArray<ts.HeritageClause>>) {
   );
 }
 
-function ClassDeclaration({ node }: NodeProps<ts.ClassDeclaration>) {
+function ClassDeclaration({
+  node,
+}: NodeProps<ts.ClassDeclaration>): JSX.Element {
   return (
     <>
       <Keyword>class</Keyword>
@@ -206,7 +214,9 @@ function ClassDeclaration({ node }: NodeProps<ts.ClassDeclaration>) {
   );
 }
 
-function InterfaceDeclaration({ node }: NodeProps<ts.InterfaceDeclaration>) {
+function InterfaceDeclaration({
+  node,
+}: NodeProps<ts.InterfaceDeclaration>): JSX.Element {
   return (
     <>
       <Keyword>interface</Keyword>
@@ -217,7 +227,9 @@ function InterfaceDeclaration({ node }: NodeProps<ts.InterfaceDeclaration>) {
   );
 }
 
-function TypeAliasDeclaration({ node }: NodeProps<ts.TypeAliasDeclaration>) {
+function TypeAliasDeclaration({
+  node,
+}: NodeProps<ts.TypeAliasDeclaration>): JSX.Element {
   return (
     <>
       <Keyword>type</Keyword>
@@ -245,7 +257,7 @@ function Operator({
   spaceLeft = spaceAround,
   spaceRight = spaceAround,
   text,
-}: OperatorProps) {
+}: OperatorProps): JSX.Element {
   return (
     <>
       {spaceLeft && " "}
@@ -263,7 +275,7 @@ interface KeywordProps {
   text?: string;
 }
 
-function Keyword({ children, className, text }: KeywordProps) {
+function Keyword({ children, className, text }: KeywordProps): JSX.Element {
   return (
     <>
       {" "}
@@ -274,7 +286,7 @@ function Keyword({ children, className, text }: KeywordProps) {
   );
 }
 
-function KeywordType({ children, className, text }: KeywordProps) {
+function KeywordType({ children, className, text }: KeywordProps): JSX.Element {
   return (
     <>
       {" "}

@@ -1,5 +1,5 @@
-import { redirect } from 'next/navigation';
+import { redirect } from "next/navigation";
 
-export default function IndexPage() {
-  return redirect('/docs/learn');
+export default function IndexPage(): JSX.Element {
+  return redirect("/docs/learn");
 }

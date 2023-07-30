@@ -23,7 +23,7 @@ const superdocsPlugin = plugin(
         },
       },
     },
-  }
+  },
 );
 
 export default superdocsPlugin;

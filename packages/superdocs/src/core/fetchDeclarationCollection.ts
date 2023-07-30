@@ -10,11 +10,11 @@ const [getDeclarationCollection, setDeclarationCollection] = serverContext<
 >(undefined, "DeclarationCollection");
 
 export function initDeclarationCollection(
-  opts: DeclarationCollectionOptions
+  opts: DeclarationCollectionOptions,
 ): DeclarationCollection {
   if (getDeclarationCollection()) {
     console.warn(
-      "warning: `initDeclarationCollection` has already been called"
+      "warning: `initDeclarationCollection` has already been called",
     );
   }
   const instance = makeDeclarationCollection(opts);
@@ -22,11 +22,11 @@ export function initDeclarationCollection(
   return instance;
 }
 
-export function useDeclarationCollection(): DeclarationCollection {
+export function fetchDeclarationCollection(): DeclarationCollection {
   const instance = getDeclarationCollection();
   if (!instance) {
     throw new Error(
-      "no instance available for DeclarationCollection (call `initDeclarationCollection` somewhere)"
+      "no instance available for DeclarationCollection (call `initDeclarationCollection` somewhere)",
     );
   }
   return instance;

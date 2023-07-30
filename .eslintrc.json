@@ -1,12 +1,12 @@
 {
   "parserOptions": {
-    "ecmaVersion": 2020,
+    "ecmaVersion": "latest",
     "sourceType": "module"
   },
   "extends": ["plugin:prettier/recommended"],
   "overrides": [
     {
-      "files": ["*.ts"],
+      "files": ["*.ts", "*.tsx"],
       "parser": "@typescript-eslint/parser",
       "extends": ["plugin:@typescript-eslint/recommended"],
       "plugins": ["import"],

@@ -13,7 +13,7 @@ const files = collectFiles(srcDir)
   .filter((x) => x !== "index");
 
 const index = ["// AUTO-GENERATED"].concat(
-  files.map((x) => `export * from './${x}.js';`)
+  files.map((x) => `export * from './${x}.js';`),
 );
 writeFileSync(join(srcDir, "index.ts"), index.join("\n") + "\n");
 

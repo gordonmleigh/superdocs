@@ -1,13 +1,15 @@
-'use client';
-import { ReactNode, useState } from 'react';
-import { Sidebar } from './Sidebar';
-import { TopNav } from './TopNav';
+"use client";
+import { ReactNode, useState } from "react";
+import { Sidebar } from "./Sidebar";
+import { TopNav } from "./TopNav";
 
 export interface NavigationClientProps {
   pages?: ReactNode;
 }
 
-export function NavigationClient({ pages }: NavigationClientProps) {
+export function NavigationClient({
+  pages,
+}: NavigationClientProps): JSX.Element {
   const [menuOpen, setMenuOpen] = useState(false);
 
   return (

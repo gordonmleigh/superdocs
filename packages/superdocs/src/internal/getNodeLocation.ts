@@ -15,7 +15,7 @@ export type GetNodeLocation = (node: ts.Node) => NodeLocation;
 
 export function makeGetNodeLocation(
   source: ts.SourceFile,
-  sourceRoot: string
+  sourceRoot: string,
 ): GetNodeLocation {
   const sourcePath = relative(resolve(sourceRoot), source.fileName);
   const sourceDir = dirname(source.fileName);
@@ -23,7 +23,7 @@ export function makeGetNodeLocation(
   const getNodeLocation: GetNodeLocation = (node) => {
     assert(
       node.getSourceFile() === source,
-      "the given node belongs to another source file"
+      "the given node belongs to another source file",
     );
     const pos = source.getLineAndCharacterOfPosition(node.pos);
 
@@ -47,7 +47,7 @@ export function makeGetNodeLocation(
     mappedSourceRoot = sourceDir;
   } else {
     converter = fromMapFileComment(comment, (path) =>
-      readFileSync(resolve(sourceDir, path), "utf-8")
+      readFileSync(resolve(sourceDir, path), "utf-8"),
     );
     mappedSourceRoot = dirname(resolve(sourceDir, url));
   }
@@ -77,7 +77,7 @@ export function makeGetNodeLocation(
 }
 
 function getSourceMapUrl(
-  source: string
+  source: string,
 ): [comment: string | undefined, url: string | undefined] {
   // blagged from https://github.com/evanw/node-source-map-support/blob/7b5b81eb14c9ee6c6537398262bf7dab8580621c/source-map-support.js#L148C1-L177C3
   const regexp =

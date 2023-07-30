@@ -10,11 +10,11 @@ const PACKAGE_JSON = "package.json";
 const TS_CONFIG = "tsconfig.json";
 
 const prettierConfig = await Prettier.resolveConfig(
-  join(WORKSPACE_ROOT, TS_CONFIG)
+  join(WORKSPACE_ROOT, TS_CONFIG),
 );
 
 const rootPkg = JSON.parse(
-  await readFile(join(WORKSPACE_ROOT, PACKAGE_JSON), "utf-8")
+  await readFile(join(WORKSPACE_ROOT, PACKAGE_JSON), "utf-8"),
 );
 
 if (
@@ -27,12 +27,12 @@ if (
 }
 
 const packages = rootPkg.workspaces.flatMap((x) =>
-  glob.sync(x, { onlyDirectories: true }).map((p) => resolve(p))
+  glob.sync(x, { onlyDirectories: true }).map((p) => resolve(p)),
 );
 
 if (!packages.length) {
   console.error(
-    `ERROR: no packages found in workspaces [${rootPkg.workspaces}]`
+    `ERROR: no packages found in workspaces [${rootPkg.workspaces}]`,
   );
   process.exit(1);
 }
@@ -65,7 +65,7 @@ for (const pkg of packages) {
     tsConfig = JSON.parse(await readFile(packageTsConfigPath));
     if (!tsConfig.compilerOptions?.composite) {
       console.warn(
-        `skipping ${packageJson.name} because composite is not turned on`
+        `skipping ${packageJson.name} because composite is not turned on`,
       );
       continue;
     }
@@ -85,14 +85,14 @@ for (const pkg of Object.values(refs)) {
   await addRefsToTsConfig(
     join(pkg.path, TS_CONFIG),
     pkg.deps.filter((x) => x in refs).map((x) => refs[x].path),
-    pkg.tsConfig
+    pkg.tsConfig,
   );
 }
 
 const rootTsConfigPath = join(WORKSPACE_ROOT, TS_CONFIG);
 await addRefsToTsConfig(
   rootTsConfigPath,
-  Object.values(refs).map((x) => x.path)
+  Object.values(refs).map((x) => x.path),
 );
 
 const result = spawnSync(
@@ -101,7 +101,7 @@ const result = spawnSync(
   {
     stdio: "inherit",
     shell: process.platform === "win32",
-  }
+  },
 );
 
 process.exit(result.status);
@@ -125,13 +125,13 @@ async function addRefsToTsConfig(configPath, references, contents) {
       })),
     },
     null,
-    2
+    2,
   );
   await writeFile(
     configPath,
     await Prettier.format(output, {
       filepath: configPath,
       ...prettierConfig,
-    })
+    }),
   );
 }

@@ -1,6 +1,6 @@
 import Link from "next/link";
 import ts from "typescript";
-import { useDeclarationCollection } from "../core/useDeclarationCollection";
+import { fetchDeclarationCollection } from "../core/fetchDeclarationCollection";
 
 type JSDocNode = ts.JSDoc | ts.JSDocTag | ts.JSDocComment | string;
 
@@ -8,11 +8,11 @@ export interface JSDocCommentProps {
   comment: JSDocNode | readonly JSDocNode[];
 }
 
-export function JSDoc({ comment }: JSDocCommentProps) {
-  const lib = useDeclarationCollection();
+export function JSDoc({ comment }: JSDocCommentProps): JSX.Element | null {
+  const lib = fetchDeclarationCollection();
 
   if (typeof comment === "string") {
-    return comment;
+    return <>{comment}</>;
   }
   if (isArray(comment)) {
     return (

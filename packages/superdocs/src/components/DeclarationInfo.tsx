@@ -6,7 +6,9 @@ export interface DeclarationInfoProps {
   declaration: Declaration;
 }
 
-export function DeclarationInfo({ declaration }: DeclarationInfoProps) {
+export function DeclarationInfo({
+  declaration,
+}: DeclarationInfoProps): JSX.Element {
   return (
     <>
       <h2 className="mb-0" id={declaration.slug}>
