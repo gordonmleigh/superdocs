@@ -1,6 +1,6 @@
 import Link from "next/link";
-import { useDeclarationCollection } from "superdocs";
 import ts from "typescript";
+import { useDeclarationCollection } from "../core/useDeclarationCollection";
 
 type JSDocNode = ts.JSDoc | ts.JSDocTag | ts.JSDocComment | string;
 

@@ -1,14 +1,14 @@
+import clsx from "clsx";
 import Link from "next/link";
 import { Fragment, ReactNode } from "react";
 import ts from "typescript";
 import { DeclarationNode } from "../core/DeclarationCollection.js";
 import { useDeclarationCollection } from "../core/useDeclarationCollection.js";
+import { getSyntaxKindName } from "../internal/getSyntaxKindName.js";
 import { styled } from "../internal/styled.js";
 
 const CodeBlock = styled("code", "my-5 block whitespace-normal p-2");
-const Keyword = styled("span", "text-code-keyword");
-const LiteralType = styled("span", "text-code-literalType");
-const Operator = styled("span", "text-code-operator");
+const LiteralType = styled("span", "text-code-literal-type");
 
 interface NodeProps<T> {
   node: T;
@@ -24,6 +24,13 @@ export function FormatDeclaration({ node }: FormatDeclarationProps) {
       </CodeBlock>
     );
   }
+  if (ts.isClassDeclaration(node)) {
+    return (
+      <CodeBlock>
+        <ClassDeclaration node={node} />
+      </CodeBlock>
+    );
+  }
   if (ts.isTypeAliasDeclaration(node)) {
     return (
       <CodeBlock>
@@ -31,7 +38,7 @@ export function FormatDeclaration({ node }: FormatDeclarationProps) {
       </CodeBlock>
     );
   }
-  return <CodeBlock>{node.getText()}</CodeBlock>;
+  return <CodeBlock className="code-unknown">{node.getText()}</CodeBlock>;
 }
 
 function EntityName({ node }: NodeProps<ts.EntityName>) {
@@ -49,7 +56,13 @@ function EntityName({ node }: NodeProps<ts.EntityName>) {
     }
   }
   const text = id.join(".");
-  return def ? <Link href={def.documentationLink}>{text}</Link> : <>{text}</>;
+  return def ? (
+    <Link className="text-code-identifier" href={def.documentationLink}>
+      {text}
+    </Link>
+  ) : (
+    <span className="text-code-identifier">{text}</span>
+  );
 }
 
 interface JoinProps<T> {
@@ -81,15 +94,31 @@ function TypeNode({ node }: NodeProps<ts.TypeNode>) {
   if (ts.isLiteralTypeNode(node)) {
     return <LiteralType>{node.getText()}</LiteralType>;
   }
-  return <>{node.getText()}</>;
+  if (ts.isUnionTypeNode(node)) {
+    return (
+      <Join
+        delimiter={<Operator text="|" spaceAround />}
+        items={node.types}
+        render={(x) => <TypeNode node={x} />}
+      />
+    );
+  }
+  if (getSyntaxKindName(node.kind).endsWith("Keyword")) {
+    return <KeywordType>{node.getText()}</KeywordType>;
+  }
+  return <span className="code-unknown">{node.getText()}</span>;
 }
 
 function TypeArguments({ node }: NodeProps<readonly ts.TypeNode[]>) {
   return (
     <>
-      {"<"}
-      <Join delimiter=", " items={node} render={(x) => <TypeNode node={x} />} />
-      {">"}
+      <Operator text="<" />
+      <Join
+        delimiter={<Operator text="," spaceRight />}
+        items={node}
+        render={(x) => <TypeNode node={x} />}
+      />
+      <Operator text=">" />
     </>
   );
 }
@@ -102,14 +131,14 @@ export function TypeParameter({
       <EntityName node={node.name} />
       {node.constraint && (
         <>
-          {" "}
-          <Keyword>extends</Keyword> <TypeNode node={node.constraint} />
+          <Keyword>extends</Keyword>
+          <TypeNode node={node.constraint} />
         </>
       )}
       {node.default && (
         <>
-          {" "}
-          <Operator>=</Operator> <TypeNode node={node.default} />
+          <Operator text="=" spaceAround />
+          <TypeNode node={node.default} />
         </>
       )}
     </>
@@ -134,16 +163,25 @@ function TypeParameters({
 
 function HeritageClause({ node }: NodeProps<ts.HeritageClause>) {
   return (
-    <Join
-      delimiter=", "
-      items={node.types}
-      render={(type) => (
-        <>
-          <EntityName node={type.expression as ts.EntityName} />
-          {type.typeArguments && <TypeArguments node={type.typeArguments} />}
-        </>
+    <>
+      <br />
+      {node.token === ts.SyntaxKind.ImplementsKeyword && (
+        <Keyword className="ml-8">implements</Keyword>
       )}
-    />
+      {node.token === ts.SyntaxKind.ExtendsKeyword && (
+        <Keyword className="ml-8">extends</Keyword>
+      )}
+      <Join
+        delimiter=", "
+        items={node.types}
+        render={(type) => (
+          <>
+            <EntityName node={type.expression as ts.EntityName} />
+            {type.typeArguments && <TypeArguments node={type.typeArguments} />}
+          </>
+        )}
+      />
+    </>
   );
 }
 
@@ -157,18 +195,24 @@ function HeritageClauses({ node }: NodeProps<ts.NodeArray<ts.HeritageClause>>) {
   );
 }
 
+function ClassDeclaration({ node }: NodeProps<ts.ClassDeclaration>) {
+  return (
+    <>
+      <Keyword>class</Keyword>
+      {node.name?.text}
+      {node.typeParameters && <TypeParameters node={node.typeParameters} />}
+      {node.heritageClauses && <HeritageClauses node={node.heritageClauses} />}
+    </>
+  );
+}
+
 function InterfaceDeclaration({ node }: NodeProps<ts.InterfaceDeclaration>) {
   return (
     <>
-      <Keyword>interface</Keyword> {node.name.text}
+      <Keyword>interface</Keyword>
+      {node.name.text}
       {node.typeParameters && <TypeParameters node={node.typeParameters} />}
-      {node.heritageClauses && (
-        <>
-          {" "}
-          <Keyword>extends</Keyword>{" "}
-          <HeritageClauses node={node.heritageClauses} />
-        </>
-      )}
+      {node.heritageClauses && <HeritageClauses node={node.heritageClauses} />}
     </>
   );
 }
@@ -176,11 +220,67 @@ function InterfaceDeclaration({ node }: NodeProps<ts.InterfaceDeclaration>) {
 function TypeAliasDeclaration({ node }: NodeProps<ts.TypeAliasDeclaration>) {
   return (
     <>
-      <Keyword>type</Keyword> {node.name.text}
-      {node.typeParameters && (
-        <TypeParameters node={node.typeParameters} />
-      )}{" "}
-      <Operator>=</Operator> <TypeNode node={node.type} />
+      <Keyword>type</Keyword>
+      {node.name.text}
+      {node.typeParameters && <TypeParameters node={node.typeParameters} />}
+      <Operator text="=" spaceAround />
+      <TypeNode node={node.type} />
+    </>
+  );
+}
+
+interface OperatorProps {
+  children?: ReactNode;
+  className?: string;
+  spaceAround?: boolean;
+  spaceLeft?: boolean;
+  spaceRight?: boolean;
+  text?: string;
+}
+
+function Operator({
+  children,
+  className,
+  spaceAround,
+  spaceLeft = spaceAround,
+  spaceRight = spaceAround,
+  text,
+}: OperatorProps) {
+  return (
+    <>
+      {spaceLeft && " "}
+      <span className={clsx(className, "text-code-operator")}>
+        {text ?? children}
+      </span>
+      {spaceRight && " "}
+    </>
+  );
+}
+
+interface KeywordProps {
+  children?: ReactNode;
+  className?: string;
+  text?: string;
+}
+
+function Keyword({ children, className, text }: KeywordProps) {
+  return (
+    <>
+      {" "}
+      <span className={clsx(className, "text-code-keyword")}>
+        {text ?? children}
+      </span>{" "}
+    </>
+  );
+}
+
+function KeywordType({ children, className, text }: KeywordProps) {
+  return (
+    <>
+      {" "}
+      <span className={clsx(className, "text-code-keyword-type")}>
+        {text ?? children}
+      </span>{" "}
     </>
   );
 }

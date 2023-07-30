@@ -7,8 +7,21 @@
  *
  * @group Classes
  */
-export class Class {
+export class Class implements Interface2 {
   constructor(public readonly name: string) {}
+
+  then<TResult1 = null | undefined, TResult2 = never>(
+    onfulfilled?:
+      | ((value: null | undefined) => TResult1 | PromiseLike<TResult1>)
+      | null
+      | undefined,
+    onrejected?:
+      | ((reason: any) => TResult2 | PromiseLike<TResult2>)
+      | null
+      | undefined
+  ): PromiseLike<TResult1 | TResult2> {
+    throw new Error("Method not implemented.");
+  }
 }
 
 /**
@@ -16,7 +29,7 @@ export class Class {
  *
  * @group Interfaces
  */
-export interface Interface1<T extends object = any>
+export interface Interface1<T extends object | null = null>
   extends PromiseLike<T | undefined> {}
 
 /**

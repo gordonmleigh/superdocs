@@ -13,7 +13,9 @@ export function initDeclarationCollection(
   opts: DeclarationCollectionOptions
 ): DeclarationCollection {
   if (getDeclarationCollection()) {
-    throw new Error("`initDeclarationCollection` has already been called");
+    console.warn(
+      "warning: `initDeclarationCollection` has already been called"
+    );
   }
   const instance = makeDeclarationCollection(opts);
   setDeclarationCollection(instance);

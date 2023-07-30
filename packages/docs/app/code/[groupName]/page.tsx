@@ -1,7 +1,6 @@
-import { DeclarationInfo } from "@/components/DeclarationInfo";
 import { MainLayout } from "@/components/MainLayout";
 import { notFound } from "next/navigation";
-import { useDeclarationCollection } from "superdocs";
+import { DeclarationInfo, useDeclarationCollection } from "superdocs";
 
 interface GroupPageParams {
   params: { groupName: string };

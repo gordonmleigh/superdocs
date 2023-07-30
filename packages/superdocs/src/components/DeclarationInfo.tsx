@@ -1,5 +1,6 @@
-import { Declaration, FormatDeclaration } from "superdocs";
-import { JSDoc } from "./JSDoc";
+import { Declaration } from "../core/DeclarationCollection.js";
+import { FormatDeclaration } from "./FormatDeclaration.js";
+import { JSDoc } from "./JSDoc.js";
 
 export interface DeclarationInfoProps {
   declaration: Declaration;
