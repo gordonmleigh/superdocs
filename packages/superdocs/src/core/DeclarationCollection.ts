@@ -49,62 +49,72 @@ export interface DeclarationCollectionOptions {
   sourceRoot?: string;
 }
 
-export interface DeclarationCollection {
-  getDeclaration(
-    name: ts.EntityName | ts.JSDocMemberName,
-  ): Declaration | undefined;
-
-  groups: DeclarationGroup[];
-}
-
 const resolveExtensions = [".ts", ".d.ts"];
 
-export function makeDeclarationCollection({
-  documentationRoot = "/code",
-  codeLinks,
-  getGroupName = defaultGetGroupName,
-  packagePath,
-  sourceRoot = resolve("."),
-}: DeclarationCollectionOptions): DeclarationCollection {
-  const packageInfo = getPackageInfo(packagePath);
-  const entryPoints = Object.values(packageInfo.entryPoints);
-  const declarations = new Map<DeclarationNode, Declaration>();
-  const getCodeLink = normaliseCodeLinkFactory(codeLinks);
-  const groups = new Map<string, DeclarationGroup>();
-  const program = loadProgram(entryPoints);
-  const checker = program.getTypeChecker();
+export class DeclarationCollection {
+  private readonly checker: ts.TypeChecker;
+  private readonly declarations = new Map<DeclarationNode, Declaration>();
+  private readonly documentationRoot: string;
+  private readonly getCodeLink: CodeLinkFactory | undefined;
+  private readonly getGroupName: (def: DeclarationNode) => string;
+  private readonly groupsMap = new Map<string, DeclarationGroup>();
+  private readonly program: ts.Program;
+  private readonly sourceRoot: string;
 
-  const self = {
-    getDeclaration,
+  public get groups(): DeclarationGroup[] {
+    return [...this.groupsMap.values()];
+  }
 
-    get groups(): DeclarationGroup[] {
-      return [...groups.values()];
-    },
-  };
+  constructor(opts: DeclarationCollectionOptions) {
+    this.documentationRoot = opts.documentationRoot ?? "/code";
+    this.getCodeLink = normaliseCodeLinkFactory(opts.codeLinks);
+    this.getGroupName = opts.getGroupName ?? defaultGetGroupName;
+    this.sourceRoot = opts.sourceRoot ?? resolve(".");
 
-  init();
+    const packageInfo = getPackageInfo(opts.packagePath);
+    const entryPoints = Object.values(packageInfo.entryPoints);
+    this.program = loadProgram(entryPoints);
+    this.checker = this.program.getTypeChecker();
 
-  return self;
-
-  function init(): void {
     for (const entryPoint of entryPoints) {
-      const source = program.getSourceFile(entryPoint);
+      const source = this.program.getSourceFile(entryPoint);
       assert(source, `expected source file '${entryPoint}'`);
-      loadSourceFile(source);
+      this.loadSourceFile(source);
     }
   }
 
-  function addDeclaration(node: DeclarationNode, location: NodeLocation): void {
-    const groupName = getGroupName(node);
+  public getDeclaration(
+    name: ts.EntityName | ts.JSDocMemberName,
+    alias = false,
+  ): Declaration | undefined {
+    let symbol = this.checker.getSymbolAtLocation(name);
+    if (!symbol) {
+      return;
+    }
+    if (alias) {
+      symbol = this.checker.getAliasedSymbol(symbol);
+    }
+    const def = symbol.declarations?.[0];
+    if (!def) {
+      return;
+    }
+    if (ts.isImportSpecifier(def)) {
+      return this.getDeclaration(def.name, true);
+    }
+    return this.declarations.get(def as any);
+  }
 
-    let group = groups.get(groupName);
+  private addDeclaration(node: DeclarationNode, location: NodeLocation): void {
+    const groupName = this.getGroupName(node);
+
+    let group = this.groupsMap.get(groupName);
     if (!group) {
       group = {
         declarations: [],
         name: groupName,
         slug: slugify(groupName),
       };
-      groups.set(groupName, group);
+      this.groupsMap.set(groupName, group);
     }
 
     if (!node.name?.text) {
@@ -114,10 +124,13 @@ export function makeDeclarationCollection({
     const slug = slugify(getSyntaxKindName(node.kind) + " " + node.name?.text);
 
     const declaration: Declaration = {
-      codeLink: getCodeLink?.(location),
-      collection: self,
+      codeLink: this.getCodeLink?.(location),
+      collection: this,
       documentation: ts.getJSDocCommentsAndTags(node),
-      documentationLink: posix.join(documentationRoot, group.slug + "#" + slug),
+      documentationLink: posix.join(
+        this.documentationRoot,
+        group.slug + "#" + slug,
+      ),
       group,
       location,
       name: node.name.text,
@@ -125,55 +138,34 @@ export function makeDeclarationCollection({
       slug,
     };
     group.declarations.push(declaration);
-    declarations.set(node, declaration);
+    this.declarations.set(node, declaration);
   }
 
-  function getDeclaration(
-    name: ts.EntityName | ts.JSDocMemberName,
-    alias = false,
-  ): Declaration | undefined {
-    let symbol = checker.getSymbolAtLocation(name);
-    if (!symbol) {
-      return;
-    }
-    if (alias) {
-      symbol = checker.getAliasedSymbol(symbol);
-    }
-    const def = symbol.declarations?.[0];
-    if (!def) {
-      return;
-    }
-    if (ts.isImportSpecifier(def)) {
-      return getDeclaration(def.name, true);
-    }
-    return declarations.get(def as any);
-  }
-
-  function loadExport(statement: ts.ExportDeclaration): void {
+  private loadExport(statement: ts.ExportDeclaration): void {
     if (statement.moduleSpecifier) {
-      const source = resolveSourceFile(
+      const source = this.resolveSourceFile(
         statement.moduleSpecifier,
         statement.getSourceFile().fileName,
       );
       if (source) {
-        loadSourceFile(source);
+        this.loadSourceFile(source);
       }
     }
   }
 
-  function loadSourceFile(source: ts.SourceFile): void {
-    const getNodeLocation = makeGetNodeLocation(source, sourceRoot);
+  private loadSourceFile(source: ts.SourceFile): void {
+    const getNodeLocation = makeGetNodeLocation(source, this.sourceRoot);
 
     for (const statement of source.statements) {
       if (ts.isExportDeclaration(statement)) {
-        loadExport(statement);
+        this.loadExport(statement);
       } else if (isDeclaration(statement) && isExported(statement)) {
-        addDeclaration(statement, getNodeLocation(statement));
+        this.addDeclaration(statement, getNodeLocation(statement));
       }
     }
   }
 
-  function resolveSourceFile(
+  private resolveSourceFile(
     moduleSpecifier: string | ts.Expression,
     from = ".",
   ): ts.SourceFile | undefined {
@@ -181,27 +173,27 @@ export function makeDeclarationCollection({
       if (!ts.isStringLiteral(moduleSpecifier)) {
         throw new Error(`expected a string `);
       }
-      return resolveSourceFile(moduleSpecifier.text, from);
+      return this.resolveSourceFile(moduleSpecifier.text, from);
     }
     if (!isLocal(moduleSpecifier)) {
       return;
     }
 
     if (moduleSpecifier.endsWith(".js")) {
-      const source = resolveSourceFile(moduleSpecifier.slice(0, -3), from);
+      const source = this.resolveSourceFile(moduleSpecifier.slice(0, -3), from);
       if (source) {
         return source;
       }
     }
 
-    const source = program.getSourceFile(
+    const source = this.program.getSourceFile(
       resolve(dirname(from), moduleSpecifier),
     );
     if (source) {
       return source;
     }
     for (const ext of resolveExtensions) {
-      const source = program.getSourceFile(
+      const source = this.program.getSourceFile(
         resolve(dirname(from), moduleSpecifier + ext),
       );
       if (source) {
