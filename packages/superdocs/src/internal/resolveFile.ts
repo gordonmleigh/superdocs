@@ -1,4 +1,4 @@
-import { statSync } from "fs";
+import { realpathSync, statSync } from "fs";
 import { dirname, join, resolve } from "path";
 
 export function resolveFileSync(
@@ -9,7 +9,7 @@ export function resolveFileSync(
     try {
       const resolved = join(curr, "node_modules", path);
       statSync(resolved);
-      return resolved;
+      return realpathSync(resolved);
     } catch (err: any) {
       if (err?.code !== "ENOENT") {
         throw err;

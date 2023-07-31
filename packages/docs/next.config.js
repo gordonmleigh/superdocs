@@ -1,6 +1,6 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  basePath: "/superdocs",
+  basePath: process.env.NEXT_PUBLIC_BASE_PATH,
   output: "export",
   webpack: (config) => {
     config.resolve = {
