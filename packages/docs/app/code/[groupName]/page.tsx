@@ -9,7 +9,7 @@ interface GroupPageParams {
 
 export function generateStaticParams(): GroupPageParams["params"][] {
   const collection = fetchDeclarationCollection();
-  return collection.groups.map(({ name }) => ({ groupName: name }));
+  return collection.groups.map(({ slug }) => ({ groupName: slug }));
 }
 
 export default function GroupPage({
