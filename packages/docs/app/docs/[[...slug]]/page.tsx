@@ -34,7 +34,7 @@ export default async function DocsPage({
 
   return (
     <MainLayout>
-      <h1>{meta.title}</h1>
+      {!meta.hideTitle && <h1>{meta.title}</h1>}
       {content}
     </MainLayout>
   );
