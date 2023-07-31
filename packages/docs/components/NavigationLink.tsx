@@ -15,7 +15,7 @@ export function NavigationLink({
   return (
     <div className="block py-1 text-sm text-zinc-600 transition hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-white">
       <Link href={href}>{title}</Link>
-      <ul className="ml-4 list-none">{children}</ul>
+      <div className="ml-4">{children}</div>
     </div>
   );
 }

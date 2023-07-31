@@ -5,30 +5,17 @@ import { ReactNode } from "react";
 import { Logo } from "./Logo";
 import { MenuButton } from "./MenuButton";
 
-interface TopNavItemProps {
-  children?: ReactNode;
-  href: string;
-}
-
-function TopNavItem({ href, children }: TopNavItemProps): JSX.Element {
-  return (
-    <li>
-      <Link
-        href={href}
-        className="text-sm leading-5 text-zinc-600 transition hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-white"
-      >
-        {children}
-      </Link>
-    </li>
-  );
-}
-
 export interface TopNavProps {
   menuOpen?: boolean;
   onMenuClick?: () => void;
+  sections?: ReactNode;
 }
 
-export function TopNav({ menuOpen, onMenuClick }: TopNavProps): JSX.Element {
+export function TopNav({
+  menuOpen,
+  onMenuClick,
+  sections,
+}: TopNavProps): JSX.Element {
   return (
     <div
       className={clsx(
@@ -44,9 +31,7 @@ export function TopNav({ menuOpen, onMenuClick }: TopNavProps): JSX.Element {
       <div className="flex items-center gap-5">
         <nav className="hidden md:block">
           <ul role="list" className="flex items-center gap-8">
-            <TopNavItem href="/">API</TopNavItem>
-            <TopNavItem href="#">Documentation</TopNavItem>
-            <TopNavItem href="#">Support</TopNavItem>
+            {sections}
           </ul>
         </nav>
       </div>

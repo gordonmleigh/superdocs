@@ -4,6 +4,6 @@
 
 Automagic documentation generation.
 
-## Documentation
+## Documentation
 
 See [Documentation](https://gordonmleigh.github.io/superdocs).

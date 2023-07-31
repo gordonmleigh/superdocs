@@ -47,6 +47,12 @@ export async function MainLayout({
             </NavigationLink>
           ))}
         </Navigation.Pages>
+        <Navigation.Sections>
+          <Navigation.SectionLink href="/docs/introduction">
+            Documentation
+          </Navigation.SectionLink>
+          <Navigation.SectionLink href="/code">API</Navigation.SectionLink>
+        </Navigation.Sections>
       </Navigation>
 
       <div className="relative">

@@ -8,24 +8,32 @@ export interface NavigationRootProps {
 }
 
 export function NavigationRoot({ children }: NavigationRootProps): JSX.Element {
-  const [pages] = getSlots(children, NavigationPages);
-  return <NavigationClient pages={pages} />;
+  const [pages, sections] = getSlots(
+    children,
+    NavigationPages,
+    NavigationSections,
+  );
+  return <NavigationClient pages={pages} sections={sections} />;
 }
 
-export interface NavigationPagesProps {
+export interface GroupProps {
   children?: ReactNode;
 }
 
-function NavigationPages({ children }: NavigationPagesProps): JSX.Element {
+function NavigationPages({ children }: GroupProps): JSX.Element {
   return <>{children}</>;
 }
 
-export interface NavigationLinkProps {
+function NavigationSections({ children }: GroupProps): JSX.Element {
+  return <>{children}</>;
+}
+
+export interface LinkProps {
   children?: ReactNode;
   href: string;
 }
 
-function NavigationLink({ children, href }: NavigationLinkProps): JSX.Element {
+function NavigationPageLink({ children, href }: LinkProps): JSX.Element {
   return (
     <li>
       <Link
@@ -38,7 +46,22 @@ function NavigationLink({ children, href }: NavigationLinkProps): JSX.Element {
   );
 }
 
+function NavigationSectionLink({ children, href }: LinkProps): JSX.Element {
+  return (
+    <li>
+      <Link
+        href={href}
+        className="block md:inline py-1 text-sm md:leading-5 text-zinc-600 transition hover:text-zinc-900"
+      >
+        {children}
+      </Link>
+    </li>
+  );
+}
+
 export const Navigation = Object.assign(NavigationRoot, {
-  Link: NavigationLink,
+  PageLink: NavigationPageLink,
   Pages: NavigationPages,
+  SectionLink: NavigationSectionLink,
+  Sections: NavigationSections,
 });

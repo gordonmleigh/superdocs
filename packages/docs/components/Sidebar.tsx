@@ -3,34 +3,18 @@ import Link from "next/link";
 import { ReactNode } from "react";
 import { Logo } from "./Logo";
 
-interface TopNavItemProps {
-  children?: ReactNode;
-  href: string;
-}
-
-function TopNavItem({ href, children }: TopNavItemProps): JSX.Element {
-  return (
-    <li>
-      <Link
-        href={href}
-        className="block py-1 text-sm text-zinc-600 transition hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-white"
-      >
-        {children}
-      </Link>
-    </li>
-  );
-}
-
 export interface SidebarProps {
-  children?: ReactNode;
   onClose?: () => void;
   open?: boolean;
+  pages: ReactNode;
+  sections?: ReactNode;
 }
 
 export function Sidebar({
-  children,
   onClose,
   open,
+  pages,
+  sections,
 }: SidebarProps): JSX.Element {
   return (
     <>
@@ -57,12 +41,10 @@ export function Sidebar({
           <div className="overflow-y-auto px-6" onClick={onClose}>
             <nav className="mt-5 md:hidden">
               <ul role="list" className="flex flex-col">
-                <TopNavItem href="/">API</TopNavItem>
-                <TopNavItem href="#">Documentation</TopNavItem>
-                <TopNavItem href="#">Support</TopNavItem>
+                {sections}
               </ul>
             </nav>
-            {children}
+            {pages}
           </div>
         </div>
       </div>
