@@ -15,7 +15,9 @@ export function NavigationClient({
   return (
     <>
       <TopNav menuOpen={menuOpen} onMenuClick={() => setMenuOpen((x) => !x)} />
-      <Sidebar open={menuOpen}>{pages}</Sidebar>
+      <Sidebar open={menuOpen} onClose={() => setMenuOpen(false)}>
+        {pages}
+      </Sidebar>
     </>
   );
 }

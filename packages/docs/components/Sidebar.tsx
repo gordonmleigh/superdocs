@@ -23,10 +23,15 @@ function TopNavItem({ href, children }: TopNavItemProps): JSX.Element {
 
 export interface SidebarProps {
   children?: ReactNode;
+  onClose?: () => void;
   open?: boolean;
 }
 
-export function Sidebar({ children, open }: SidebarProps): JSX.Element {
+export function Sidebar({
+  children,
+  onClose,
+  open,
+}: SidebarProps): JSX.Element {
   return (
     <>
       <div
@@ -34,6 +39,7 @@ export function Sidebar({ children, open }: SidebarProps): JSX.Element {
           "fixed left-0 top-0 z-30 h-full bg-zinc-400/20 backdrop-blur-sm transition lg:hidden",
           open ? "w-full" : "w-0",
         )}
+        onClick={onClose}
       />
       <div
         className={clsx(
@@ -48,7 +54,7 @@ export function Sidebar({ children, open }: SidebarProps): JSX.Element {
               <Logo className="h-6" />
             </Link>
           </div>
-          <div className="overflow-y-auto px-6">
+          <div className="overflow-y-auto px-6" onClick={onClose}>
             <nav className="mt-5 md:hidden">
               <ul role="list" className="flex flex-col">
                 <TopNavItem href="/">API</TopNavItem>
