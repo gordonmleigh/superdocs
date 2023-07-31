@@ -25,7 +25,7 @@ export function makeGetNodeLocation(
       node.getSourceFile() === source,
       "the given node belongs to another source file",
     );
-    const pos = source.getLineAndCharacterOfPosition(node.pos);
+    const pos = source.getLineAndCharacterOfPosition(node.getStart());
 
     return {
       char: pos.character + 1,
