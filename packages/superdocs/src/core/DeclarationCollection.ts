@@ -10,18 +10,30 @@ import { slugify } from "../internal/slugify";
 import { CodeError } from "./CodeError";
 import { NodeLocation } from "./NodeLocation";
 
+/**
+ * Union of supported declaration AST node types.
+ * @group Utilities
+ */
 export type DeclarationNode =
   | ts.ClassDeclaration
   | ts.FunctionDeclaration
   | ts.InterfaceDeclaration
   | ts.TypeAliasDeclaration;
 
+/**
+ * Represents a group of {@link Declaration} instances.
+ * @group Core
+ */
 export interface DeclarationGroup {
   declarations: Declaration[];
   name: string;
   slug: string;
 }
 
+/**
+ * Represents a declaration in a code file.
+ * @group Core
+ */
 export interface Declaration<Node extends DeclarationNode = DeclarationNode> {
   codeLink?: string;
   collection: DeclarationCollection;
@@ -34,13 +46,26 @@ export interface Declaration<Node extends DeclarationNode = DeclarationNode> {
   slug: string;
 }
 
+/**
+ * Represents a function which can return a code link for a given source code
+ * location.
+ * @group Utilities
+ */
 export type CodeLinkFactory = (pos: NodeLocation) => string;
 
+/**
+ * Represents information about a source code repository.
+ * @group Utilities
+ */
 export interface RepositoryInfo {
   sha: string;
   url: string;
 }
 
+/**
+ * Options for the {@link DeclarationCollection} class.
+ * @group Core
+ */
 export interface DeclarationCollectionOptions {
   codeLinks?: RepositoryInfo | CodeLinkFactory;
   documentationRoot?: string;
@@ -51,6 +76,11 @@ export interface DeclarationCollectionOptions {
 
 const resolveExtensions = [".ts", ".d.ts"];
 
+/**
+ * A class which can parse package type declarations and generate metadata about
+ * the declarations.
+ * @group Core
+ */
 export class DeclarationCollection {
   private readonly checker: ts.TypeChecker;
   private readonly declarations = new Map<DeclarationNode, Declaration>();

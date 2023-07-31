@@ -2,17 +2,26 @@ import Link from "next/link";
 import ts from "typescript";
 import { DeclarationCollection } from "../core/DeclarationCollection";
 
-type JSDocNode = ts.JSDoc | ts.JSDocTag | ts.JSDocComment | string;
+/**
+ * The union of valid AST nodes within a JSDoc.
+ * @group Utilities
+ */
+export type JSDocNode = ts.JSDoc | ts.JSDocTag | ts.JSDocComment | string;
 
-export interface JSDocCommentProps {
+/**
+ * Properties for the {@link JSDoc} component.
+ * @group Components
+ */
+export interface JSDocProps {
   collection: DeclarationCollection;
   comment: JSDocNode | readonly JSDocNode[];
 }
 
-export function JSDoc({
-  collection,
-  comment,
-}: JSDocCommentProps): JSX.Element | null {
+/**
+ * Format a JSDoc comment nicely.
+ * @group Components
+ */
+export function JSDoc({ collection, comment }: JSDocProps): JSX.Element | null {
   if (typeof comment === "string") {
     return <>{comment}</>;
   }

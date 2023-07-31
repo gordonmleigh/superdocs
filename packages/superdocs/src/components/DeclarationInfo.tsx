@@ -2,10 +2,18 @@ import { Declaration } from "../core/DeclarationCollection.js";
 import { FormatDeclaration } from "./FormatDeclaration.js";
 import { JSDoc } from "./JSDoc.js";
 
+/**
+ * Properties for {@link DeclarationInfo} component.
+ * @group Components
+ */
 export interface DeclarationInfoProps {
   declaration: Declaration;
 }
 
+/**
+ * Formats information about a declaration.
+ * @group Components
+ */
 export function DeclarationInfo({
   declaration,
 }: DeclarationInfoProps): JSX.Element {
