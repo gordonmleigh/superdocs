@@ -2,7 +2,7 @@
   "name": "@w/root",
   "private": "true",
   "scripts": {
-    "clean": "rimraf **/*.tsbuildinfo packages/docs/out packages/docs/.next packages/*/lib **/node_modules/.cache",
+    "clean": "rimraf --glob '**/*.tsbuildinfo' packages/docs/out packages/docs/.next packages/*/lib **/node_modules/.cache",
     "compile": "node tsbuild.mjs",
     "dev:docs": "npm run -w @w/docs dev",
     "docs": "npm run -w @w/docs build",
