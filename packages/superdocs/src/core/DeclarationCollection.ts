@@ -84,7 +84,6 @@ export function makeDeclarationCollection({
 
   init();
 
-  debugger;
   return self;
 
   function init(): void {
