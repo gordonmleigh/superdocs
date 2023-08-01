@@ -31,7 +31,7 @@ export function TypeNode({
   if (ts.isUnionTypeNode(node)) {
     return (
       <Join
-        delimiter={<Operator text="|" spaceAround />}
+        delimiter={<Operator text=" | " />}
         items={node.types}
         render={(x) => <TypeNode collection={collection} node={x} />}
       />

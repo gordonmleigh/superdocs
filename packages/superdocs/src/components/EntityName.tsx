@@ -1,6 +1,8 @@
 import Link from "next/link";
 import ts from "typescript";
+import { normaliseName } from "./Identifier.js";
 import { NodeProps } from "./NodeProps.js";
+import { CodeWord } from "./Word.js";
 
 /**
  * Formats a {@link ts.EntityName} in code, linking it to a definition if
@@ -12,23 +14,10 @@ export function EntityName({
   node,
 }: NodeProps<ts.EntityName>): JSX.Element {
   const def = collection.getDeclaration(node);
-  const id: string[] = [];
-
-  for (let curr = node; ; ) {
-    if (ts.isQualifiedName(curr)) {
-      id.unshift(curr.right.text);
-      curr = curr.left;
-    } else {
-      id.unshift(curr.text);
-      break;
-    }
-  }
-  const text = id.join(".");
-  return def ? (
-    <Link className="text-code-identifier" href={def.documentationLink}>
-      {text}
-    </Link>
-  ) : (
-    <span className="text-code-identifier">{text}</span>
+  const text = normaliseName(node);
+  return (
+    <CodeWord className="text-code-identifier">
+      {def ? <Link href={def.documentationLink}>{text}</Link> : text}
+    </CodeWord>
   );
 }

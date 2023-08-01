@@ -1,5 +1,7 @@
 import ts from "typescript";
+import { Identifier } from "./Identifier.js";
 import { Keyword } from "./Keyword.js";
+import { Modifiers } from "./Modifier.js";
 import { NodeProps } from "./NodeProps.js";
 import { Operator } from "./Operator.js";
 import { TypeNode } from "./TypeNode.js";
@@ -15,12 +17,13 @@ export function TypeAliasDeclaration({
 }: NodeProps<ts.TypeAliasDeclaration>): JSX.Element {
   return (
     <>
+      {node.modifiers && <Modifiers node={node.modifiers} />}
       <Keyword>type</Keyword>
-      {node.name.text}
+      <Identifier name={node.name} />
       {node.typeParameters && (
         <TypeParameters collection={collection} node={node.typeParameters} />
       )}
-      <Operator text="=" spaceAround />
+      <Operator text=" = " />
       <TypeNode collection={collection} node={node.type} />
     </>
   );

@@ -3,10 +3,14 @@
 @tailwind utilities;
 
 .transition-backdrop-in {
-  transition: backdrop-filter 2s ease-in, background-color 2s ease-in,
+  transition:
+    backdrop-filter 2s ease-in,
+    background-color 2s ease-in,
     width step-end 2s;
 }
 
 .transition-backdrop-out {
-  transition: backdrop-filter 2s ease-in, background-color 2s ease-in;
+  transition:
+    backdrop-filter 2s ease-in,
+    background-color 2s ease-in;
 }

@@ -52,7 +52,7 @@ export function JSDoc({ collection, comment }: JSDocProps): JSX.Element | null {
           </Link>
         );
       } else {
-        return <>{comment.name.getText()}</>;
+        return <code>{comment.name.getText()}</code>;
       }
     } else {
       return <>{comment.text}</>;

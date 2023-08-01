@@ -1,5 +1,6 @@
 import clsx from "clsx";
 import { ReactNode } from "react";
+import { CodeWord } from "./Word";
 
 /**
  * Properties for the {@link KeywordType} component.
@@ -22,10 +23,9 @@ export function KeywordType({
 }: KeywordTypeProps): JSX.Element {
   return (
     <>
-      {" "}
-      <span className={clsx(className, "text-code-keyword-type")}>
+      <CodeWord className={clsx(className, "text-code-keyword-type")}>
         {text ?? children}
-      </span>{" "}
+      </CodeWord>
     </>
   );
 }

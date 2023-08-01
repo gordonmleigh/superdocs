@@ -16,7 +16,7 @@ export function TypeArguments({
     <>
       <Operator text="<" />
       <Join
-        delimiter={<Operator text="," spaceRight />}
+        delimiter={<Operator text=", " />}
         items={node}
         render={(x) => <TypeNode collection={collection} node={x} />}
       />

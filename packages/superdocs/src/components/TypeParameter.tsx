@@ -25,7 +25,7 @@ export function TypeParameter({
       )}
       {node.default && (
         <>
-          <Operator text="=" spaceAround />
+          <Operator text=" = " />
           <TypeNode collection={collection} node={node.default} />
         </>
       )}

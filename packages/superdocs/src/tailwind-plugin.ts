@@ -4,6 +4,12 @@ import plugin from "tailwindcss/plugin";
 const superdocsPlugin = plugin(
   ({ addUtilities }) => {
     addUtilities({
+      ".code-word-spacing-space": {
+        display: "none",
+      },
+      ".code-word-spacing + .code-word-spacing > .code-word-spacing-space": {
+        display: "inline",
+      },
       ".code-unknown": {
         textDecoration: "underline",
         textDecorationStyle: "dotted",

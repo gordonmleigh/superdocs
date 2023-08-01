@@ -2,6 +2,7 @@ import ts from "typescript";
 import { DeclarationNode } from "../core/DeclarationCollection.js";
 import { styled } from "../internal/styled.js";
 import { ClassDeclaration } from "./ClassDeclaration.js";
+import { FunctionDeclaration } from "./FunctionDeclaration.js";
 import { InterfaceDeclaration } from "./InterfaceDeclaration.js";
 import { NodeProps } from "./NodeProps.js";
 import { TypeAliasDeclaration } from "./TypeAliasDeclaration.js";
@@ -22,17 +23,24 @@ export function FormatDeclaration({
   collection,
   node,
 }: FormatDeclarationProps): JSX.Element {
-  if (ts.isInterfaceDeclaration(node)) {
-    return (
-      <CodeBlock>
-        <InterfaceDeclaration collection={collection} node={node} />
-      </CodeBlock>
-    );
-  }
   if (ts.isClassDeclaration(node)) {
     return (
       <CodeBlock>
         <ClassDeclaration collection={collection} node={node} />
+      </CodeBlock>
+    );
+  }
+  if (ts.isFunctionDeclaration(node)) {
+    return (
+      <CodeBlock>
+        <FunctionDeclaration collection={collection} node={node} />
+      </CodeBlock>
+    );
+  }
+  if (ts.isInterfaceDeclaration(node)) {
+    return (
+      <CodeBlock>
+        <InterfaceDeclaration collection={collection} node={node} />
       </CodeBlock>
     );
   }
@@ -43,5 +51,7 @@ export function FormatDeclaration({
       </CodeBlock>
     );
   }
-  return <CodeBlock className="code-unknown">{node.getText()}</CodeBlock>;
+  return (
+    <CodeBlock className="code-unknown">{(node as any).getText()}</CodeBlock>
+  );
 }
