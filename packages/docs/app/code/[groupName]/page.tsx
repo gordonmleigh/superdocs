@@ -22,10 +22,14 @@ export default function GroupPage({
     return notFound();
   }
 
+  const sortedDeclarations = group.declarations
+    .slice()
+    .sort((a, b) => a.name.localeCompare(b.name));
+
   return (
     <MainLayout>
       <h1>{group.name}</h1>
-      {group.declarations.map((def) => (
+      {sortedDeclarations.map((def) => (
         <DeclarationInfo declaration={def} key={def.slug} />
       ))}
     </MainLayout>
