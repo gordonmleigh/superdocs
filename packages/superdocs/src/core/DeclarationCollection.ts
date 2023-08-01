@@ -1,8 +1,8 @@
 import chalk from "chalk";
 import { dirname, posix, resolve } from "path";
 import ts from "typescript";
+import { NodeLocationMap } from "../internal/NodeLocationMap";
 import { assert } from "../internal/assert";
-import { makeGetNodeLocation } from "../internal/getNodeLocation";
 import { getPackageInfo } from "../internal/getPackageInfo";
 import { getSyntaxKindName } from "../internal/getSyntaxKindName";
 import { loadProgram } from "../internal/loadProgram";
@@ -88,6 +88,7 @@ export class DeclarationCollection {
   private readonly getCodeLink: CodeLinkFactory | undefined;
   private readonly getGroupName: (def: DeclarationNode) => string;
   private readonly groupsMap = new Map<string, DeclarationGroup>();
+  private readonly nodeLocations: NodeLocationMap;
   private readonly program: ts.Program;
   private readonly sourceRoot: string;
 
@@ -100,6 +101,7 @@ export class DeclarationCollection {
     this.getCodeLink = normaliseCodeLinkFactory(opts.codeLinks);
     this.getGroupName = opts.getGroupName ?? defaultGetGroupName;
     this.sourceRoot = opts.sourceRoot ?? resolve(".");
+    this.nodeLocations = new NodeLocationMap({ sourceRoot: this.sourceRoot });
 
     const packageInfo = getPackageInfo(opts.packagePath);
     const entryPoints = Object.values(packageInfo.entryPoints);
@@ -134,8 +136,9 @@ export class DeclarationCollection {
     return this.declarations.get(def as any);
   }
 
-  private addDeclaration(node: DeclarationNode, location: NodeLocation): void {
+  private addDeclaration(node: DeclarationNode): void {
     const groupName = this.getGroupName(node);
+    const location = this.nodeLocations.getNodeLocation(node);
 
     let group = this.groupsMap.get(groupName);
     if (!group) {
@@ -184,13 +187,11 @@ export class DeclarationCollection {
   }
 
   private loadSourceFile(source: ts.SourceFile): void {
-    const getNodeLocation = makeGetNodeLocation(source, this.sourceRoot);
-
     for (const statement of source.statements) {
       if (ts.isExportDeclaration(statement)) {
         this.loadExport(statement);
       } else if (isDeclaration(statement) && isExported(statement)) {
-        this.addDeclaration(statement, getNodeLocation(statement));
+        this.addDeclaration(statement);
       }
     }
   }
