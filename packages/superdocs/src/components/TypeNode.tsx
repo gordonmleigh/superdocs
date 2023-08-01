@@ -6,15 +6,19 @@ import { KeywordType } from "./KeywordType.js";
 import { NodeProps } from "./NodeProps.js";
 import { Operator } from "./Operator.js";
 import { TypeArguments } from "./TypeArguments.js";
+import { CodeWord } from "./Word.js";
+
+/**
+ * Properties for the {@link TypeNode} component.
+ * @group Components
+ */
+export type TypeNodeProps = NodeProps<ts.TypeNode>;
 
 /**
  * Format a type node in code.
  * @group Components
  */
-export function TypeNode({
-  collection,
-  node,
-}: NodeProps<ts.TypeNode>): JSX.Element {
+export function TypeNode({ collection, node }: TypeNodeProps): JSX.Element {
   if (ts.isTypeReferenceNode(node)) {
     return (
       <>
@@ -35,6 +39,55 @@ export function TypeNode({
         items={node.types}
         render={(x) => <TypeNode collection={collection} node={x} />}
       />
+    );
+  }
+  if (ts.isIntersectionTypeNode(node)) {
+    return (
+      <Join
+        delimiter={<Operator text=" & " />}
+        items={node.types}
+        render={(x) => <TypeNode collection={collection} node={x} />}
+      />
+    );
+  }
+  if (ts.isArrayTypeNode(node)) {
+    return (
+      <>
+        <TypeNode collection={collection} node={node.elementType} />
+        <Operator text="[]" />
+      </>
+    );
+  }
+  if (ts.isParenthesizedTypeNode(node)) {
+    return (
+      <>
+        <CodeWord />
+        <Operator text="(" />
+        <TypeNode collection={collection} node={node.type} />
+        <Operator text=")" />
+      </>
+    );
+  }
+  if (ts.isTypeOperatorNode(node)) {
+    let keyword: string | undefined;
+    switch (node.operator) {
+      case ts.SyntaxKind.KeyOfKeyword:
+        keyword = "keyof";
+        break;
+      case ts.SyntaxKind.ReadonlyKeyword:
+        keyword = "readonly";
+        break;
+      case ts.SyntaxKind.UniqueKeyword:
+        keyword = "unique";
+        break;
+    }
+    return keyword ? (
+      <>
+        <KeywordType text={keyword} />
+        <TypeNode collection={collection} node={node.type} />
+      </>
+    ) : (
+      <span className="code-unknown">{node.getText()}</span>
     );
   }
   if (getSyntaxKindName(node.kind).endsWith("Keyword")) {

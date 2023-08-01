@@ -16,7 +16,7 @@ export function Modifier({
 
 export function Modifiers({
   node,
-}: NodeOnlyProps<readonly ts.ModifierLike[]>): JSX.Element {
+}: NodeOnlyProps<readonly (ts.ModifierLike | ts.ModifierLike)[]>): JSX.Element {
   return (
     <>
       {node.map((modifier) => (

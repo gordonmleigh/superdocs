@@ -21,6 +21,7 @@ export function FunctionDeclaration({
       {node.modifiers && <Modifiers node={node.modifiers} />}
       <Keyword>function</Keyword>
       {node.name && <Identifier name={node.name} />}
+      {node.asteriskToken && <Operator text="*" />}
       {node.typeParameters && (
         <TypeParameters collection={collection} node={node.typeParameters} />
       )}

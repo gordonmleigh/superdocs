@@ -28,12 +28,12 @@ export function Sidebar({
       <div
         className={clsx(
           "fixed inset-0 z-50 mt-14 flex w-72 border-r bg-white shadow-lg shadow-zinc-900/10 transition-transform",
-          "lg:mt-0 lg:transform-none lg:border-zinc-200 lg:pb-8 lg:pt-4 lg:shadow-none xl:w-80",
+          "lg:mt-0 lg:transform-none lg:border-zinc-200 lg:pb-8 lg:shadow-none xl:w-80",
           open ? "transform-none" : "-translate-x-full",
         )}
       >
         <div className="flex w-full flex-col">
-          <div className="hidden h-14 content-center px-6 lg:flex">
+          <div className="hidden h-14 content-center px-6 py-4 lg:flex bg-white">
             <Link href="/" aria-label="Home">
               <Logo className="h-6" />
             </Link>
