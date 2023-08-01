@@ -31,21 +31,27 @@ export async function MainLayout({
             />
           ))}
           <NavigationSection>API</NavigationSection>
-          {collection.groups.map((group) => (
-            <NavigationLink
-              href={`/code/${group.slug}`}
-              key={group.slug}
-              title={group.name}
-            >
-              {group.declarations.map((def) => (
-                <NavigationLink
-                  href={def.documentationLink}
-                  key={def.slug}
-                  title={def.name}
-                />
-              ))}
-            </NavigationLink>
-          ))}
+          {collection.groups
+            .slice()
+            .sort((a, b) => a.name.localeCompare(b.name))
+            .map((group) => (
+              <NavigationLink
+                href={`/code/${group.slug}`}
+                key={group.slug}
+                title={group.name}
+              >
+                {group.declarations
+                  .slice()
+                  .sort((a, b) => a.name.localeCompare(b.name))
+                  .map((def) => (
+                    <NavigationLink
+                      href={def.documentationLink}
+                      key={def.slug}
+                      title={def.name}
+                    />
+                  ))}
+              </NavigationLink>
+            ))}
         </Navigation.Pages>
         <Navigation.Sections>
           <Navigation.SectionLink href="/docs/introduction">
