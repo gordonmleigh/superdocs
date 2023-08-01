@@ -39,7 +39,6 @@ export interface Declaration<Node extends DeclarationNode = DeclarationNode> {
   collection: DeclarationCollection;
   documentation: readonly (ts.JSDoc | ts.JSDocTag)[];
   documentationLink: string;
-  group: DeclarationGroup;
   location: NodeLocation;
   name: string;
   node: Node;
@@ -154,7 +153,7 @@ export class DeclarationCollection {
       throw new CodeError(`expected a named declaration`, location);
     }
 
-    const slug = slugify(getSyntaxKindName(node.kind) + " " + node.name?.text);
+    const slug = slugifyNode(node);
 
     const declaration: Declaration = {
       codeLink: this.getCodeLink?.(location),
@@ -164,7 +163,6 @@ export class DeclarationCollection {
         this.documentationRoot,
         group.slug + "#" + slug,
       ),
-      group,
       location,
       name: node.name.text,
       node,
@@ -282,4 +280,8 @@ function normaliseCodeLinkFactory(
     );
     return `${url.toString()}#L${location.line}`;
   };
+}
+
+function slugifyNode(node: DeclarationNode): string {
+  return getSyntaxKindName(node.kind) + "-" + (node.name?.text ?? "node");
 }
