@@ -48,11 +48,15 @@ export function JSDoc({ collection, comment }: JSDocProps): JSX.Element | null {
       if (def) {
         return (
           <Link href={def.documentationLink}>
-            <code>{comment.name.getText()}</code>
+            <code className="jsdoc-code-link">{comment.name.getText()}</code>
           </Link>
         );
       } else {
-        return <code>{comment.name.getText()}</code>;
+        return (
+          <code className="jsdoc-code-link-broken">
+            {comment.name.getText()}
+          </code>
+        );
       }
     } else {
       return <>{comment.text}</>;

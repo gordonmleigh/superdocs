@@ -1,4 +1,5 @@
 import { MainLayout } from "@/components/MainLayout";
+import { Prose } from "@/components/Prose";
 import { fetchAllContent, fetchContentBySlug } from "@/util/content";
 import { SiteMeta } from "@/util/metadata";
 import { Metadata } from "next";
@@ -34,8 +35,10 @@ export default async function DocsPage({
 
   return (
     <MainLayout>
-      {!meta.hideTitle && <h1>{meta.title}</h1>}
-      {content}
+      <Prose as="article">
+        {!meta.hideTitle && <h1>{meta.title}</h1>}
+        {content}
+      </Prose>
     </MainLayout>
   );
 }

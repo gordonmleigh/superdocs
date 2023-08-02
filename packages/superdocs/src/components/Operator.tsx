@@ -26,9 +26,7 @@ export function Operator({
   return (
     <>
       {spaceLeft && " "}
-      <span className={clsx(className, "text-code-operator")}>
-        {text?.trim()}
-      </span>
+      <span className={clsx(className, "code-operator")}>{text?.trim()}</span>
       {spaceRight && " "}
     </>
   );

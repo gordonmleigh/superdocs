@@ -19,9 +19,7 @@ export function Identifier({ className, name }: IdentifierProps): JSX.Element {
   const text = name && normaliseName(name);
   return (
     <>
-      <CodeWord className={clsx(className, "text-code-identifier")}>
-        {text}
-      </CodeWord>
+      <CodeWord className={clsx(className, "code-identifier")}>{text}</CodeWord>
     </>
   );
 }

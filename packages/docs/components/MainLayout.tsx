@@ -4,7 +4,6 @@ import { styled } from "@/util/styled";
 import { ReactNode } from "react";
 import { Navigation } from "./Navigation";
 import { NavigationLink } from "./NavigationLink";
-import { Prose } from "./Prose";
 
 const NavigationSection = styled("div", "text-xs uppercase mt-8");
 
@@ -63,7 +62,7 @@ export async function MainLayout({
 
       <div className="relative">
         <main className="min-h-[100vh] px-4 pb-16 pt-28 sm:px-6 lg:px-8">
-          <Prose as="article">{children}</Prose>
+          {children}
         </main>
       </div>
     </div>

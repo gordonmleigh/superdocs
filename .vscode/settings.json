@@ -3,5 +3,6 @@
     "source.organizeImports": true
   },
   "eslint.workingDirectories": [{ "mode": "auto" }],
-  "typescript.tsdk": "node_modules/typescript/lib"
+  "typescript.tsdk": "node_modules/typescript/lib",
+  "cSpell.words": ["superdocs", "tailwindcss"]
 }

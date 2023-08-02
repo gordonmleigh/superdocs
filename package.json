@@ -4,7 +4,7 @@
   "scripts": {
     "clean": "rimraf --glob '**/*.tsbuildinfo' packages/docs/out packages/docs/.next packages/*/lib **/node_modules/.cache",
     "compile": "node tsbuild.mjs",
-    "dev:docs": "npm run -w @w/docs dev",
+    "dev:docs": "nodemon --exec 'npm run -w @w/docs dev' --watch packages/superdocs/lib",
     "docs": "npm run -w @w/docs build",
     "lint": "npm run --workspaces --if-present lint",
     "watch:compile": "node tsbuild.mjs --watch"
@@ -30,6 +30,7 @@
     "eslint-plugin-prettier": "^5.0.0",
     "glob": "^10.3.3",
     "next": "13.4.12",
+    "nodemon": "^3.0.1",
     "postcss": "8.4.26",
     "prettier": "^3.0.0",
     "react": "18.2.0",

@@ -28,10 +28,12 @@ export default function GroupPage({
 
   return (
     <MainLayout>
-      <h1>{group.name}</h1>
-      {sortedDeclarations.map((def) => (
-        <DeclarationInfo declaration={def} key={def.slug} />
-      ))}
+      <div className="superdocs">
+        <h1 className="text-4xl font-semibold mb-10">{group.name}</h1>
+        {sortedDeclarations.map((def) => (
+          <DeclarationInfo declaration={def} key={def.slug} />
+        ))}
+      </div>
     </MainLayout>
   );
 }

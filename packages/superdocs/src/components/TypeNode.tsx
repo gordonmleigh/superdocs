@@ -30,7 +30,7 @@ export function TypeNode({ collection, node }: TypeNodeProps): JSX.Element {
     );
   }
   if (ts.isLiteralTypeNode(node)) {
-    return <span className="text-code-literal-type">{node.getText()}</span>;
+    return <span className="code-literal-type">{node.getText()}</span>;
   }
   if (ts.isUnionTypeNode(node)) {
     return (

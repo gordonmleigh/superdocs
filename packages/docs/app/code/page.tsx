@@ -8,7 +8,7 @@ export default function CodePage(): JSX.Element {
   return (
     <MainLayout>
       <h1>API Documentation</h1>
-      <div className="not-prose">
+      <div>
         {collection.groups.map((group) => (
           <NavigationLink
             href={`/code/${group.slug}`}

@@ -23,7 +23,7 @@ export function KeywordType({
 }: KeywordTypeProps): JSX.Element {
   return (
     <>
-      <CodeWord className={clsx(className, "text-code-keyword-type")}>
+      <CodeWord className={clsx(className, "code-keyword-type")}>
         {text ?? children}
       </CodeWord>
     </>

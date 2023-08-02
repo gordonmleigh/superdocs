@@ -16,7 +16,7 @@ export function EntityName({
   const def = collection.getDeclaration(node);
   const text = normaliseName(node);
   return (
-    <CodeWord className="text-code-identifier">
+    <CodeWord className="code-identifier">
       {def ? <Link href={def.documentationLink}>{text}</Link> : text}
     </CodeWord>
   );

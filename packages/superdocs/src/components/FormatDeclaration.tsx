@@ -1,13 +1,10 @@
 import ts from "typescript";
 import { DeclarationNode } from "../core/DeclarationCollection.js";
-import { styled } from "../internal/styled.js";
 import { ClassDeclaration } from "./ClassDeclaration.js";
 import { FunctionDeclaration } from "./FunctionDeclaration.js";
 import { InterfaceDeclaration } from "./InterfaceDeclaration.js";
 import { NodeProps } from "./NodeProps.js";
 import { TypeAliasDeclaration } from "./TypeAliasDeclaration.js";
-
-const CodeBlock = styled("code", "my-5 block whitespace-normal p-2");
 
 /**
  * Properties for the {@link FormatDeclaration} component.
@@ -25,33 +22,35 @@ export function FormatDeclaration({
 }: FormatDeclarationProps): JSX.Element {
   if (ts.isClassDeclaration(node)) {
     return (
-      <CodeBlock>
+      <code className="declaration-code">
         <ClassDeclaration collection={collection} node={node} />
-      </CodeBlock>
+      </code>
     );
   }
   if (ts.isFunctionDeclaration(node)) {
     return (
-      <CodeBlock>
+      <code className="declaration-code">
         <FunctionDeclaration collection={collection} node={node} />
-      </CodeBlock>
+      </code>
     );
   }
   if (ts.isInterfaceDeclaration(node)) {
     return (
-      <CodeBlock>
+      <code className="declaration-code">
         <InterfaceDeclaration collection={collection} node={node} />
-      </CodeBlock>
+      </code>
     );
   }
   if (ts.isTypeAliasDeclaration(node)) {
     return (
-      <CodeBlock>
+      <code className="declaration-code">
         <TypeAliasDeclaration collection={collection} node={node} />
-      </CodeBlock>
+      </code>
     );
   }
   return (
-    <CodeBlock className="code-unknown">{(node as any).getText()}</CodeBlock>
+    <code className="declaration-code code-unknown">
+      {(node as any).getText()}
+    </code>
   );
 }
