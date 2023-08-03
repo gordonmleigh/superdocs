@@ -5,9 +5,9 @@ import { NodeLocationMap } from "../internal/NodeLocationMap";
 import { assert } from "../internal/assert";
 import { getPackageInfo } from "../internal/getPackageInfo";
 import { getSyntaxKindName } from "../internal/getSyntaxKindName";
+import { hash } from "../internal/hash";
 import { loadProgram } from "../internal/loadProgram";
 import { slugify } from "../internal/slugify";
-import { CodeError } from "./CodeError";
 import { NodeLocation } from "./NodeLocation";
 
 /**
@@ -19,6 +19,25 @@ export type DeclarationNode =
   | ts.FunctionDeclaration
   | ts.InterfaceDeclaration
   | ts.TypeAliasDeclaration;
+
+/**
+ * Union of supported declaration AST node types which can be a child of
+ * declaration node.
+ * @group Utilities
+ */
+export type DeclarationMemberNode = ts.TypeElement;
+
+/**
+ * Union of supported AST node types which are children of declarations.
+ * @group Utilities
+ */
+export type DeclarationChildNode = DeclarationMemberNode;
+
+/**
+ * Union of supported declaration AST node types and their supported children.
+ * @group Utilities
+ */
+export type DeclarationNodeOrChildNode = DeclarationNode | DeclarationChildNode;
 
 /**
  * Represents a group of {@link Declaration} instances.
@@ -34,12 +53,15 @@ export interface DeclarationGroup {
  * Represents a declaration in a code file.
  * @group Core
  */
-export interface Declaration<Node extends DeclarationNode = DeclarationNode> {
+export interface Declaration<
+  Node extends DeclarationNodeOrChildNode = DeclarationNode,
+> {
   codeLink?: string;
   collection: DeclarationCollection;
   documentation: readonly (ts.JSDoc | ts.JSDocTag)[];
   documentationLink: string;
   location: NodeLocation;
+  members?: Declaration<DeclarationMemberNode>[];
   name: string;
   node: Node;
   slug: string;
@@ -137,9 +159,8 @@ export class DeclarationCollection {
 
   private addDeclaration(node: DeclarationNode): void {
     const groupName = this.getGroupName(node);
-    const location = this.nodeLocations.getNodeLocation(node);
-
     let group = this.groupsMap.get(groupName);
+
     if (!group) {
       group = {
         declarations: [],
@@ -149,27 +170,23 @@ export class DeclarationCollection {
       this.groupsMap.set(groupName, group);
     }
 
-    if (!node.name?.text) {
-      throw new CodeError(`expected a named declaration`, location);
-    }
-
-    const slug = slugifyNode(node);
-
-    const declaration: Declaration = {
-      codeLink: this.getCodeLink?.(location),
-      collection: this,
-      documentation: ts.getJSDocCommentsAndTags(node),
-      documentationLink: posix.join(
-        this.documentationRoot,
-        group.slug + "#" + slug,
-      ),
-      location,
-      name: node.name.text,
-      node,
-      slug,
-    };
+    const declaration = this.makeDeclaration(node, group);
     group.declarations.push(declaration);
     this.declarations.set(node, declaration);
+  }
+
+  private getMembers(
+    node: DeclarationNodeOrChildNode,
+    group: DeclarationGroup,
+  ): Declaration<DeclarationMemberNode>[] | undefined {
+    if (ts.isInterfaceDeclaration(node)) {
+      return node.members?.map((member) => this.makeDeclaration(member, group));
+    }
+    if (ts.isTypeAliasDeclaration(node) && ts.isTypeLiteralNode(node.type)) {
+      return node.type.members.map((member) =>
+        this.makeDeclaration(member, group),
+      );
+    }
   }
 
   private loadExport(statement: ts.ExportDeclaration): void {
@@ -192,6 +209,29 @@ export class DeclarationCollection {
         this.addDeclaration(statement);
       }
     }
+  }
+
+  private makeDeclaration<T extends DeclarationNodeOrChildNode>(
+    node: T,
+    group: DeclarationGroup,
+  ): Declaration<T> {
+    const location = this.nodeLocations.getNodeLocation(node);
+    const slug = slugifyNode(node);
+
+    return {
+      codeLink: this.getCodeLink?.(location),
+      collection: this,
+      documentation: ts.getJSDocCommentsAndTags(node),
+      documentationLink: posix.join(
+        this.documentationRoot,
+        group.slug + "#" + slug,
+      ),
+      location,
+      members: this.getMembers(node, group),
+      name: getName(node) ?? getNodeId(node),
+      node,
+      slug,
+    };
   }
 
   private resolveSourceFile(
@@ -282,6 +322,32 @@ function normaliseCodeLinkFactory(
   };
 }
 
-function slugifyNode(node: DeclarationNode): string {
-  return getSyntaxKindName(node.kind) + "-" + (node.name?.text ?? "node");
+function getName(node: DeclarationNodeOrChildNode): string | undefined {
+  if ("name" in node && node.name) {
+    if (ts.isIdentifier(node.name)) {
+      return node.name.text;
+    }
+    if (ts.isStringLiteral(node.name)) {
+      return `"${node.name.text}"`;
+    }
+    if (ts.isNumericLiteral(node.name)) {
+      return `[${node.name.text}]`;
+    }
+    if (ts.isComputedPropertyName(node.name)) {
+      return `[${node.name.getText()}]`;
+    }
+  }
+  if (ts.isIndexSignatureDeclaration(node)) {
+    return `Index [${node.parameters.map((x) => x.getText()).join(", ")}]`;
+  }
+}
+
+function getNodeId(node: ts.Node): string {
+  const id = hash([node.getSourceFile().fileName, `${node.pos}`])?.slice(0, 5);
+  return `node-${id}`;
+}
+
+function slugifyNode(node: DeclarationNodeOrChildNode): string {
+  const name = getName(node) ?? getNodeId(node);
+  return getSyntaxKindName(node.kind) + "-" + slugify(name);
 }

@@ -90,7 +90,8 @@ const superdocsPlugin = plugin.withOptions(
               "--tw-superdocs-font-size-sm": fontSize("sm").fontSize,
               "--tw-superdocs-font-size-base": fontSize("base").fontSize,
               "--tw-superdocs-font-size-lg": fontSize("lg").fontSize,
-              "--tw-superdocs-font-size-xl": fontSize("2xl").fontSize,
+              "--tw-superdocs-font-size-xl": fontSize("xl").fontSize,
+              "--tw-superdocs-font-size-2xl": fontSize("2xl").fontSize,
             },
 
             components: {
@@ -117,7 +118,11 @@ const superdocsPlugin = plugin.withOptions(
               },
 
               ".declaration": {
-                marginBottom: theme("spacing.16"),
+                marginBottom: theme("spacing.28"),
+              },
+
+              ".declaration-child": {
+                marginBottom: theme("spacing.8"),
               },
 
               ".declaration-code": {
@@ -128,8 +133,8 @@ const superdocsPlugin = plugin.withOptions(
                 borderWidth: "1px",
                 display: "block",
                 fontSize: "var(--tw-superdocs-font-size-sm)",
-                marginBottom: theme("spacing.5"),
-                marginTop: theme("spacing.5"),
+                marginBottom: theme("spacing.4"),
+                marginTop: theme("spacing.4"),
                 padding: theme("spacing.2"),
               },
 
@@ -144,7 +149,21 @@ const superdocsPlugin = plugin.withOptions(
               },
 
               ".declaration-heading": {
+                fontSize: "var(--tw-superdocs-font-size-2xl)",
+                fontWeight: theme("fontWeight.semibold"),
+              },
+
+              ".declaration-members": {
+                marginTop: theme("spacing.8"),
+              },
+
+              ".declaration-subheading": {
                 fontSize: "var(--tw-superdocs-font-size-xl)",
+                fontWeight: theme("fontWeight.semibold"),
+              },
+
+              ".declaration-subsubheading": {
+                fontSize: "var(--tw-superdocs-font-size-lg)",
                 fontWeight: theme("fontWeight.semibold"),
               },
 

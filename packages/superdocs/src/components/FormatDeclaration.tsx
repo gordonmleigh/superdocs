@@ -1,5 +1,5 @@
 import ts from "typescript";
-import { DeclarationNode } from "../core/DeclarationCollection.js";
+import { DeclarationNodeOrChildNode } from "../core/DeclarationCollection.js";
 import { ClassDeclaration } from "./ClassDeclaration.js";
 import { FunctionDeclaration } from "./FunctionDeclaration.js";
 import { InterfaceDeclaration } from "./InterfaceDeclaration.js";
@@ -10,7 +10,7 @@ import { TypeAliasDeclaration } from "./TypeAliasDeclaration.js";
  * Properties for the {@link FormatDeclaration} component.
  * @group Components
  */
-export type FormatDeclarationProps = NodeProps<DeclarationNode>;
+export type FormatDeclarationProps = NodeProps<DeclarationNodeOrChildNode>;
 
 /**
  * Properties for the {@link FormatDeclaration} component.

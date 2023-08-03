@@ -1,13 +1,24 @@
-import { Declaration } from "../core/DeclarationCollection.js";
-import { FormatDeclaration } from "./FormatDeclaration.js";
-import { JSDoc } from "./JSDoc.js";
+import clsx from "clsx";
+import {
+  Declaration,
+  DeclarationNodeOrChildNode,
+} from "../core/DeclarationCollection.js";
+import { JSDoc } from "./ast/JSDoc.js";
+import { FormatDeclaration } from "./declarations/FormatDeclaration.js";
 
 /**
  * Properties for {@link DeclarationInfo} component.
  * @group Components
  */
 export interface DeclarationInfoProps {
-  declaration: Declaration;
+  /**
+   * True if the node is a child of a declaration.
+   */
+  child?: boolean;
+  /**
+   * The declaration to format.
+   */
+  declaration: Declaration<DeclarationNodeOrChildNode>;
 }
 
 /**
@@ -15,11 +26,17 @@ export interface DeclarationInfoProps {
  * @group Components
  */
 export function DeclarationInfo({
+  child,
   declaration,
 }: DeclarationInfoProps): JSX.Element {
   return (
-    <section className="declaration">
-      <h2 className="declaration-heading" id={declaration.slug}>
+    <section className={clsx("declaration", child && "declaration-child")}>
+      <h2
+        className={clsx(
+          child ? "declaration-subsubheading" : "declaration-heading",
+        )}
+        id={declaration.slug}
+      >
         {declaration.name}
       </h2>
       {declaration.codeLink ? (
@@ -35,12 +52,18 @@ export function DeclarationInfo({
         collection={declaration.collection}
         node={declaration.node}
       />
-      <p>
-        <JSDoc
-          collection={declaration.collection}
-          comment={declaration.documentation}
-        />
-      </p>
+      <JSDoc
+        collection={declaration.collection}
+        comment={declaration.documentation}
+      />
+      {declaration.members && (
+        <div className="declaration-members">
+          <h3 className="declaration-subheading">Members</h3>
+          {declaration.members.map((member) => (
+            <DeclarationInfo key={member.slug} declaration={member} child />
+          ))}
+        </div>
+      )}
     </section>
   );
 }
