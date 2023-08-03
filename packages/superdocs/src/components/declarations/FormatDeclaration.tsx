@@ -1,6 +1,8 @@
 import ts from "typescript";
 import { DeclarationNodeOrChildNode } from "../../core/DeclarationCollection.js";
+import { IndexSignatureDeclaration } from "../ast/IndexSignatureDeclaration.js";
 import { NodeProps } from "../ast/NodeProps.js";
+import { PropertySignature } from "../ast/PropertySignature.js";
 import { ClassDeclaration } from "./ClassDeclaration.js";
 import { FunctionDeclaration } from "./FunctionDeclaration.js";
 import { InterfaceDeclaration } from "./InterfaceDeclaration.js";
@@ -34,10 +36,24 @@ export function FormatDeclaration({
       </code>
     );
   }
+  if (ts.isIndexSignatureDeclaration(node)) {
+    return (
+      <code className="declaration-code">
+        <IndexSignatureDeclaration collection={collection} node={node} />
+      </code>
+    );
+  }
   if (ts.isInterfaceDeclaration(node)) {
     return (
       <code className="declaration-code">
         <InterfaceDeclaration collection={collection} node={node} />
+      </code>
+    );
+  }
+  if (ts.isPropertySignature(node)) {
+    return (
+      <code className="declaration-code">
+        <PropertySignature collection={collection} node={node} />
       </code>
     );
   }

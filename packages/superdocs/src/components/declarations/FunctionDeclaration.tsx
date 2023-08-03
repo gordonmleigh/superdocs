@@ -1,10 +1,11 @@
 import ts from "typescript";
 import { Identifier } from "../ast/Identifier.js";
+import { Join } from "../ast/Join.js";
 import { Keyword } from "../ast/Keyword.js";
-import { KeywordType } from "../ast/KeywordType.js";
 import { Modifiers } from "../ast/Modifier.js";
 import { NodeProps } from "../ast/NodeProps.js";
 import { Operator } from "../ast/Operator.js";
+import { ParameterDeclaration } from "../ast/ParameterDeclaration.js";
 import { TypeNode } from "../ast/TypeNode.js";
 import { TypeParameters } from "../ast/TypeParameter.js";
 
@@ -25,56 +26,28 @@ export function FunctionDeclaration({
       {node.typeParameters && (
         <TypeParameters collection={collection} node={node.typeParameters} />
       )}
-      <FunctionParameters collection={collection} node={node.parameters} />
+
+      <Operator text="(" />
+      <Join
+        delimiter={<Operator text=", " />}
+        items={node.parameters}
+        render={(param, index) => (
+          <ParameterDeclaration
+            collection={collection}
+            index={index}
+            node={param}
+            key={param.pos}
+          />
+        )}
+      />
+      <Operator text=")" />
+
       {node.type && (
         <>
           <Operator text=": " />
           <TypeNode collection={collection} node={node.type} />
         </>
       )}
-    </>
-  );
-}
-
-type FunctionParameterProps = NodeProps<ts.ParameterDeclaration> & {
-  index: number;
-};
-
-function FunctionParameter({
-  collection,
-  index,
-  node,
-}: FunctionParameterProps): JSX.Element {
-  const name = ts.isIdentifier(node.name) ? node.name.text : `arg${index}`;
-  return (
-    <>
-      <Identifier name={name} />
-      <Operator text=": " />
-      {node.type ? (
-        <TypeNode collection={collection} node={node.type} />
-      ) : (
-        <KeywordType>unknown</KeywordType>
-      )}
-    </>
-  );
-}
-
-function FunctionParameters({
-  collection,
-  node,
-}: NodeProps<readonly ts.ParameterDeclaration[]>): JSX.Element {
-  return (
-    <>
-      <Operator text="(" />
-      {node.map((param, index) => (
-        <FunctionParameter
-          collection={collection}
-          index={index}
-          node={param}
-          key={param.pos}
-        />
-      ))}
-      <Operator text=")" />
     </>
   );
 }

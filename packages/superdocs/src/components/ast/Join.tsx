@@ -7,7 +7,7 @@ import { Fragment, ReactNode } from "react";
 export interface JoinProps<T> {
   delimiter: ReactNode;
   items: readonly T[];
-  render: (item: T) => ReactNode;
+  render: (item: T, index: number) => ReactNode;
 }
 
 /**
@@ -20,11 +20,13 @@ export function Join<T>({
   render,
 }: JoinProps<T>): JSX.Element {
   const children: ReactNode[] = [];
-  for (const item of items) {
+  for (let index = 0; index < items.length; ++index) {
     if (children.length) {
       children.push(<Fragment key={children.length}>{delimiter}</Fragment>);
     }
-    children.push(<Fragment key={children.length}>{render(item)}</Fragment>);
+    children.push(
+      <Fragment key={children.length}>{render(items[index], index)}</Fragment>,
+    );
   }
   return <>{children}</>;
 }
