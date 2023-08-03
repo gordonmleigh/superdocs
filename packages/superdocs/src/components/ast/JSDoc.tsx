@@ -1,6 +1,6 @@
 import Link from "next/link";
 import ts from "typescript";
-import { DeclarationCollection } from "../core/DeclarationCollection";
+import { DeclarationCollection } from "../../core/DeclarationCollection";
 
 /**
  * The union of valid AST nodes within a JSDoc.

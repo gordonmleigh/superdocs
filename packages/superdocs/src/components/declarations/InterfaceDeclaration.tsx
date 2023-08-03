@@ -1,10 +1,10 @@
 import ts from "typescript";
-import { HeritageClauses } from "./HeritageClause.js";
-import { Identifier } from "./Identifier.js";
-import { Keyword } from "./Keyword.js";
-import { Modifiers } from "./Modifier.js";
-import { NodeProps } from "./NodeProps.js";
-import { TypeParameters } from "./TypeParameter.js";
+import { HeritageClauses } from "../ast/HeritageClause.js";
+import { Identifier } from "../ast/Identifier.js";
+import { Keyword } from "../ast/Keyword.js";
+import { Modifiers } from "../ast/Modifier.js";
+import { NodeProps } from "../ast/NodeProps.js";
+import { TypeParameters } from "../ast/TypeParameter.js";
 
 /**
  * Formats an interface declaration in code.

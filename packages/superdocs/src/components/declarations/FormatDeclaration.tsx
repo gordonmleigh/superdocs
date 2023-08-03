@@ -1,9 +1,9 @@
 import ts from "typescript";
-import { DeclarationNodeOrChildNode } from "../core/DeclarationCollection.js";
+import { DeclarationNodeOrChildNode } from "../../core/DeclarationCollection.js";
+import { NodeProps } from "../ast/NodeProps.js";
 import { ClassDeclaration } from "./ClassDeclaration.js";
 import { FunctionDeclaration } from "./FunctionDeclaration.js";
 import { InterfaceDeclaration } from "./InterfaceDeclaration.js";
-import { NodeProps } from "./NodeProps.js";
 import { TypeAliasDeclaration } from "./TypeAliasDeclaration.js";
 
 /**

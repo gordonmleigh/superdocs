@@ -1,11 +1,11 @@
 import ts from "typescript";
-import { Identifier } from "./Identifier.js";
-import { Keyword } from "./Keyword.js";
-import { Modifiers } from "./Modifier.js";
-import { NodeProps } from "./NodeProps.js";
-import { Operator } from "./Operator.js";
-import { TypeNode } from "./TypeNode.js";
-import { TypeParameters } from "./TypeParameter.js";
+import { Identifier } from "../ast/Identifier.js";
+import { Keyword } from "../ast/Keyword.js";
+import { Modifiers } from "../ast/Modifier.js";
+import { NodeProps } from "../ast/NodeProps.js";
+import { Operator } from "../ast/Operator.js";
+import { TypeNode } from "../ast/TypeNode.js";
+import { TypeParameters } from "../ast/TypeParameter.js";
 
 /**
  * Format a type alias declaration in code.
