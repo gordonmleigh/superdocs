@@ -94,6 +94,12 @@ const superdocsPlugin = plugin.withOptions(
             },
 
             components: {
+              ".code-identifier": {
+                a: {
+                  textDecoration: "underline",
+                },
+              },
+
               ".code-keyword": {
                 color: "var(--tw-superdocs-color-code-keyword)",
               },
