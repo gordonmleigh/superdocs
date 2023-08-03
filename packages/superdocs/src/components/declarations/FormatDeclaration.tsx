@@ -1,8 +1,7 @@
 import ts from "typescript";
 import { DeclarationNodeOrChildNode } from "../../core/DeclarationCollection.js";
-import { IndexSignatureDeclaration } from "../ast/IndexSignatureDeclaration.js";
 import { NodeProps } from "../ast/NodeProps.js";
-import { PropertySignature } from "../ast/PropertySignature.js";
+import { TypeElement } from "../ast/TypeElement.js";
 import { ClassDeclaration } from "./ClassDeclaration.js";
 import { FunctionDeclaration } from "./FunctionDeclaration.js";
 import { InterfaceDeclaration } from "./InterfaceDeclaration.js";
@@ -23,50 +22,19 @@ export function FormatDeclaration({
   node,
 }: FormatDeclarationProps): JSX.Element {
   if (ts.isClassDeclaration(node)) {
-    return (
-      <code className="declaration-code">
-        <ClassDeclaration collection={collection} node={node} />
-      </code>
-    );
+    return <ClassDeclaration collection={collection} node={node} />;
   }
   if (ts.isFunctionDeclaration(node)) {
-    return (
-      <code className="declaration-code">
-        <FunctionDeclaration collection={collection} node={node} />
-      </code>
-    );
-  }
-  if (ts.isIndexSignatureDeclaration(node)) {
-    return (
-      <code className="declaration-code">
-        <IndexSignatureDeclaration collection={collection} node={node} />
-      </code>
-    );
+    return <FunctionDeclaration collection={collection} node={node} />;
   }
   if (ts.isInterfaceDeclaration(node)) {
-    return (
-      <code className="declaration-code">
-        <InterfaceDeclaration collection={collection} node={node} />
-      </code>
-    );
-  }
-  if (ts.isPropertySignature(node)) {
-    return (
-      <code className="declaration-code">
-        <PropertySignature collection={collection} node={node} />
-      </code>
-    );
+    return <InterfaceDeclaration collection={collection} node={node} />;
   }
   if (ts.isTypeAliasDeclaration(node)) {
-    return (
-      <code className="declaration-code">
-        <TypeAliasDeclaration collection={collection} node={node} />
-      </code>
-    );
+    return <TypeAliasDeclaration collection={collection} node={node} />;
   }
-  return (
-    <code className="declaration-code code-unknown">
-      {(node as any).getText()}
-    </code>
-  );
+  if (ts.isTypeElement(node)) {
+    return <TypeElement collection={collection} node={node} />;
+  }
+  return <span className="code-unknown">{(node as any).getText()}</span>;
 }

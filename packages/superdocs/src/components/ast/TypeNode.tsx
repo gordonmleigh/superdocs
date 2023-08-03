@@ -1,3 +1,4 @@
+import { Fragment } from "react";
 import ts from "typescript";
 import { getSyntaxKindName } from "../../internal/getSyntaxKindName.js";
 import { EntityName } from "./EntityName.js";
@@ -6,6 +7,7 @@ import { KeywordType } from "./KeywordType.js";
 import { NodeProps } from "./NodeProps.js";
 import { Operator } from "./Operator.js";
 import { TypeArguments } from "./TypeArguments.js";
+import { TypeElement } from "./TypeElement.js";
 import { CodeWord } from "./Word.js";
 
 /**
@@ -88,6 +90,20 @@ export function TypeNode({ collection, node }: TypeNodeProps): JSX.Element {
       </>
     ) : (
       <span className="code-unknown">{node.getText()}</span>
+    );
+  }
+  if (ts.isTypeLiteralNode(node)) {
+    return (
+      <>
+        <Operator text="{ " />
+        {node.members.map((member) => (
+          <Fragment key={member.pos}>
+            <TypeElement collection={collection} node={member} />
+            <Operator text="; " />
+          </Fragment>
+        ))}
+        <Operator text=" }" />
+      </>
     );
   }
   if (getSyntaxKindName(node.kind).endsWith("Keyword")) {
