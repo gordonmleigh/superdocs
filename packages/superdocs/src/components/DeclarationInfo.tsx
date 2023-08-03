@@ -61,9 +61,12 @@ export function DeclarationInfo({
       {declaration.members && (
         <div className="declaration-members">
           <h3 className="declaration-subheading">Members</h3>
-          {declaration.members.map((member) => (
-            <DeclarationInfo key={member.slug} declaration={member} child />
-          ))}
+          {declaration.members
+            .slice()
+            .sort((a, b) => a.name.localeCompare(b.name))
+            .map((member) => (
+              <DeclarationInfo key={member.slug} declaration={member} child />
+            ))}
         </div>
       )}
     </section>

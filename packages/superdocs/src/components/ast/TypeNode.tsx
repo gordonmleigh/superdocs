@@ -6,6 +6,7 @@ import { Join } from "./Join.js";
 import { KeywordType } from "./KeywordType.js";
 import { NodeProps } from "./NodeProps.js";
 import { Operator } from "./Operator.js";
+import { SignatureDeclaration } from "./SignatureDeclaration.js";
 import { TypeArguments } from "./TypeArguments.js";
 import { TypeElement } from "./TypeElement.js";
 import { CodeWord } from "./Word.js";
@@ -105,6 +106,9 @@ export function TypeNode({ collection, node }: TypeNodeProps): JSX.Element {
         <Operator text=" }" />
       </>
     );
+  }
+  if (ts.isFunctionLike(node)) {
+    return <SignatureDeclaration collection={collection} node={node} />;
   }
   if (getSyntaxKindName(node.kind).endsWith("Keyword")) {
     return <KeywordType>{node.getText()}</KeywordType>;

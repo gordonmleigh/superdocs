@@ -1,5 +1,6 @@
 import ts from "typescript";
 import { DeclarationNodeOrChildNode } from "../../core/DeclarationCollection.js";
+import { ClassElement } from "../ast/ClassElement.js";
 import { NodeProps } from "../ast/NodeProps.js";
 import { TypeElement } from "../ast/TypeElement.js";
 import { ClassDeclaration } from "./ClassDeclaration.js";
@@ -23,6 +24,9 @@ export function FormatDeclaration({
 }: FormatDeclarationProps): JSX.Element {
   if (ts.isClassDeclaration(node)) {
     return <ClassDeclaration collection={collection} node={node} />;
+  }
+  if (ts.isClassElement(node)) {
+    return <ClassElement collection={collection} node={node} />;
   }
   if (ts.isFunctionDeclaration(node)) {
     return <FunctionDeclaration collection={collection} node={node} />;

@@ -25,7 +25,7 @@ export type DeclarationNode =
  * declaration node.
  * @group Utilities
  */
-export type DeclarationMemberNode = ts.TypeElement;
+export type DeclarationMemberNode = ts.ClassElement | ts.TypeElement;
 
 /**
  * Union of supported AST node types which are children of declarations.
@@ -179,6 +179,11 @@ export class DeclarationCollection {
     node: DeclarationNodeOrChildNode,
     group: DeclarationGroup,
   ): Declaration<DeclarationMemberNode>[] | undefined {
+    if (ts.isClassDeclaration(node)) {
+      return node.members
+        ?.filter((member) => !isPrivateMember(member))
+        .map((member) => this.makeDeclaration(member, group));
+    }
     if (ts.isInterfaceDeclaration(node)) {
       return node.members?.map((member) => this.makeDeclaration(member, group));
     }
@@ -304,6 +309,20 @@ function isLocal(path: string): boolean {
   return path.startsWith("./") || path.startsWith("../");
 }
 
+function isPrivateMember(node: ts.TypeElement | ts.ClassElement): boolean {
+  if (ts.canHaveModifiers(node) && node.modifiers) {
+    if (node.modifiers.some((x) => x.kind === ts.SyntaxKind.PrivateKeyword)) {
+      return false;
+    }
+  }
+  if ("name" in node && node.name) {
+    if (ts.isPrivateIdentifier(node.name)) {
+      return false;
+    }
+  }
+  return true;
+}
+
 function normaliseCodeLinkFactory(
   codeLinks: RepositoryInfo | CodeLinkFactory | undefined,
 ): CodeLinkFactory | undefined {
@@ -336,6 +355,12 @@ function getName(node: DeclarationNodeOrChildNode): string | undefined {
     if (ts.isComputedPropertyName(node.name)) {
       return `[${node.name.getText()}]`;
     }
+  }
+  if (
+    ts.isConstructSignatureDeclaration(node) ||
+    ts.isConstructorDeclaration(node)
+  ) {
+    return "constructor";
   }
   if (ts.isIndexSignatureDeclaration(node)) {
     return `Index [${node.parameters.map((x) => x.getText()).join(", ")}]`;
