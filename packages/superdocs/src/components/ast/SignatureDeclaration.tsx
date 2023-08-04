@@ -48,10 +48,9 @@ export function SignatureDeclaration({
       <Join
         delimiter={<Operator text=", " />}
         items={node.parameters}
-        render={(param, index) => (
+        render={(param) => (
           <ParameterDeclaration
             collection={collection}
-            index={index}
             node={param}
             key={param.pos}
           />

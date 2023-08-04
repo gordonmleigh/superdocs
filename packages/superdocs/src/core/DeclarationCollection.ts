@@ -4,6 +4,7 @@ import ts from "typescript";
 import { NodeLocationMap } from "../internal/NodeLocationMap";
 import { assert } from "../internal/assert";
 import { getPackageInfo } from "../internal/getPackageInfo";
+import { getParameterIndex } from "../internal/getParameterIndex";
 import { getSyntaxKindName } from "../internal/getSyntaxKindName";
 import { hash } from "../internal/hash";
 import { loadProgram } from "../internal/loadProgram";
@@ -31,7 +32,9 @@ export type DeclarationMemberNode = ts.ClassElement | ts.TypeElement;
  * Union of supported AST node types which are children of declarations.
  * @group Utilities
  */
-export type DeclarationChildNode = DeclarationMemberNode;
+export type DeclarationChildNode =
+  | DeclarationMemberNode
+  | ts.ParameterDeclaration;
 
 /**
  * Union of supported declaration AST node types and their supported children.
@@ -64,6 +67,7 @@ export interface Declaration<
   members?: Declaration<DeclarationMemberNode>[];
   name: string;
   node: Node;
+  parameters?: Declaration<ts.ParameterDeclaration>[];
   parent?: Declaration<DeclarationNodeOrChildNode>;
   slug: string;
 }
@@ -198,6 +202,18 @@ export class DeclarationCollection {
     }
   }
 
+  private getParameters(
+    node: DeclarationNodeOrChildNode,
+    group: DeclarationGroup,
+    parent?: Declaration<DeclarationNodeOrChildNode>,
+  ): Declaration<ts.ParameterDeclaration>[] | undefined {
+    if (ts.isFunctionLike(node)) {
+      return node.parameters.map((param) =>
+        this.makeDeclaration(param, group, parent),
+      );
+    }
+  }
+
   private loadExport(statement: ts.ExportDeclaration): void {
     if (statement.moduleSpecifier) {
       const source = this.resolveSourceFile(
@@ -237,12 +253,13 @@ export class DeclarationCollection {
         group.slug + "#" + slug,
       ),
       location,
-      name: getName(node) ?? getNodeId(node),
+      name: getName(node) ?? "Unnamed",
       node,
       parent,
       slug,
     };
     declaration.members = this.getMembers(node, group, declaration);
+    declaration.parameters = this.getParameters(node, group, declaration);
     return declaration;
   }
 
@@ -362,6 +379,9 @@ function getName(node: DeclarationNodeOrChildNode): string | undefined {
     if (ts.isComputedPropertyName(node.name)) {
       return `[${node.name.getText()}]`;
     }
+  }
+  if (ts.isParameter(node)) {
+    return `arg${getParameterIndex(node)}`;
   }
   if (
     ts.isConstructSignatureDeclaration(node) ||

@@ -157,6 +157,10 @@ const superdocsPlugin = plugin.withOptions(
                 marginTop: theme("spacing.8"),
               },
 
+              ".declaration-parameters": {
+                marginTop: theme("spacing.8"),
+              },
+
               ".declaration-subheading": {
                 fontSize: "var(--tw-superdocs-font-size-xl)",
                 fontWeight: theme("fontWeight.semibold"),

@@ -58,6 +58,14 @@ export function DeclarationInfo({
         collection={declaration.collection}
         comment={declaration.documentation}
       />
+      {declaration.parameters && (
+        <div className="declaration-parameters">
+          <h3 className="declaration-subheading">Parameters</h3>
+          {declaration.parameters.map((member) => (
+            <DeclarationInfo key={member.slug} declaration={member} child />
+          ))}
+        </div>
+      )}
       {declaration.members && (
         <div className="declaration-members">
           <h3 className="declaration-subheading">Members</h3>

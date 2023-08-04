@@ -2,6 +2,7 @@ import ts from "typescript";
 import { DeclarationNodeOrChildNode } from "../../core/DeclarationCollection.js";
 import { ClassElement } from "../ast/ClassElement.js";
 import { NodeProps } from "../ast/NodeProps.js";
+import { ParameterDeclaration } from "../ast/ParameterDeclaration.js";
 import { TypeElement } from "../ast/TypeElement.js";
 import { ClassDeclaration } from "./ClassDeclaration.js";
 import { FunctionDeclaration } from "./FunctionDeclaration.js";
@@ -33,6 +34,9 @@ export function FormatDeclaration({
   }
   if (ts.isInterfaceDeclaration(node)) {
     return <InterfaceDeclaration collection={collection} node={node} />;
+  }
+  if (ts.isParameter(node)) {
+    return <ParameterDeclaration collection={collection} node={node} />;
   }
   if (ts.isTypeAliasDeclaration(node)) {
     return <TypeAliasDeclaration collection={collection} node={node} />;
