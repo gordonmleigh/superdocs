@@ -64,6 +64,7 @@ export interface Declaration<
   members?: Declaration<DeclarationMemberNode>[];
   name: string;
   node: Node;
+  parent?: Declaration<DeclarationNodeOrChildNode>;
   slug: string;
 }
 
@@ -178,18 +179,21 @@ export class DeclarationCollection {
   private getMembers(
     node: DeclarationNodeOrChildNode,
     group: DeclarationGroup,
+    parent?: Declaration<DeclarationNodeOrChildNode>,
   ): Declaration<DeclarationMemberNode>[] | undefined {
     if (ts.isClassDeclaration(node)) {
       return node.members
         ?.filter((member) => !isPrivateMember(member))
-        .map((member) => this.makeDeclaration(member, group));
+        .map((member) => this.makeDeclaration(member, group, parent));
     }
     if (ts.isInterfaceDeclaration(node)) {
-      return node.members?.map((member) => this.makeDeclaration(member, group));
+      return node.members?.map((member) =>
+        this.makeDeclaration(member, group, parent),
+      );
     }
     if (ts.isTypeAliasDeclaration(node) && ts.isTypeLiteralNode(node.type)) {
       return node.type.members.map((member) =>
-        this.makeDeclaration(member, group),
+        this.makeDeclaration(member, group, parent),
       );
     }
   }
@@ -219,11 +223,12 @@ export class DeclarationCollection {
   private makeDeclaration<T extends DeclarationNodeOrChildNode>(
     node: T,
     group: DeclarationGroup,
+    parent?: Declaration<DeclarationNodeOrChildNode>,
   ): Declaration<T> {
     const location = this.nodeLocations.getNodeLocation(node);
-    const slug = slugifyNode(node);
+    const slug = slugifyNode(node, parent?.node);
 
-    return {
+    const declaration: Declaration<T> = {
       codeLink: this.getCodeLink?.(location),
       collection: this,
       documentation: ts.getJSDocCommentsAndTags(node),
@@ -232,11 +237,13 @@ export class DeclarationCollection {
         group.slug + "#" + slug,
       ),
       location,
-      members: this.getMembers(node, group),
       name: getName(node) ?? getNodeId(node),
       node,
+      parent,
       slug,
     };
+    declaration.members = this.getMembers(node, group, declaration);
+    return declaration;
   }
 
   private resolveSourceFile(
@@ -372,7 +379,13 @@ function getNodeId(node: ts.Node): string {
   return `node-${id}`;
 }
 
-function slugifyNode(node: DeclarationNodeOrChildNode): string {
+function slugifyNode(
+  node: DeclarationNodeOrChildNode,
+  parent?: DeclarationNodeOrChildNode,
+): string {
+  if (parent) {
+    return slugifyNode(parent) + "-" + slugifyNode(node);
+  }
   const name = getName(node) ?? getNodeId(node);
   return getSyntaxKindName(node.kind) + "-" + slugify(name);
 }
