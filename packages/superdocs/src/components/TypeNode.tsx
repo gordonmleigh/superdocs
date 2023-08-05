@@ -71,6 +71,16 @@ export function TypeNode({ collection, node }: TypeNodeProps): JSX.Element {
       </>
     );
   }
+  if (ts.isIndexedAccessTypeNode(node)) {
+    return (
+      <>
+        <TypeNode collection={collection} node={node.objectType} />
+        <Token operator text="[" />
+        <TypeNode collection={collection} node={node.indexType} />
+        <Token operator text="]" />
+      </>
+    );
+  }
   if (ts.isParenthesizedTypeNode(node)) {
     return (
       <>
