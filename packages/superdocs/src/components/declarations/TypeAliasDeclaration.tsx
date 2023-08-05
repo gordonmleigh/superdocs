@@ -1,9 +1,7 @@
 import ts from "typescript";
-import { Identifier } from "../ast/Identifier.js";
-import { Keyword } from "../ast/Keyword.js";
 import { Modifiers } from "../ast/Modifier.js";
 import { NodeProps } from "../ast/NodeProps.js";
-import { Operator } from "../ast/Operator.js";
+import { Token } from "../ast/Token.js";
 import { TypeNode } from "../ast/TypeNode.js";
 import { TypeParameters } from "../ast/TypeParameter.js";
 
@@ -18,12 +16,12 @@ export function TypeAliasDeclaration({
   return (
     <>
       {node.modifiers && <Modifiers node={node.modifiers} />}
-      <Keyword>type</Keyword>
-      <Identifier name={node.name} />
+      <Token keyword>type</Token>
+      <Token identifier>{node.name.text}</Token>
       {node.typeParameters && (
         <TypeParameters collection={collection} node={node.typeParameters} />
       )}
-      <Operator text=" = " />
+      <Token operator text=" = " />
       <TypeNode collection={collection} node={node.type} />
     </>
   );

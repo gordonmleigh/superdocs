@@ -1,13 +1,11 @@
 import ts from "typescript";
 import { Join } from "../ast/Join.js";
-import { Keyword } from "../ast/Keyword.js";
 import { Modifiers } from "../ast/Modifier.js";
 import { NodeProps } from "../ast/NodeProps.js";
-import { Operator } from "../ast/Operator.js";
 import { ParameterDeclaration } from "../ast/ParameterDeclaration.js";
+import { Token } from "../ast/Token.js";
 import { TypeNode } from "../ast/TypeNode.js";
 import { TypeParameters } from "../ast/TypeParameter.js";
-import { KeywordType } from "./KeywordType.js";
 import { PropertyName } from "./PropertyName.js";
 
 /**
@@ -24,14 +22,14 @@ export function SignatureDeclaration({
         <Modifiers node={node.modifiers} />
       )}
 
-      {ts.isFunctionDeclaration(node) && <Keyword>function</Keyword>}
-      {ts.isGetAccessorDeclaration(node) && <Keyword>get</Keyword>}
-      {ts.isSetAccessorDeclaration(node) && <Keyword>set</Keyword>}
+      {ts.isFunctionDeclaration(node) && <Token keyword>function</Token>}
+      {ts.isGetAccessorDeclaration(node) && <Token keyword>get</Token>}
+      {ts.isSetAccessorDeclaration(node) && <Token keyword>set</Token>}
 
       {ts.isConstructorDeclaration(node) ? (
-        <Keyword text="constructor" />
+        <Token keyword>constructor</Token>
       ) : ts.isConstructSignatureDeclaration(node) ? (
-        <Keyword text="new" />
+        <Token keyword>new</Token>
       ) : node.name ? (
         <PropertyName collection={collection} node={node.name} />
       ) : undefined}
@@ -41,12 +39,12 @@ export function SignatureDeclaration({
       )}
 
       {ts.isIndexSignatureDeclaration(node) ? (
-        <Operator text="[" />
+        <Token operator text="[" />
       ) : (
-        <Operator text="(" />
+        <Token operator text="(" />
       )}
       <Join
-        delimiter={<Operator text=", " />}
+        operator=", "
         items={node.parameters}
         render={(param) => (
           <ParameterDeclaration
@@ -57,16 +55,22 @@ export function SignatureDeclaration({
         )}
       />
       {ts.isIndexSignatureDeclaration(node) ? (
-        <Operator text="]" />
+        <Token operator text="]" />
       ) : (
-        <Operator text=")" />
+        <Token operator text=")" />
       )}
 
-      {ts.isTypeNode(node) ? <Operator text=" => " /> : <Operator text=": " />}
+      {ts.isTypeNode(node) ? (
+        <Token operator text=" => " />
+      ) : (
+        <Token operator text=": " />
+      )}
       {node.type ? (
         <TypeNode collection={collection} node={node.type} />
       ) : ts.isTypeNode(node) ? (
-        <KeywordType text="unknown" />
+        <Token keyword type>
+          unknown
+        </Token>
       ) : undefined}
     </>
   );

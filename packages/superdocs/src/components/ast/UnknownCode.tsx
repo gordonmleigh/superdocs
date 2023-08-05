@@ -1,9 +1,8 @@
 import chalk from "chalk";
-import clsx from "clsx";
 import ts from "typescript";
 import { DeclarationCollection } from "../../core/DeclarationCollection";
 import { getSyntaxKindName } from "../../internal/getSyntaxKindName";
-import { CodeWord } from "./Word";
+import { Token } from "./Token";
 
 /**
  * Properties for the {@link UnknownCode} component.
@@ -29,15 +28,14 @@ export function UnknownCode({
   const kind = getSyntaxKindName(node.kind);
   const location = collection.getNodeLocation(node);
   const locationStr = `${location.path}:${location.line}:${location.char}`;
-  const Container = word ? CodeWord : "span";
 
   console.warn(
     `- ${chalk.yellow("warn")} unknown AST node ${kind} (${locationStr})`,
   );
 
   return (
-    <Container className={clsx(className, "code-unknown")}>
+    <Token className={className} unknown word={word}>
       {node.getText()}
-    </Container>
+    </Token>
   );
 }

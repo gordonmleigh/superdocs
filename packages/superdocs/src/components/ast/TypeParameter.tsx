@@ -1,9 +1,8 @@
 import ts from "typescript";
 import { EntityName } from "./EntityName.js";
 import { Join } from "./Join.js";
-import { Keyword } from "./Keyword.js";
 import { NodeProps } from "./NodeProps.js";
-import { Operator } from "./Operator.js";
+import { Token } from "./Token.js";
 import { TypeNode } from "./TypeNode.js";
 
 /**
@@ -19,13 +18,13 @@ export function TypeParameter({
       <EntityName collection={collection} node={node.name} />
       {node.constraint && (
         <>
-          <Keyword>extends</Keyword>
+          <Token keyword>extends</Token>
           <TypeNode collection={collection} node={node.constraint} />
         </>
       )}
       {node.default && (
         <>
-          <Operator text=" = " />
+          <Token operator text=" = " />
           <TypeNode collection={collection} node={node.default} />
         </>
       )}
@@ -43,13 +42,13 @@ export function TypeParameters({
 }: NodeProps<readonly ts.TypeParameterDeclaration[]>): JSX.Element {
   return (
     <>
-      <Operator>{"<"}</Operator>
+      <Token operator text="<" />
       <Join
-        delimiter=", "
+        operator=", "
         items={node}
         render={(x) => <TypeParameter collection={collection} node={x} />}
       />
-      <Operator>{">"}</Operator>
+      <Token operator text=">" />
     </>
   );
 }

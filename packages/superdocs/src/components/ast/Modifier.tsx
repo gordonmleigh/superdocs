@@ -1,6 +1,6 @@
 import ts from "typescript";
-import { Keyword } from "./Keyword";
 import { NodeOnlyProps } from "./NodeProps";
+import { Token } from "./Token";
 
 export function Modifier({
   node,
@@ -9,7 +9,7 @@ export function Modifier({
     if (node.kind === ts.SyntaxKind.DeclareKeyword) {
       return null;
     }
-    return <Keyword>{node.getText()}</Keyword>;
+    return <Token keyword>{node.getText()}</Token>;
   }
   return null;
 }

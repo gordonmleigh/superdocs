@@ -3,14 +3,12 @@ import ts from "typescript";
 import { getSyntaxKindName } from "../../internal/getSyntaxKindName.js";
 import { EntityName } from "./EntityName.js";
 import { Join } from "./Join.js";
-import { KeywordType } from "./KeywordType.js";
 import { NodeProps } from "./NodeProps.js";
-import { Operator } from "./Operator.js";
 import { SignatureDeclaration } from "./SignatureDeclaration.js";
+import { Token, TokenProps } from "./Token.js";
 import { TypeArguments } from "./TypeArguments.js";
 import { TypeElement } from "./TypeElement.js";
 import { UnknownCode } from "./UnknownCode.js";
-import { CodeWord } from "./Word.js";
 
 /**
  * Properties for the {@link TypeNode} component.
@@ -34,12 +32,23 @@ export function TypeNode({ collection, node }: TypeNodeProps): JSX.Element {
     );
   }
   if (ts.isLiteralTypeNode(node)) {
-    return <span className="code-literal-type">{node.getText()}</span>;
+    let literal: TokenProps["literal"];
+    switch (node.literal.kind) {
+      case ts.SyntaxKind.StringLiteral:
+        literal = "string";
+        break;
+      case ts.SyntaxKind.NumericLiteral:
+        literal = "number";
+        break;
+      default:
+        literal = true;
+    }
+    return <Token literal={literal}>{node.getText()}</Token>;
   }
   if (ts.isUnionTypeNode(node)) {
     return (
       <Join
-        delimiter={<Operator text=" | " />}
+        operator=" | "
         items={node.types}
         render={(x) => <TypeNode collection={collection} node={x} />}
       />
@@ -48,7 +57,7 @@ export function TypeNode({ collection, node }: TypeNodeProps): JSX.Element {
   if (ts.isIntersectionTypeNode(node)) {
     return (
       <Join
-        delimiter={<Operator text=" & " />}
+        operator=" & "
         items={node.types}
         render={(x) => <TypeNode collection={collection} node={x} />}
       />
@@ -58,17 +67,17 @@ export function TypeNode({ collection, node }: TypeNodeProps): JSX.Element {
     return (
       <>
         <TypeNode collection={collection} node={node.elementType} />
-        <Operator text="[]" />
+        <Token operator text="[]" />
       </>
     );
   }
   if (ts.isParenthesizedTypeNode(node)) {
     return (
       <>
-        <CodeWord />
-        <Operator text="(" />
+        <Token word />
+        <Token operator text="(" />
         <TypeNode collection={collection} node={node.type} />
-        <Operator text=")" />
+        <Token operator text=")" />
       </>
     );
   }
@@ -87,7 +96,9 @@ export function TypeNode({ collection, node }: TypeNodeProps): JSX.Element {
     }
     return keyword ? (
       <>
-        <KeywordType text={keyword} />
+        <Token keyword type>
+          {keyword}
+        </Token>
         <TypeNode collection={collection} node={node.type} />
       </>
     ) : (
@@ -97,14 +108,14 @@ export function TypeNode({ collection, node }: TypeNodeProps): JSX.Element {
   if (ts.isTypeLiteralNode(node)) {
     return (
       <>
-        <Operator text="{ " />
+        <Token operator text="{ " />
         {node.members.map((member) => (
           <Fragment key={member.pos}>
             <TypeElement collection={collection} node={member} />
-            <Operator text="; " />
+            <Token operator text="; " />
           </Fragment>
         ))}
-        <Operator text=" }" />
+        <Token operator text=" }" />
       </>
     );
   }
@@ -112,7 +123,11 @@ export function TypeNode({ collection, node }: TypeNodeProps): JSX.Element {
     return <SignatureDeclaration collection={collection} node={node} />;
   }
   if (getSyntaxKindName(node.kind).endsWith("Keyword")) {
-    return <KeywordType>{node.getText()}</KeywordType>;
+    return (
+      <Token keyword type>
+        {node.getText()}
+      </Token>
+    );
   }
   return <UnknownCode collection={collection} node={node} />;
 }

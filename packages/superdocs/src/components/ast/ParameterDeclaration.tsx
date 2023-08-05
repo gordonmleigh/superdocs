@@ -1,10 +1,8 @@
 import ts from "typescript";
 import { getParameterIndex } from "../../internal/getParameterIndex.js";
-import { Identifier } from "../ast/Identifier.js";
-import { KeywordType } from "../ast/KeywordType.js";
 import { NodeProps } from "../ast/NodeProps.js";
-import { Operator } from "../ast/Operator.js";
 import { TypeNode } from "../ast/TypeNode.js";
+import { Token } from "./Token.js";
 
 export type ParameterDeclarationProps = NodeProps<ts.ParameterDeclaration>;
 
@@ -17,13 +15,15 @@ export function ParameterDeclaration({
     : `arg${getParameterIndex(node)}`;
   return (
     <>
-      {node.dotDotDotToken && <Operator text="..." />}
-      <Identifier name={name} />
-      <Operator text=": " />
+      {node.dotDotDotToken && <Token operator text="..." />}
+      <Token identifier>{name}</Token>
+      <Token operator text=": " />
       {node.type ? (
         <TypeNode collection={collection} node={node.type} />
       ) : (
-        <KeywordType>unknown</KeywordType>
+        <Token keyword type>
+          unknown
+        </Token>
       )}
     </>
   );

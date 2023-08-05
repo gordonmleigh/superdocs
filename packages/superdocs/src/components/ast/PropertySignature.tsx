@@ -1,9 +1,9 @@
 import ts from "typescript";
 import { Modifiers } from "../ast/Modifier.js";
 import { NodeProps } from "../ast/NodeProps.js";
-import { Operator } from "../ast/Operator.js";
 import { TypeNode } from "../ast/TypeNode.js";
 import { PropertyName } from "./PropertyName.js";
+import { Token } from "./Token.js";
 
 /**
  * Formats a property signature in code.
@@ -17,10 +17,10 @@ export function PropertySignature({
     <>
       {node.modifiers && <Modifiers node={node.modifiers} />}
       <PropertyName collection={collection} node={node.name} />
-      {node.questionToken && <Operator text="?" />}
+      {node.questionToken && <Token operator text="?" />}
       {node.type && (
         <>
-          <Operator text=": " />
+          <Token operator text=": " />
           <TypeNode collection={collection} node={node.type} />
         </>
       )}

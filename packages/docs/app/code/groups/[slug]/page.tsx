@@ -32,7 +32,7 @@ export default function GroupPage({
             <DeclarationInfo className="mb-4" declaration={def} />
             <div>
               <Link
-                className="text-zinc-700 hover:underline text-sm"
+                className="text-zinc-500 hover:underline text-sm"
                 href={def.documentationLink}
               >
                 More &raquo;

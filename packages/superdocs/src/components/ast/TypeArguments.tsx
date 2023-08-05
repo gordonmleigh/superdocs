@@ -1,7 +1,7 @@
 import ts from "typescript";
 import { Join } from "./Join.js";
 import { NodeProps } from "./NodeProps.js";
-import { Operator } from "./Operator.js";
+import { Token } from "./Token.js";
 import { TypeNode } from "./TypeNode.js";
 
 /**
@@ -14,13 +14,13 @@ export function TypeArguments({
 }: NodeProps<readonly ts.TypeNode[]>): JSX.Element {
   return (
     <>
-      <Operator text="<" />
+      <Token operator text="<" />
       <Join
-        delimiter={<Operator text=", " />}
+        operator=", "
         items={node}
         render={(x) => <TypeNode collection={collection} node={x} />}
       />
-      <Operator text=">" />
+      <Token operator text=">" />
     </>
   );
 }

@@ -3,10 +3,10 @@ import { fetchDeclarationCollection } from "@/util/declarations";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { DeclarationInfo } from "superdocs/components/DeclarationInfo";
-import { Identifier } from "superdocs/components/ast/Identifier";
 import { Keyword } from "superdocs/components/ast/Keyword";
 import { Operator } from "superdocs/components/ast/Operator";
 import { StringLiteral } from "superdocs/components/ast/StringLiteral";
+import { Token } from "superdocs/components/ast/Token";
 
 interface DeclarationPageParams {
   params: { slug: string };
@@ -38,7 +38,7 @@ export default function DeclarationPage({
               </Link>
             </h1>
             <Link
-              className="text-zinc-700 text-sm hover:underline"
+              className="text-zinc-500 text-sm hover:underline"
               href={declaration.parent.documentationLink}
             >
               &laquo; Back
@@ -51,7 +51,7 @@ export default function DeclarationPage({
               <code className="declaration-code">
                 <Keyword>import</Keyword>
                 <Operator text=" { " />
-                <Identifier name={declaration.name} />
+                <Token identifier>{declaration.name}</Token>
                 <Operator text=" } " />
                 <Keyword>from</Keyword>
                 <StringLiteral>

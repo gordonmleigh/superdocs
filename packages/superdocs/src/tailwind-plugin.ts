@@ -141,7 +141,7 @@ const superdocsPlugin = plugin.withOptions(
                 fontWeight: theme("fontWeight.light"),
               },
 
-              "a.declaration-code-link": {
+              "a.declaration-code-link:hover": {
                 textDecoration: "underline",
               },
 

@@ -1,8 +1,8 @@
 import ts from "typescript";
 import { EntityName } from "./EntityName.js";
 import { Join } from "./Join.js";
-import { Keyword } from "./Keyword.js";
 import { NodeProps } from "./NodeProps.js";
+import { Token } from "./Token.js";
 import { TypeArguments } from "./TypeArguments.js";
 
 /**
@@ -16,13 +16,13 @@ export function HeritageClause({
   return (
     <>
       {node.token === ts.SyntaxKind.ImplementsKeyword && (
-        <Keyword className="ml-8">implements</Keyword>
+        <Token keyword>implements</Token>
       )}
       {node.token === ts.SyntaxKind.ExtendsKeyword && (
-        <Keyword className="ml-8">extends</Keyword>
+        <Token keyword>extends</Token>
       )}
       <Join
-        delimiter=", "
+        operator=", "
         items={node.types}
         render={(type) => (
           <>
