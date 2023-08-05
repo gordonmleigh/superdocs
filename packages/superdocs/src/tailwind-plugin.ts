@@ -135,6 +135,19 @@ const superdocsPlugin = plugin.withOptions(
                 padding: theme("spacing.2"),
               },
 
+              ".declaration-code-popup": {
+                backgroundColor: theme("colors.zinc.100"),
+                borderColor: theme("colors.zinc.300"),
+                borderRadius: theme("borderRadius.DEFAULT"),
+                borderStyle: "solid",
+                borderWidth: "1px",
+                display: "none",
+                fontSize: "var(--tw-superdocs-font-size-sm)",
+                marginBottom: theme("spacing.4"),
+                marginTop: theme("spacing.4"),
+                padding: theme("spacing.2"),
+              },
+
               ".declaration-code-link": {
                 color: theme("colors.zinc.500"),
                 fontSize: "var(--tw-superdocs-font-size-sm)",
@@ -184,7 +197,8 @@ const superdocsPlugin = plugin.withOptions(
 
               ".code-unknown": {
                 textDecoration: "underline",
-                textDecorationStyle: "dotted",
+                textDecorationColor: theme("colors.blue.600"),
+                textDecorationStyle: "wavy",
               },
             },
           },

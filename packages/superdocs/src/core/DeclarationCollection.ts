@@ -102,6 +102,17 @@ export interface DeclarationCollectionOptions {
   sourceRoot?: string;
 }
 
+/**
+ * Information about an imported symbol.
+ * @group Core
+ */
+export interface ImportInfo {
+  kind: "default" | "named" | "star";
+  localName?: string;
+  module: string;
+  name: string;
+}
+
 const resolveExtensions = [".ts", ".d.ts"];
 
 /**
@@ -174,6 +185,49 @@ export class DeclarationCollection implements Iterable<Declaration> {
       return this.getDeclaration(def.name, true);
     }
     return this.declarationsByNode.get(def as any);
+  }
+
+  public getImportInfo(
+    name: ts.EntityName | ts.JSDocMemberName,
+  ): ImportInfo | undefined {
+    const symbol = this.checker.getSymbolAtLocation(name);
+    if (!symbol) {
+      return;
+    }
+    const def = symbol.declarations?.[0];
+    if (!def) {
+      return;
+    }
+
+    const moduleSpecifier = ts.findAncestor(def, ts.isImportDeclaration)
+      ?.moduleSpecifier;
+    if (!moduleSpecifier) {
+      return;
+    }
+    assert(ts.isStringLiteral(moduleSpecifier));
+
+    if (ts.isImportSpecifier(def)) {
+      return {
+        kind: "named",
+        localName: def.propertyName ? def.name.text : undefined,
+        module: moduleSpecifier.text,
+        name: def.propertyName?.text ?? def.name.text,
+      };
+    }
+    if (ts.isImportClause(def) && def.name) {
+      return {
+        kind: "default",
+        module: moduleSpecifier.text,
+        name: def.name.text,
+      };
+    }
+    if (ts.isNamespaceImport(def)) {
+      return {
+        kind: "star",
+        module: moduleSpecifier.text,
+        name: def.name.text,
+      };
+    }
   }
 
   public getDeclarationBySlug(slug: string): Declaration | undefined {

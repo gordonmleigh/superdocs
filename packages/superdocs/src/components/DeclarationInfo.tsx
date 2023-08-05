@@ -1,5 +1,5 @@
 import clsx from "clsx";
-import Link from "next/link.js";
+import Link from "next/link";
 import {
   Declaration,
   DeclarationNodeOrChildNode,
