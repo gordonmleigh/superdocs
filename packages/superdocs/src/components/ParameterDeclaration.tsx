@@ -1,8 +1,8 @@
 import ts from "typescript";
-import { getParameterIndex } from "../../internal/getParameterIndex.js";
-import { NodeProps } from "../ast/NodeProps.js";
-import { TypeNode } from "../ast/TypeNode.js";
+import { getParameterIndex } from "../internal/getParameterIndex.js";
+import { NodeProps } from "./NodeProps.js";
 import { Token } from "./Token.js";
+import { TypeNode } from "./TypeNode.js";
 
 export type ParameterDeclarationProps = NodeProps<ts.ParameterDeclaration>;
 

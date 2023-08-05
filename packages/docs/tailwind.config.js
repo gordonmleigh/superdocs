@@ -10,10 +10,6 @@ module.exports = {
       dirname(require.resolve("superdocs/tailwind")),
       "components/*.{js,ts,jsx,tsx,mdx}",
     ),
-    join(
-      dirname(require.resolve("superdocs/tailwind")),
-      "components/**/*.{js,ts,jsx,tsx,mdx}",
-    ),
   ],
   theme: {
     extend: {

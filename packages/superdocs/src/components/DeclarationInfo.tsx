@@ -4,8 +4,8 @@ import {
   Declaration,
   DeclarationNodeOrChildNode,
 } from "../core/DeclarationCollection.js";
-import { JSDoc } from "./ast/JSDoc.js";
-import { FormatDeclaration } from "./declarations/FormatDeclaration.js";
+import { FormatDeclaration } from "./FormatDeclaration.js";
+import { JSDoc } from "./JSDoc.js";
 
 /**
  * Properties for {@link DeclarationInfo} component.

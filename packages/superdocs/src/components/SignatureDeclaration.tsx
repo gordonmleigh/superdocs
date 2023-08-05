@@ -1,12 +1,12 @@
 import ts from "typescript";
-import { Join } from "../ast/Join.js";
-import { Modifiers } from "../ast/Modifier.js";
-import { NodeProps } from "../ast/NodeProps.js";
-import { ParameterDeclaration } from "../ast/ParameterDeclaration.js";
-import { Token } from "../ast/Token.js";
-import { TypeNode } from "../ast/TypeNode.js";
-import { TypeParameters } from "../ast/TypeParameter.js";
+import { Join } from "./Join.js";
+import { Modifiers } from "./Modifier.js";
+import { NodeProps } from "./NodeProps.js";
+import { ParameterDeclaration } from "./ParameterDeclaration.js";
 import { PropertyName } from "./PropertyName.js";
+import { Token } from "./Token.js";
+import { TypeNode } from "./TypeNode.js";
+import { TypeParameters } from "./TypeParameter.js";
 
 /**
  * Formats a function-like declaration in code.

@@ -1,6 +1,6 @@
 import { Fragment } from "react";
 import ts from "typescript";
-import { getSyntaxKindName } from "../../internal/getSyntaxKindName.js";
+import { getSyntaxKindName } from "../internal/getSyntaxKindName.js";
 import { EntityName } from "./EntityName.js";
 import { Join } from "./Join.js";
 import { NodeProps } from "./NodeProps.js";

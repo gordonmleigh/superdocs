@@ -1,9 +1,9 @@
 import ts from "typescript";
-import { Modifiers } from "../ast/Modifier.js";
-import { NodeProps } from "../ast/NodeProps.js";
-import { TypeNode } from "../ast/TypeNode.js";
+import { Modifiers } from "./Modifier.js";
+import { NodeProps } from "./NodeProps.js";
 import { PropertyName } from "./PropertyName.js";
 import { Token } from "./Token.js";
+import { TypeNode } from "./TypeNode.js";
 
 /**
  * Formats a property signature in code.

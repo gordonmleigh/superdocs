@@ -1,7 +1,7 @@
 import chalk from "chalk";
 import ts from "typescript";
-import { DeclarationCollection } from "../../core/DeclarationCollection";
-import { getSyntaxKindName } from "../../internal/getSyntaxKindName";
+import { DeclarationCollection } from "../core/DeclarationCollection";
+import { getSyntaxKindName } from "../internal/getSyntaxKindName";
 import { Token } from "./Token";
 
 /**

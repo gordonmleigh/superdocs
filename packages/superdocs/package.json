@@ -14,14 +14,6 @@
       "types": "./lib/components/*.d.ts",
       "default": "./lib/components/*.js"
     },
-    "./components/ast/*": {
-      "types": "./lib/components/ast/*.d.ts",
-      "default": "./lib/components/ast/*.js"
-    },
-    "./components/declarations/*": {
-      "types": "./lib/components/declarations/*.d.ts",
-      "default": "./lib/components/declarations/*.js"
-    },
     "./core/*": {
       "types": "./lib/core/*.d.ts",
       "default": "./lib/core/*.js"

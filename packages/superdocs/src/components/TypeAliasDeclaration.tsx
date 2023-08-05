@@ -1,9 +1,9 @@
 import ts from "typescript";
-import { Modifiers } from "../ast/Modifier.js";
-import { NodeProps } from "../ast/NodeProps.js";
-import { Token } from "../ast/Token.js";
-import { TypeNode } from "../ast/TypeNode.js";
-import { TypeParameters } from "../ast/TypeParameter.js";
+import { Modifiers } from "./Modifier.js";
+import { NodeProps } from "./NodeProps.js";
+import { Token } from "./Token.js";
+import { TypeNode } from "./TypeNode.js";
+import { TypeParameters } from "./TypeParameter.js";
 
 /**
  * Format a type alias declaration in code.

@@ -1,6 +1,6 @@
 import Link from "next/link";
 import ts from "typescript";
-import { ImportInfo } from "../../core/DeclarationCollection.js";
+import { ImportInfo } from "../core/DeclarationCollection.js";
 import { NodeProps } from "./NodeProps.js";
 import { Token } from "./Token.js";
 

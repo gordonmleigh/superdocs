@@ -3,10 +3,7 @@ import { fetchDeclarationCollection } from "@/util/declarations";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { DeclarationInfo } from "superdocs/components/DeclarationInfo";
-import { Keyword } from "superdocs/components/ast/Keyword";
-import { Operator } from "superdocs/components/ast/Operator";
-import { StringLiteral } from "superdocs/components/ast/StringLiteral";
-import { Token } from "superdocs/components/ast/Token";
+import { Token } from "superdocs/components/Token";
 
 interface DeclarationPageParams {
   params: { slug: string };
@@ -49,14 +46,14 @@ export default function DeclarationPage({
             <h1 className="text-3xl font-semibold">{declaration.name}</h1>
             {declaration.name && (
               <code className="declaration-code">
-                <Keyword>import</Keyword>
-                <Operator text=" { " />
+                <Token keyword>import</Token>
+                <Token operator text=" { " />
                 <Token identifier>{declaration.name}</Token>
-                <Operator text=" } " />
-                <Keyword>from</Keyword>
-                <StringLiteral>
+                <Token operator text=" } " />
+                <Token keyword>from</Token>
+                <Token literal="string">
                   &quot;{declaration.moduleSpecifier}&quot;
-                </StringLiteral>
+                </Token>
               </code>
             )}
           </div>

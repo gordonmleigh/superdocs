@@ -1,6 +1,6 @@
 import ts from "typescript";
-import { NodeProps } from "../ast/NodeProps.js";
-import { SignatureDeclaration } from "../ast/SignatureDeclaration.js";
+import { NodeProps } from "./NodeProps.js";
+import { SignatureDeclaration } from "./SignatureDeclaration.js";
 
 /**
  * Formats a function declaration in code.

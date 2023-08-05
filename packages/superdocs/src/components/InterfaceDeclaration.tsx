@@ -1,9 +1,9 @@
 import ts from "typescript";
-import { HeritageClauses } from "../ast/HeritageClause.js";
-import { Modifiers } from "../ast/Modifier.js";
-import { NodeProps } from "../ast/NodeProps.js";
-import { Token } from "../ast/Token.js";
-import { TypeParameters } from "../ast/TypeParameter.js";
+import { HeritageClauses } from "./HeritageClause.js";
+import { Modifiers } from "./Modifier.js";
+import { NodeProps } from "./NodeProps.js";
+import { Token } from "./Token.js";
+import { TypeParameters } from "./TypeParameter.js";
 
 /**
  * Formats an interface declaration in code.

@@ -1,14 +1,14 @@
 import ts from "typescript";
-import { DeclarationNodeOrChildNode } from "../../core/DeclarationCollection.js";
-import { ClassElement } from "../ast/ClassElement.js";
-import { NodeProps } from "../ast/NodeProps.js";
-import { ParameterDeclaration } from "../ast/ParameterDeclaration.js";
-import { TypeElement } from "../ast/TypeElement.js";
-import { UnknownCode } from "../ast/UnknownCode.js";
+import { DeclarationNodeOrChildNode } from "../core/DeclarationCollection.js";
 import { ClassDeclaration } from "./ClassDeclaration.js";
+import { ClassElement } from "./ClassElement.js";
 import { FunctionDeclaration } from "./FunctionDeclaration.js";
 import { InterfaceDeclaration } from "./InterfaceDeclaration.js";
+import { NodeProps } from "./NodeProps.js";
+import { ParameterDeclaration } from "./ParameterDeclaration.js";
 import { TypeAliasDeclaration } from "./TypeAliasDeclaration.js";
+import { TypeElement } from "./TypeElement.js";
+import { UnknownCode } from "./UnknownCode.js";
 
 /**
  * Properties for the {@link FormatDeclaration} component.

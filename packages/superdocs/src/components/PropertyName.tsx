@@ -1,5 +1,5 @@
 import ts from "typescript";
-import { NodeProps } from "../ast/NodeProps.js";
+import { NodeProps } from "./NodeProps.js";
 import { Token } from "./Token.js";
 import { UnknownCode } from "./UnknownCode.js";
 
