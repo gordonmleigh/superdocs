@@ -16,7 +16,7 @@ export function PropertySignature({
   return (
     <>
       {node.modifiers && <Modifiers node={node.modifiers} />}
-      <PropertyName node={node.name} />
+      <PropertyName collection={collection} node={node.name} />
       {node.questionToken && <Operator text="?" />}
       {node.type && (
         <>

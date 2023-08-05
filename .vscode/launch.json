@@ -8,9 +8,13 @@
       "type": "node-terminal",
       "request": "launch",
       "name": "Launch Docs",
-      "skipFiles": ["<node_internals>/**"],
-      "command": "npm run -w @w/docs dev",
-      "outFiles": ["${workspaceFolder}/**/*.js"]
+      "skipFiles": ["<node_internals>/**", "node_modules/typescript/**"],
+      "command": "npm run dev",
+      "outFiles": ["${workspaceFolder}/**/*.js"],
+      "cwd": "${workspaceFolder}/packages/docs",
+      "env": {
+        "NEXT_PUBLIC_BASE_PATH": "/superdocs"
+      }
     }
   ]
 }

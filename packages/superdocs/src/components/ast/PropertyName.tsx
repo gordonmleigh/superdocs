@@ -1,16 +1,16 @@
 import ts from "typescript";
 import { Identifier } from "../ast/Identifier.js";
-import { NodeOnlyProps } from "../ast/NodeProps.js";
-import { Operator } from "../ast/Operator.js";
-import { CodeWord } from "./Word.js";
+import { NodeProps } from "../ast/NodeProps.js";
+import { UnknownCode } from "./UnknownCode.js";
 
 /**
  * Formats a property name.
  * @group Components
  */
 export function PropertyName({
+  collection,
   node,
-}: NodeOnlyProps<ts.PropertyName>): JSX.Element {
+}: NodeProps<ts.PropertyName>): JSX.Element {
   if (ts.isEntityName(node)) {
     return <Identifier name={node} />;
   }
@@ -21,15 +21,11 @@ export function PropertyName({
   }
   if (ts.isNumericLiteral(node)) {
     return (
-      <>
-        <Operator text="[" />
-        <Identifier className="code-numeric-literal" name={`${node.text}`} />
-        <Operator text="]" />
-      </>
+      <Identifier className="code-numeric-literal" name={`${node.text}`} />
     );
   }
   if (ts.isPrivateIdentifier(node)) {
     return <Identifier name={node.text} />;
   }
-  return <CodeWord className="code-unknown">{node.getText()}</CodeWord>;
+  return <UnknownCode collection={collection} node={node} word />;
 }

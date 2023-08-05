@@ -1,15 +1,15 @@
 import { MainLayout } from "@/components/MainLayout";
 import { NavigationLink } from "@/components/NavigationLink";
-import { fetchDeclarationCollection } from "@/util/declarations";
+import { fetchDeclarationGroups } from "@/util/declarations";
 
 export default function CodePage(): JSX.Element {
-  const collection = fetchDeclarationCollection();
+  const groups = fetchDeclarationGroups();
 
   return (
     <MainLayout>
       <h1>API Documentation</h1>
       <div>
-        {collection.groups.map((group) => (
+        {groups.map((group) => (
           <NavigationLink
             href={`/code/${group.slug}`}
             key={group.slug}

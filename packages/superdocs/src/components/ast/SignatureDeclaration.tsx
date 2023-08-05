@@ -33,7 +33,7 @@ export function SignatureDeclaration({
       ) : ts.isConstructSignatureDeclaration(node) ? (
         <Keyword text="new" />
       ) : node.name ? (
-        <PropertyName node={node.name} />
+        <PropertyName collection={collection} node={node.name} />
       ) : undefined}
 
       {node.typeParameters && (

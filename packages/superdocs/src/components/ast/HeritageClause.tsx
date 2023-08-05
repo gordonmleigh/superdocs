@@ -15,7 +15,6 @@ export function HeritageClause({
 }: NodeProps<ts.HeritageClause>): JSX.Element {
   return (
     <>
-      <br />
       {node.token === ts.SyntaxKind.ImplementsKeyword && (
         <Keyword className="ml-8">implements</Keyword>
       )}

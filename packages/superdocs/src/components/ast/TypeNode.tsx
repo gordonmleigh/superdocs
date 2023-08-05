@@ -9,6 +9,7 @@ import { Operator } from "./Operator.js";
 import { SignatureDeclaration } from "./SignatureDeclaration.js";
 import { TypeArguments } from "./TypeArguments.js";
 import { TypeElement } from "./TypeElement.js";
+import { UnknownCode } from "./UnknownCode.js";
 import { CodeWord } from "./Word.js";
 
 /**
@@ -90,7 +91,7 @@ export function TypeNode({ collection, node }: TypeNodeProps): JSX.Element {
         <TypeNode collection={collection} node={node.type} />
       </>
     ) : (
-      <span className="code-unknown">{node.getText()}</span>
+      <UnknownCode collection={collection} node={node} />
     );
   }
   if (ts.isTypeLiteralNode(node)) {
@@ -113,5 +114,5 @@ export function TypeNode({ collection, node }: TypeNodeProps): JSX.Element {
   if (getSyntaxKindName(node.kind).endsWith("Keyword")) {
     return <KeywordType>{node.getText()}</KeywordType>;
   }
-  return <span className="code-unknown">{node.getText()}</span>;
+  return <UnknownCode collection={collection} node={node} />;
 }

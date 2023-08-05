@@ -1,4 +1,5 @@
 import clsx from "clsx";
+import Link from "next/link.js";
 import {
   Declaration,
   DeclarationNodeOrChildNode,
@@ -12,13 +13,24 @@ import { FormatDeclaration } from "./declarations/FormatDeclaration.js";
  */
 export interface DeclarationInfoProps {
   /**
-   * True if the node is a child of a declaration.
+   * Additional styles to apply.
+   */
+  className?: string;
+
+  /**
+   * True to format this declaration as a child of another declaration.
    */
   child?: boolean;
+
   /**
    * The declaration to format.
    */
   declaration: Declaration<DeclarationNodeOrChildNode>;
+
+  /**
+   * Optional title to show in place of the declaration name.
+   */
+  title?: string;
 }
 
 /**
@@ -26,18 +38,19 @@ export interface DeclarationInfoProps {
  * @group Components
  */
 export function DeclarationInfo({
+  className,
   child,
   declaration,
+  title,
 }: DeclarationInfoProps): JSX.Element {
   return (
-    <section className={clsx("declaration", child && "declaration-child")}>
-      <h2
-        className={clsx(
-          child ? "declaration-subsubheading" : "declaration-heading",
-        )}
-        id={declaration.slug}
-      >
-        {declaration.name}
+    <section
+      className={clsx("declaration", child && "declaration-child", className)}
+    >
+      <h2 className="declaration-heading" id={declaration.slug}>
+        <Link href={declaration.documentationLink}>
+          {title ?? declaration.name}
+        </Link>
       </h2>
       {declaration.codeLink ? (
         <a className="declaration-code-link" href={declaration.codeLink}>
@@ -58,25 +71,6 @@ export function DeclarationInfo({
         collection={declaration.collection}
         comment={declaration.documentation}
       />
-      {declaration.parameters && (
-        <div className="declaration-parameters">
-          <h3 className="declaration-subheading">Parameters</h3>
-          {declaration.parameters.map((member) => (
-            <DeclarationInfo key={member.slug} declaration={member} child />
-          ))}
-        </div>
-      )}
-      {declaration.members && (
-        <div className="declaration-members">
-          <h3 className="declaration-subheading">Members</h3>
-          {declaration.members
-            .slice()
-            .sort((a, b) => a.name.localeCompare(b.name))
-            .map((member) => (
-              <DeclarationInfo key={member.slug} declaration={member} child />
-            ))}
-        </div>
-      )}
     </section>
   );
 }

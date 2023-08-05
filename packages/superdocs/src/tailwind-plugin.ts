@@ -84,9 +84,10 @@ const superdocsPlugin = plugin.withOptions(
             base: {
               "--tw-superdocs-color-code-keyword": theme("colors.red.500"),
               "--tw-superdocs-color-code-keyword-type": theme("colors.red.500"),
-              "--tw-superdocs-color-code-literal-type":
-                theme("colors.blue.700"),
+              "--tw-superdocs-color-code-literal": theme("colors.blue.700"),
               "--tw-superdocs-color-code-operator": theme("colors.zinc.400"),
+              "--tw-superdocs-color-declaration-members-border":
+                theme("colors.zinc.100"),
               "--tw-superdocs-font-size-sm": fontSize("sm").fontSize,
               "--tw-superdocs-font-size-base": fontSize("base").fontSize,
               "--tw-superdocs-font-size-lg": fontSize("lg").fontSize,
@@ -110,19 +111,15 @@ const superdocsPlugin = plugin.withOptions(
               },
 
               ".code-literal-type": {
-                color: "var(--tw-superdocs-color-code-literal-type)",
+                color: "var(--tw-superdocs-color-code-literal)",
               },
 
               ".code-operator": {
                 color: "var(--tw-superdocs-color-code-operator)",
               },
 
-              ".declaration": {
-                marginBottom: theme("spacing.28"),
-              },
-
-              ".declaration-child": {
-                marginBottom: theme("spacing.8"),
+              ".code-string-literal": {
+                color: "var(--tw-superdocs-color-code-literal)",
               },
 
               ".declaration-code": {
@@ -153,22 +150,11 @@ const superdocsPlugin = plugin.withOptions(
                 fontWeight: theme("fontWeight.semibold"),
               },
 
-              ".declaration-members": {
-                marginTop: theme("spacing.8"),
-              },
-
-              ".declaration-parameters": {
-                marginTop: theme("spacing.8"),
-              },
-
-              ".declaration-subheading": {
-                fontSize: "var(--tw-superdocs-font-size-xl)",
-                fontWeight: theme("fontWeight.semibold"),
-              },
-
-              ".declaration-subsubheading": {
-                fontSize: "var(--tw-superdocs-font-size-lg)",
-                fontWeight: theme("fontWeight.semibold"),
+              ".declaration-child": {
+                ".declaration-heading": {
+                  fontSize: "var(--tw-superdocs-font-size-lg)",
+                  fontWeight: theme("fontWeight.semibold"),
+                },
               },
 
               ".jsdoc-code-link": {

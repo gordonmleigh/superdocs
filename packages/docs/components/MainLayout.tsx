@@ -1,5 +1,5 @@
 import { fetchAllContent } from "@/util/content";
-import { fetchDeclarationCollection } from "@/util/declarations";
+import { fetchDeclarationGroups } from "@/util/declarations";
 import { styled } from "@/util/styled";
 import { ReactNode } from "react";
 import { Navigation } from "./Navigation";
@@ -15,7 +15,7 @@ export async function MainLayout({
   children,
 }: MainLayoutProps): Promise<JSX.Element> {
   const pages = await fetchAllContent();
-  const collection = fetchDeclarationCollection();
+  const groups = fetchDeclarationGroups();
 
   return (
     <div className="lg:ml-72 xl:ml-80">
@@ -30,27 +30,21 @@ export async function MainLayout({
             />
           ))}
           <NavigationSection>API</NavigationSection>
-          {collection.groups
-            .slice()
-            .sort((a, b) => a.name.localeCompare(b.name))
-            .map((group) => (
-              <NavigationLink
-                href={`/code/${group.slug}`}
-                key={group.slug}
-                title={group.name}
-              >
-                {group.declarations
-                  .slice()
-                  .sort((a, b) => a.name.localeCompare(b.name))
-                  .map((def) => (
-                    <NavigationLink
-                      href={def.documentationLink}
-                      key={def.slug}
-                      title={def.name}
-                    />
-                  ))}
-              </NavigationLink>
-            ))}
+          {groups.map((group) => (
+            <NavigationLink
+              href={`/code/groups/${group.slug}`}
+              key={group.slug}
+              title={group.name}
+            >
+              {group.declarations.map((def) => (
+                <NavigationLink
+                  href={`/code/groups/${group.slug}#${def.slug}`}
+                  key={def.slug}
+                  title={def.name}
+                />
+              ))}
+            </NavigationLink>
+          ))}
         </Navigation.Pages>
         <Navigation.Sections>
           <Navigation.SectionLink href="/docs/introduction">

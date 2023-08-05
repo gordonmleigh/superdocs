@@ -2,6 +2,7 @@ import ts from "typescript";
 import { NodeProps } from "./NodeProps";
 import { PropertySignature } from "./PropertySignature";
 import { SignatureDeclaration } from "./SignatureDeclaration";
+import { UnknownCode } from "./UnknownCode";
 
 export function ClassElement({
   collection,
@@ -13,5 +14,5 @@ export function ClassElement({
   if (ts.isPropertyDeclaration(node)) {
     return <PropertySignature collection={collection} node={node} />;
   }
-  return <span className="code-unknown">{(node as any).getText()}</span>;
+  return <UnknownCode collection={collection} node={node} />;
 }

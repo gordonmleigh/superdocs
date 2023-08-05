@@ -4,6 +4,7 @@ import { ClassElement } from "../ast/ClassElement.js";
 import { NodeProps } from "../ast/NodeProps.js";
 import { ParameterDeclaration } from "../ast/ParameterDeclaration.js";
 import { TypeElement } from "../ast/TypeElement.js";
+import { UnknownCode } from "../ast/UnknownCode.js";
 import { ClassDeclaration } from "./ClassDeclaration.js";
 import { FunctionDeclaration } from "./FunctionDeclaration.js";
 import { InterfaceDeclaration } from "./InterfaceDeclaration.js";
@@ -44,5 +45,5 @@ export function FormatDeclaration({
   if (ts.isTypeElement(node)) {
     return <TypeElement collection={collection} node={node} />;
   }
-  return <span className="code-unknown">{(node as any).getText()}</span>;
+  return <UnknownCode collection={collection} node={node} />;
 }
