@@ -1,7 +1,9 @@
 "use client";
+import { SiteMeta } from "@/util/metadata";
 import clsx from "clsx";
 import Link from "next/link";
 import { ReactNode } from "react";
+import { Invertocat } from "./Invertocat";
 import { Logo } from "./Logo";
 import { MenuButton } from "./MenuButton";
 
@@ -35,6 +37,14 @@ export function TopNav({
           </ul>
         </nav>
       </div>
+      <div className="grow" />
+      <a
+        href={SiteMeta.repo}
+        className="flex gap-2 items-center transition text-zinc-600 hover:text-zinc-900 text-sm"
+      >
+        <Invertocat className="h-5" />
+        GitHub
+      </a>
     </div>
   );
 }
