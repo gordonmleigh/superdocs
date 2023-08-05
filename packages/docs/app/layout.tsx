@@ -12,13 +12,27 @@ export const metadata = {
   description: "A test of some documentation",
 };
 
+const darkScript = `(function() {
+  const dark = localStorage.theme
+  ? localStorage.theme === "dark"
+  : window.matchMedia("(prefers-color-scheme: dark)").matches;
+
+  if (dark) {
+    document.documentElement.classList.add("[&_*]:!transition-none");
+    document.documentElement.classList.add("dark")
+    window.setTimeout(() => {
+      document.documentElement.classList.remove("[&_*]:!transition-none");
+    }, 0);
+  }
+})();`;
+
 export default function RootLayout({
   children,
 }: {
   children: React.ReactNode;
 }): JSX.Element {
   return (
-    <html lang="en" className="h-full scroll-pt-20 scroll-smooth bg-white">
+    <html lang="en" className="h-full scroll-pt-20 scroll-smooth">
       <head>
         <link
           rel="icon"
@@ -35,8 +49,16 @@ export default function RootLayout({
           href={`${SiteMeta.basePath}/icon-256.png`}
           sizes="256x256"
         />
+        <script
+          type="text/javascript"
+          dangerouslySetInnerHTML={{ __html: darkScript }}
+        />
       </head>
-      <body className={clsx("h-full", inter.className)}>{children}</body>
+      <body
+        className={clsx("h-full bg-white dark:bg-zinc-900", inter.className)}
+      >
+        {children}
+      </body>
     </html>
   );
 }

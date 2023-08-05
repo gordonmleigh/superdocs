@@ -82,12 +82,20 @@ const superdocsPlugin = plugin.withOptions(
         return {
           DEFAULT: {
             base: {
+              "--tw-superdocs-color-code-background": theme("colors.zinc.100"),
+              "--tw-superdocs-color-code-border": theme("colors.zinc.200"),
+              "--tw-superdocs-color-code-popup-background":
+                theme("colors.zinc.100"),
+              "--tw-superdocs-color-code-popup-border":
+                theme("colors.zinc.300"),
+              "--tw-superdocs-color-code": theme("colors.zinc.900"),
               "--tw-superdocs-color-code-keyword": theme("colors.red.500"),
               "--tw-superdocs-color-code-keyword-type": theme("colors.red.500"),
               "--tw-superdocs-color-code-literal": theme("colors.blue.700"),
               "--tw-superdocs-color-code-operator": theme("colors.zinc.400"),
               "--tw-superdocs-color-declaration-members-border":
                 theme("colors.zinc.100"),
+              "--tw-superdocs-color-text": theme("colors.zinc.900"),
               "--tw-superdocs-font-size-sm": fontSize("sm").fontSize,
               "--tw-superdocs-font-size-base": fontSize("base").fontSize,
               "--tw-superdocs-font-size-lg": fontSize("lg").fontSize,
@@ -96,6 +104,10 @@ const superdocsPlugin = plugin.withOptions(
             },
 
             components: {
+              "&": {
+                color: "var(--tw-superdocs-color-text)",
+              },
+
               ".code-identifier": {
                 a: {
                   textDecoration: "underline",
@@ -123,11 +135,12 @@ const superdocsPlugin = plugin.withOptions(
               },
 
               ".declaration-code": {
-                backgroundColor: theme("colors.zinc.100"),
-                borderColor: theme("colors.zinc.200"),
+                backgroundColor: "var(--tw-superdocs-color-code-background)",
+                borderColor: "var(--tw-superdocs-color-code-border)",
                 borderRadius: theme("borderRadius.DEFAULT"),
                 borderStyle: "solid",
                 borderWidth: "1px",
+                color: "var(--tw-superdocs-color-code)",
                 display: "block",
                 fontSize: "var(--tw-superdocs-font-size-sm)",
                 marginBottom: theme("spacing.4"),
@@ -136,11 +149,13 @@ const superdocsPlugin = plugin.withOptions(
               },
 
               ".declaration-code-popup": {
-                backgroundColor: theme("colors.zinc.100"),
-                borderColor: theme("colors.zinc.300"),
+                backgroundColor:
+                  "var(--tw-superdocs-color-code-popup-background)",
+                borderColor: "var(--tw-superdocs-color-code-popup-border)",
                 borderRadius: theme("borderRadius.DEFAULT"),
                 borderStyle: "solid",
                 borderWidth: "1px",
+                color: "var(--tw-superdocs-color-code)",
                 display: "none",
                 fontSize: "var(--tw-superdocs-font-size-sm)",
                 marginBottom: theme("spacing.4"),
@@ -171,11 +186,12 @@ const superdocsPlugin = plugin.withOptions(
               },
 
               ".jsdoc-code-link": {
-                backgroundColor: theme("colors.zinc.100"),
-                borderColor: theme("colors.zinc.200"),
+                backgroundColor: "var(--tw-superdocs-color-code-background)",
+                borderColor: "var(--tw-superdocs-color-code-border)",
                 borderRadius: theme("borderRadius.DEFAULT"),
                 borderStyle: "solid",
                 borderWidth: "1px",
+                color: "var(--tw-superdocs-color-code)",
                 fontSize: "var(--tw-superdocs-font-size-sm)",
                 padding: theme("spacing.1"),
 
@@ -200,6 +216,30 @@ const superdocsPlugin = plugin.withOptions(
                 textDecorationColor: theme("colors.blue.600"),
                 textDecorationStyle: "wavy",
               },
+            },
+          },
+
+          dark: {
+            base: {
+              "--tw-superdocs-color-code-background": theme("colors.zinc.900"),
+              "--tw-superdocs-color-code-border": theme("colors.zinc.800"),
+              "--tw-superdocs-color-code-popup-background":
+                theme("colors.zinc.900"),
+              "--tw-superdocs-color-code-popup-border":
+                theme("colors.zinc.800"),
+              "--tw-superdocs-color-code": theme("colors.zinc.100"),
+              "--tw-superdocs-color-code-keyword": theme("colors.red.500"),
+              "--tw-superdocs-color-code-keyword-type": theme("colors.red.500"),
+              "--tw-superdocs-color-code-literal": theme("colors.cyan.500"),
+              "--tw-superdocs-color-code-operator": theme("colors.zinc.400"),
+              "--tw-superdocs-color-declaration-members-border":
+                theme("colors.zinc.100"),
+              "--tw-superdocs-color-text": theme("colors.zinc.100"),
+              "--tw-superdocs-font-size-sm": fontSize("sm").fontSize,
+              "--tw-superdocs-font-size-base": fontSize("base").fontSize,
+              "--tw-superdocs-font-size-lg": fontSize("lg").fontSize,
+              "--tw-superdocs-font-size-xl": fontSize("xl").fontSize,
+              "--tw-superdocs-font-size-2xl": fontSize("2xl").fontSize,
             },
           },
         };

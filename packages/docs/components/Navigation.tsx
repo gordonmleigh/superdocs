@@ -51,7 +51,7 @@ function NavigationSectionLink({ children, href }: LinkProps): JSX.Element {
     <li>
       <Link
         href={href}
-        className="block md:inline py-1 text-sm md:leading-5 text-zinc-600 transition hover:text-zinc-900"
+        className="block md:inline py-1 text-sm md:leading-5 text-zinc-600 transition hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-white"
       >
         {children}
       </Link>

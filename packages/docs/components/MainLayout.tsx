@@ -5,7 +5,10 @@ import { ReactNode } from "react";
 import { Navigation } from "./Navigation";
 import { NavigationLink } from "./NavigationLink";
 
-const NavigationSection = styled("div", "text-xs uppercase mt-8");
+const NavigationSection = styled(
+  "div",
+  "text-xs semibold mt-8 dark:text-white",
+);
 
 export interface MainLayoutProps {
   children?: ReactNode;
