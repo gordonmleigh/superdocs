@@ -22,7 +22,7 @@ export function TopNav({
   return (
     <div
       className={clsx(
-        "fixed inset-x-0 top-0 z-50 flex h-14 items-center justify-between gap-12 border-b border-solid border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-900 px-4 transition sm:px-6 lg:left-72 lg:z-30 lg:px-8 lg:shadow-none xl:left-80",
+        "fixed top-0 inset-0 z-50 flex h-14 items-center justify-between border-b border-solid border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-900 px-4 transition sm:px-6 lg:left-72 lg:z-30 lg:px-8 lg:shadow-none xl:left-80",
       )}
     >
       <div className="flex items-center gap-5 lg:hidden">
@@ -46,7 +46,7 @@ export function TopNav({
           className="flex gap-2 items-center transition text-zinc-600 hover:text-zinc-900 text-sm dark:text-zinc-400 dark:hover:text-white"
         >
           <Invertocat className="h-5" />
-          GitHub
+          <span className="hidden md:inline">GitHub</span>
         </a>
       </div>
     </div>
