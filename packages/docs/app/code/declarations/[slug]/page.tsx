@@ -3,7 +3,7 @@ import { fetchDeclarationCollection } from "@/util/declarations";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { DeclarationInfo } from "superdocs/components/DeclarationInfo";
-import { Token } from "superdocs/components/Token";
+import { FormatImport } from "superdocs/components/FormatImport";
 
 interface DeclarationPageParams {
   params: { slug: string };
@@ -44,16 +44,9 @@ export default function DeclarationPage({
         ) : (
           <div className="mb-12">
             <h1 className="text-3xl font-semibold">{declaration.name}</h1>
-            {declaration.name && (
+            {declaration.importInfo && (
               <code className="declaration-code">
-                <Token keyword>import</Token>
-                <Token operator text=" { " />
-                <Token identifier>{declaration.name}</Token>
-                <Token operator text=" } " />
-                <Token keyword>from</Token>
-                <Token literal="string">
-                  &quot;{declaration.moduleSpecifier}&quot;
-                </Token>
+                <FormatImport info={declaration.importInfo} />
               </code>
             )}
           </div>

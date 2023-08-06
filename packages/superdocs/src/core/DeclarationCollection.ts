@@ -65,9 +65,10 @@ export interface Declaration<
   documentationLink: string;
   group?: string;
   id: string;
+  importInfo?: ImportInfo;
   location: NodeLocation;
-  members?: Declaration<DeclarationMemberNode>[];
   moduleSpecifier: string;
+  members?: Declaration<DeclarationMemberNode>[];
   name?: string;
   node: Node;
   parameters?: Declaration<ts.ParameterDeclaration>[];
@@ -245,6 +246,7 @@ export class DeclarationCollection implements Iterable<Declaration> {
   ): Declaration<T> {
     const location = this.nodeLocations.getNodeLocation(node);
     const slug = slugifyNode(node, parent?.node);
+    const name = getName(node);
 
     const declaration: Declaration<T> = {
       codeLink: this.getCodeLink?.(location),
@@ -255,7 +257,15 @@ export class DeclarationCollection implements Iterable<Declaration> {
       id: getNodeId(node),
       location,
       moduleSpecifier,
-      name: getName(node) ?? "Unnamed",
+      importInfo:
+        name !== undefined
+          ? {
+              kind: "named",
+              module: moduleSpecifier,
+              name: name,
+            }
+          : undefined,
+      name: name ?? "Unnamed",
       node,
       parent,
       slug,

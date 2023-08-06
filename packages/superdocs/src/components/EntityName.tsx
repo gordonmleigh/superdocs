@@ -1,6 +1,8 @@
+import clsx from "clsx";
 import Link from "next/link";
 import ts from "typescript";
 import { ImportInfo } from "../core/DeclarationCollection.js";
+import { FormatImport } from "./FormatImport.js";
 import { NodeProps } from "./NodeProps.js";
 import { Token } from "./Token.js";
 
@@ -24,45 +26,29 @@ export function EntityName({
   );
 }
 
-function ImportedIdentifier({
-  info,
-  node,
-}: {
+interface ImportedIdentifierProps {
+  href?: string;
   info: ImportInfo;
   node: ts.Identifier;
-}): JSX.Element {
+}
+
+function ImportedIdentifier({
+  href,
+  info,
+  node,
+}: ImportedIdentifierProps): JSX.Element {
   return (
     <Token
-      className="relative group underline decoration-dotted cursor-help"
+      className={clsx(
+        "relative group",
+        !href && "underline decoration-dotted cursor-help",
+      )}
       identifier
     >
       <code className="group-hover:block absolute top-0 left-0 declaration-code-popup whitespace-nowrap drop-shadow-lg">
-        <Token keyword>import</Token>
-        {info.kind === "named" && (
-          <>
-            <Token operator text=" { " />
-            <Token identifier>{info.name}</Token>
-            {info.localName && (
-              <>
-                <Token keyword>as</Token>
-                <Token identifier>{info.localName}</Token>
-              </>
-            )}
-            <Token operator text=" } " />
-          </>
-        )}
-        {info.kind === "default" && <Token identifier>{info.name}</Token>}
-        {info.kind === "star" && (
-          <>
-            <Token operator text="*" />
-            <Token keyword>as</Token>
-            <Token identifier>{info.name}</Token>
-          </>
-        )}
-        <Token keyword>from</Token>
-        <Token literal="string">&quot;{info.module}&quot;</Token>
+        <FormatImport info={info} />
       </code>
-      {node.text}
+      {href ? <Link href={href}>{node.text}</Link> : node.text}
     </Token>
   );
 }
@@ -73,7 +59,13 @@ function LinkedIdentifier({
 }: NodeProps<ts.Identifier>): JSX.Element {
   const def = collection.getDeclaration(node);
   if (def) {
-    return (
+    return def.importInfo ? (
+      <ImportedIdentifier
+        node={node}
+        href={def.documentationLink}
+        info={def.importInfo}
+      />
+    ) : (
       <Token identifier>
         <Link href={def.documentationLink}>{node.text}</Link>
       </Token>
