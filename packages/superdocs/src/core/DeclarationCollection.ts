@@ -3,6 +3,7 @@ import { dirname, posix, resolve } from "path";
 import ts from "typescript";
 import { NodeLocationMap } from "../internal/NodeLocationMap";
 import { assert } from "../internal/assert";
+import { getJSDocTagsByName } from "../internal/getJSDocTag";
 import { getPackageInfo } from "../internal/getPackageInfo";
 import { getParameterIndex } from "../internal/getParameterIndex";
 import { getSyntaxKindName } from "../internal/getSyntaxKindName";
@@ -10,6 +11,12 @@ import { hash } from "../internal/hash";
 import { loadProgram } from "../internal/loadProgram";
 import { slugify } from "../internal/slugify";
 import { NodeLocation } from "./NodeLocation";
+
+/**
+ * The union of valid AST nodes within a JSDoc.
+ * @group Utilities
+ */
+export type JSDocNode = ts.JSDoc | ts.JSDocTag | ts.JSDocComment | string;
 
 /**
  * Union of supported declaration AST node types.
@@ -61,8 +68,9 @@ export interface Declaration<
 > {
   codeLink?: string;
   collection: DeclarationCollection;
-  documentation: readonly (ts.JSDoc | ts.JSDocTag)[];
+  documentation: readonly JSDocNode[];
   documentationLink: string;
+  examples?: readonly ts.JSDocTag[];
   group?: string;
   id: string;
   importInfo?: ImportInfo;
@@ -119,6 +127,18 @@ const resolveExtensions = [".ts", ".d.ts"];
 /**
  * A class which can parse package type declarations and generate metadata about
  * the declarations.
+ *
+ * @example
+ * ```
+ * const collection = new DeclarationCollection({
+ *   codeLinks: {
+ *     sha: getGitSha(),
+ *     url: SiteMeta.repo,
+ *   },
+ *   packagePath: "superdocs",
+ *   sourceRoot: getWorkspaceRoot(),
+ * });
+ * ```
  * @group Core
  */
 export class DeclarationCollection implements Iterable<Declaration> {
@@ -253,6 +273,7 @@ export class DeclarationCollection implements Iterable<Declaration> {
       collection: this,
       documentation: ts.getJSDocCommentsAndTags(node),
       documentationLink: posix.join(this.documentationRoot, slug),
+      examples: getJSDocTagsByName(node, "example"),
       group: getGroupName(node),
       id: getNodeId(node),
       location,
@@ -399,11 +420,7 @@ export function sortDeclarationsByName(a: Declaration, b: Declaration): number {
 }
 
 function getGroupName(node: ts.Node): string | undefined {
-  const groupTag = ts.getAllJSDocTags(
-    node,
-    (tag): tag is ts.JSDocTag => tag.tagName.text === "group",
-  )[0];
-
+  const groupTag = getJSDocTagsByName(node, "group")[0];
   if (typeof groupTag?.comment === "string") {
     return groupTag.comment;
   }

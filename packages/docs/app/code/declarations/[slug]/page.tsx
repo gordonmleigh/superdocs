@@ -4,6 +4,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { DeclarationInfo } from "superdocs/components/DeclarationInfo";
 import { FormatImport } from "superdocs/components/FormatImport";
+import { JSDoc } from "superdocs/components/JSDoc";
 
 interface DeclarationPageParams {
   params: { slug: string };
@@ -56,6 +57,19 @@ export default function DeclarationPage({
           declaration={declaration}
           title={declaration.parent ? undefined : "Details"}
         />
+        {!!declaration.examples?.length && (
+          <div className="mb-16">
+            {declaration.examples.map(
+              (example) =>
+                example.comment && (
+                  <div key={example.pos}>
+                    <h3 className="text-base font-semibold">Example</h3>
+                    <JSDoc collection={collection} comment={example.comment} />
+                  </div>
+                ),
+            )}
+          </div>
+        )}
         {!!declaration.members?.length && (
           <div className="mb-16">
             <h3 className="font-semibold text-xl mb-8">Members</h3>

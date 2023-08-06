@@ -148,6 +148,20 @@ const superdocsPlugin = plugin.withOptions(
                 padding: theme("spacing.2"),
               },
 
+              "pre code[class*='language-']": {
+                backgroundColor: "var(--tw-superdocs-color-code-background)",
+                borderColor: "var(--tw-superdocs-color-code-border)",
+                borderRadius: theme("borderRadius.DEFAULT"),
+                borderStyle: "solid",
+                borderWidth: "1px",
+                color: "var(--tw-superdocs-color-code)",
+                display: "block",
+                fontSize: "var(--tw-superdocs-font-size-sm)",
+                marginBottom: theme("spacing.4"),
+                marginTop: theme("spacing.4"),
+                padding: theme("spacing.2"),
+              },
+
               ".declaration-code-popup": {
                 backgroundColor:
                   "var(--tw-superdocs-color-code-popup-background)",

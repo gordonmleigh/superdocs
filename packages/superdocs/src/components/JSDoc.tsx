@@ -1,13 +1,11 @@
 import ts from "typescript";
-import { DeclarationCollection } from "../core/DeclarationCollection";
+import {
+  DeclarationCollection,
+  JSDocNode,
+} from "../core/DeclarationCollection";
 import { EntityName } from "./EntityName";
+import { Markdown } from "./Markdown";
 import { UnknownCode } from "./UnknownCode";
-
-/**
- * The union of valid AST nodes within a JSDoc.
- * @group Utilities
- */
-export type JSDocNode = ts.JSDoc | ts.JSDocTag | ts.JSDocComment | string;
 
 /**
  * Properties for the {@link JSDoc} component.
@@ -24,7 +22,7 @@ export interface JSDocProps {
  */
 export function JSDoc({ collection, comment }: JSDocProps): JSX.Element | null {
   if (typeof comment === "string") {
-    return <>{comment}</>;
+    return <Markdown>{comment}</Markdown>;
   }
   if (isArray(comment)) {
     return (
