@@ -29,7 +29,7 @@ export function PropertyName({
     );
   }
   if (ts.isPrivateIdentifier(node)) {
-    return <Token identifier="private">{node.text}</Token>;
+    return <Token identifier="symbol">{node.text}</Token>;
   }
   return <UnknownCode collection={collection} node={node} word />;
 }

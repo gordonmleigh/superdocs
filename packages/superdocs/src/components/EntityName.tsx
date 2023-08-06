@@ -20,7 +20,7 @@ export function EntityName({
   ) : (
     <>
       <EntityName collection={collection} node={node.left} />
-      <Token operator text="." />
+      <Token punctuation text="." />
       <EntityName collection={collection} node={node.right} />
     </>
   );
@@ -45,7 +45,7 @@ function ImportedIdentifier({
       )}
       identifier
     >
-      <code className="group-hover:block absolute top-0 left-0 declaration-code-popup whitespace-nowrap drop-shadow-lg">
+      <code className="hidden group-hover:block absolute top-0 left-0 language-typescript whitespace-nowrap drop-shadow-lg">
         <FormatImport info={info} />
       </code>
       {href ? <Link href={href}>{node.text}</Link> : node.text}

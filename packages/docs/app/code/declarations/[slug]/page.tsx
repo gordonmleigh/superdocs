@@ -46,9 +46,11 @@ export default function DeclarationPage({
           <div className="mb-12">
             <h1 className="text-3xl font-semibold">{declaration.name}</h1>
             {declaration.importInfo && (
-              <code className="declaration-code">
-                <FormatImport info={declaration.importInfo} />
-              </code>
+              <pre className="language-typescript my-4">
+                <code className="language-typescript">
+                  <FormatImport info={declaration.importInfo} />
+                </code>
+              </pre>
             )}
           </div>
         )}

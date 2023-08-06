@@ -14,13 +14,13 @@ export function TypeArguments({
 }: NodeProps<readonly ts.TypeNode[]>): JSX.Element {
   return (
     <>
-      <Token operator text="<" />
+      <Token punctuation text="<" />
       <Join
-        operator=", "
+        punctuation=", "
         items={node}
         render={(x) => <TypeNode collection={collection} node={x} />}
       />
-      <Token operator text=">" />
+      <Token punctuation text=">" />
     </>
   );
 }

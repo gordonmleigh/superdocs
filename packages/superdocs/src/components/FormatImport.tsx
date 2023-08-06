@@ -11,7 +11,7 @@ export function FormatImport({ info }: FormatImportProps): JSX.Element {
       <Token keyword>import</Token>
       {info.kind === "named" && (
         <>
-          <Token operator text=" { " />
+          <Token punctuation text=" { " />
           <Token identifier>{info.name}</Token>
           {info.localName && (
             <>
@@ -19,15 +19,17 @@ export function FormatImport({ info }: FormatImportProps): JSX.Element {
               <Token identifier>{info.localName}</Token>
             </>
           )}
-          <Token operator text=" } " />
+          <Token punctuation text=" } " />
         </>
       )}
-      {info.kind === "default" && <Token identifier>{info.name}</Token>}
+      {info.kind === "default" && (
+        <Token identifier="namespace">{info.name}</Token>
+      )}
       {info.kind === "star" && (
         <>
           <Token operator text="*" />
           <Token keyword>as</Token>
-          <Token identifier>{info.name}</Token>
+          <Token identifier="namespace">{info.name}</Token>
         </>
       )}
       <Token keyword>from</Token>

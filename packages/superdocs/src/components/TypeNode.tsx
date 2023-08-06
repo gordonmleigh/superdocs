@@ -67,7 +67,7 @@ export function TypeNode({ collection, node }: TypeNodeProps): JSX.Element {
     return (
       <>
         <TypeNode collection={collection} node={node.elementType} />
-        <Token operator text="[]" />
+        <Token punctuation text="[]" />
       </>
     );
   }
@@ -75,9 +75,9 @@ export function TypeNode({ collection, node }: TypeNodeProps): JSX.Element {
     return (
       <>
         <TypeNode collection={collection} node={node.objectType} />
-        <Token operator text="[" />
+        <Token punctuation text="[" />
         <TypeNode collection={collection} node={node.indexType} />
-        <Token operator text="]" />
+        <Token punctuation text="]" />
       </>
     );
   }
@@ -85,9 +85,9 @@ export function TypeNode({ collection, node }: TypeNodeProps): JSX.Element {
     return (
       <>
         <Token word />
-        <Token operator text="(" />
+        <Token punctuation text="(" />
         <TypeNode collection={collection} node={node.type} />
-        <Token operator text=")" />
+        <Token punctuation text=")" />
       </>
     );
   }
@@ -106,9 +106,7 @@ export function TypeNode({ collection, node }: TypeNodeProps): JSX.Element {
     }
     return keyword ? (
       <>
-        <Token keyword type>
-          {keyword}
-        </Token>
+        <Token keyword>{keyword}</Token>
         <TypeNode collection={collection} node={node.type} />
       </>
     ) : (
@@ -118,14 +116,14 @@ export function TypeNode({ collection, node }: TypeNodeProps): JSX.Element {
   if (ts.isTypeLiteralNode(node)) {
     return (
       <>
-        <Token operator text="{ " />
+        <Token punctuation text="{ " />
         {node.members.map((member) => (
           <Fragment key={member.pos}>
             <TypeElement collection={collection} node={member} />
-            <Token operator text="; " />
+            <Token punctuation text="; " />
           </Fragment>
         ))}
-        <Token operator text=" }" />
+        <Token punctuation text=" }" />
       </>
     );
   }
@@ -133,11 +131,7 @@ export function TypeNode({ collection, node }: TypeNodeProps): JSX.Element {
     return <SignatureDeclaration collection={collection} node={node} />;
   }
   if (getSyntaxKindName(node.kind).endsWith("Keyword")) {
-    return (
-      <Token keyword type>
-        {node.getText()}
-      </Token>
-    );
+    return <Token builtin>{node.getText()}</Token>;
   }
   return <UnknownCode collection={collection} node={node} />;
 }

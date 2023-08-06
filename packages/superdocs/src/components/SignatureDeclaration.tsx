@@ -39,12 +39,12 @@ export function SignatureDeclaration({
       )}
 
       {ts.isIndexSignatureDeclaration(node) ? (
-        <Token operator text="[" />
+        <Token punctuation text="[" />
       ) : (
-        <Token operator text="(" />
+        <Token punctuation text="(" />
       )}
       <Join
-        operator=", "
+        punctuation=", "
         items={node.parameters}
         render={(param) => (
           <ParameterDeclaration
@@ -55,9 +55,9 @@ export function SignatureDeclaration({
         )}
       />
       {ts.isIndexSignatureDeclaration(node) ? (
-        <Token operator text="]" />
+        <Token punctuation text="]" />
       ) : (
-        <Token operator text=")" />
+        <Token punctuation text=")" />
       )}
 
       {ts.isTypeNode(node) ? (
@@ -68,9 +68,7 @@ export function SignatureDeclaration({
       {node.type ? (
         <TypeNode collection={collection} node={node.type} />
       ) : ts.isTypeNode(node) ? (
-        <Token keyword type>
-          unknown
-        </Token>
+        <Token builtin>unknown</Token>
       ) : undefined}
     </>
   );

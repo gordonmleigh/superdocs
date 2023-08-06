@@ -42,13 +42,13 @@ export function TypeParameters({
 }: NodeProps<readonly ts.TypeParameterDeclaration[]>): JSX.Element {
   return (
     <>
-      <Token operator text="<" />
+      <Token punctuation text="<" />
       <Join
-        operator=", "
+        punctuation=", "
         items={node}
         render={(x) => <TypeParameter collection={collection} node={x} />}
       />
-      <Token operator text=">" />
+      <Token punctuation text=">" />
     </>
   );
 }

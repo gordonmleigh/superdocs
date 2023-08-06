@@ -61,7 +61,7 @@ export function DeclarationInfo({
           {declaration.location.path}:{declaration.location.line}
         </span>
       )}
-      <code className="declaration-code">
+      <code className="language-typescript block">
         <FormatDeclaration
           collection={declaration.collection}
           node={declaration.node}

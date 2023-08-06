@@ -21,9 +21,7 @@ export function ParameterDeclaration({
       {node.type ? (
         <TypeNode collection={collection} node={node.type} />
       ) : (
-        <Token keyword type>
-          unknown
-        </Token>
+        <Token builtin>unknown</Token>
       )}
     </>
   );

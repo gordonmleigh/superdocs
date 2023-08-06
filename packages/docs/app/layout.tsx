@@ -3,7 +3,6 @@ import { Inter } from "next/font/google";
 import "./globals.css";
 
 import { SiteMeta } from "@/util/metadata.js";
-import "./code-theme.scss";
 
 const inter = Inter({ subsets: ["latin"] });
 
