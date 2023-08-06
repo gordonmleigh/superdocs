@@ -1,6 +1,7 @@
-import Link from "next/link";
 import ts from "typescript";
 import { DeclarationCollection } from "../core/DeclarationCollection";
+import { EntityName } from "./EntityName";
+import { UnknownCode } from "./UnknownCode";
 
 /**
  * The union of valid AST nodes within a JSDoc.
@@ -44,25 +45,16 @@ export function JSDoc({ collection, comment }: JSDocProps): JSX.Element | null {
   }
   if (ts.isJSDocLink(comment)) {
     if (comment.name) {
-      const def = collection.getDeclaration(comment.name);
-      if (def) {
-        return (
-          <Link href={def.documentationLink}>
-            <code className="jsdoc-code-link">{comment.name.getText()}</code>
-          </Link>
-        );
-      } else {
-        return (
-          <code className="jsdoc-code-link-broken">
-            {comment.name.getText()}
-          </code>
-        );
-      }
+      return (
+        <code className="jsdoc-code-link">
+          <EntityName collection={collection} node={comment.name} />
+        </code>
+      );
     } else {
       return <>{comment.text}</>;
     }
   }
-  return <span>unknown${ts.SyntaxKind[comment.kind]}</span>;
+  return <UnknownCode collection={collection} node={comment} />;
 }
 
 function isArray(x: unknown): x is readonly any[] {

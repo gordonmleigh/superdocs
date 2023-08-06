@@ -173,6 +173,10 @@ const superdocsPlugin = plugin.withOptions(
                 textDecoration: "underline",
               },
 
+              ".declaration-description": {
+                maxWidth: "65ch",
+              },
+
               ".declaration-heading": {
                 fontSize: "var(--tw-superdocs-font-size-2xl)",
                 fontWeight: theme("fontWeight.semibold"),
@@ -194,10 +198,6 @@ const superdocsPlugin = plugin.withOptions(
                 color: "var(--tw-superdocs-color-code)",
                 fontSize: "var(--tw-superdocs-font-size-sm)",
                 padding: theme("spacing.1"),
-
-                "&:hover": {
-                  textDecoration: "underline",
-                },
               },
             },
 

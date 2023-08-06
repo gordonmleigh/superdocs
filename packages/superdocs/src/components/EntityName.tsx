@@ -14,7 +14,7 @@ import { Token } from "./Token.js";
 export function EntityName({
   collection,
   node,
-}: NodeProps<ts.EntityName>): JSX.Element {
+}: NodeProps<ts.EntityName | ts.JSDocMemberName>): JSX.Element {
   return ts.isIdentifier(node) ? (
     <LinkedIdentifier collection={collection} node={node} />
   ) : (

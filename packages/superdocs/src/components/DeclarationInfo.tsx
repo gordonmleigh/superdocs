@@ -67,10 +67,12 @@ export function DeclarationInfo({
           node={declaration.node}
         />
       </code>
-      <JSDoc
-        collection={declaration.collection}
-        comment={declaration.documentation}
-      />
+      <div className="declaration-description">
+        <JSDoc
+          collection={declaration.collection}
+          comment={declaration.documentation}
+        />
+      </div>
     </section>
   );
 }
