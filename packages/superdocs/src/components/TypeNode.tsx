@@ -127,6 +127,17 @@ export function TypeNode({ collection, node }: TypeNodeProps): JSX.Element {
       </>
     );
   }
+  if (ts.isTypeQueryNode(node)) {
+    return (
+      <>
+        <Token keyword>typeof</Token>
+        <EntityName collection={collection} node={node.exprName} />
+        {node.typeArguments && (
+          <TypeArguments collection={collection} node={node.typeArguments} />
+        )}
+      </>
+    );
+  }
   if (ts.isFunctionLike(node)) {
     return <SignatureDeclaration collection={collection} node={node} />;
   }
