@@ -14,6 +14,7 @@ export function defaultTheme({ theme }: PluginUtils): SuperdocsTheme {
       "--tw-superdocs-color-token-deleted": theme("colors.red.500"),
       "--tw-superdocs-color-token-inserted": theme("colors.green.500"),
       "--tw-superdocs-color-token-operator": theme("colors.zinc.400"),
+      "--tw-superdocs-color-token-unknown-underline": theme("colors.blue.600"),
 
       "--tw-superdocs-color-token-atrule":
         "var(--tw-superdocs-color-token-keyword)",
@@ -240,6 +241,10 @@ export function defaultTheme({ theme }: PluginUtils): SuperdocsTheme {
         },
         "&.unknown": {
           color: "var(--tw-superdocs-color-token-unknown)",
+          textDecoration: "underline",
+          textDecorationColor:
+            "var(--tw-superdocs-color-token-unknown-underline)",
+          textDecorationStyle: "wavy",
         },
         "&.url": {
           color: "var(--tw-superdocs-color-token-url)",
