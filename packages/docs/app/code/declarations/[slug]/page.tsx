@@ -4,7 +4,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { DeclarationInfo } from "superdocs/components/DeclarationInfo";
 import { FormatImport } from "superdocs/components/FormatImport";
-import { JSDoc } from "superdocs/components/JSDoc";
+import { JSDocMarkdown } from "superdocs/components/JSDocMarkdown";
 
 interface DeclarationPageParams {
   params: { slug: string };
@@ -66,7 +66,10 @@ export default function DeclarationPage({
                 example.comment && (
                   <div key={example.pos}>
                     <h3 className="text-base font-semibold">Example</h3>
-                    <JSDoc collection={collection} comment={example.comment} />
+                    <JSDocMarkdown
+                      collection={collection}
+                      node={example.comment}
+                    />
                   </div>
                 ),
             )}

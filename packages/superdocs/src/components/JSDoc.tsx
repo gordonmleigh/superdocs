@@ -1,58 +1,49 @@
 import ts from "typescript";
-import {
-  DeclarationCollection,
-  JSDocNode,
-} from "../core/DeclarationCollection";
+import { JSDocNode } from "../core/DeclarationCollection";
 import { EntityName } from "./EntityName";
-import { Markdown } from "./Markdown";
+import { NodeProps } from "./NodeProps";
 import { UnknownCode } from "./UnknownCode";
-
-/**
- * Properties for the {@link JSDoc} component.
- * @group Components
- */
-export interface JSDocProps {
-  collection: DeclarationCollection;
-  comment: JSDocNode | readonly JSDocNode[];
-}
 
 /**
  * Format a JSDoc comment nicely.
  * @group Components
  */
-export function JSDoc({ collection, comment }: JSDocProps): JSX.Element | null {
-  if (typeof comment === "string") {
-    return <Markdown>{comment}</Markdown>;
+export function JSDoc({
+  collection,
+  node,
+}: NodeProps<JSDocNode | readonly JSDocNode[]>): JSX.Element | null {
+  if (typeof node === "string") {
+    return <>{node}</>;
   }
-  if (isArray(comment)) {
+  if (isArray(node)) {
     return (
       <>
-        {comment.map((tag, index) => (
-          <JSDoc collection={collection} comment={tag} key={index} />
+        {node.map((tag, index) => (
+          <JSDoc collection={collection} node={tag} key={index} />
         ))}
       </>
     );
   }
-  if (ts.isJSDoc(comment)) {
-    return comment.comment ? (
-      <JSDoc collection={collection} comment={comment.comment} />
+  if (ts.isJSDoc(node)) {
+    return node.comment ? (
+      <JSDoc collection={collection} node={node.comment} />
     ) : null;
   }
-  if (isJSDocText(comment)) {
-    return <>{comment.text}</>;
+  if (isJSDocText(node)) {
+    return <>{node.text}</>;
   }
-  if (ts.isJSDocLink(comment)) {
-    if (comment.name) {
+  if (ts.isJSDocLink(node)) {
+    if (node.name) {
       return (
         <code className="jsdoc-code-link">
-          <EntityName collection={collection} node={comment.name} />
+          <EntityName collection={collection} node={node.name} />
         </code>
       );
     } else {
-      return <>{comment.text}</>;
+      return <>{node.text}</>;
     }
   }
-  return <UnknownCode collection={collection} node={comment} />;
+  return <UnknownCode collection={collection} node={node} />;
 }
 
 function isArray(x: unknown): x is readonly any[] {

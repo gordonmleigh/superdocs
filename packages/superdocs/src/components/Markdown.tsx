@@ -1,5 +1,6 @@
 import clsx from "clsx";
 import ReactMarkdown from "react-markdown";
+import { ReactMarkdownOptions } from "react-markdown/lib/react-markdown";
 import remarkGfm from "remark-gfm";
 import { CodeBlock } from "./CodeBlock";
 
@@ -7,10 +8,15 @@ export interface MarkdownProps {
   children: string;
 }
 
-export function Markdown({ children }: MarkdownProps): JSX.Element {
+export function Markdown({
+  children,
+  components,
+  remarkPlugins = [],
+  ...rest
+}: ReactMarkdownOptions): JSX.Element {
   return (
     <ReactMarkdown
-      remarkPlugins={[remarkGfm]}
+      remarkPlugins={[remarkGfm, ...remarkPlugins]}
       components={{
         code: ({
           className,
@@ -32,8 +38,9 @@ export function Markdown({ children }: MarkdownProps): JSX.Element {
             </code>
           );
         },
-        pre: ({ children }) => <>{children}</>,
+        ...components,
       }}
+      {...rest}
     >
       {children}
     </ReactMarkdown>

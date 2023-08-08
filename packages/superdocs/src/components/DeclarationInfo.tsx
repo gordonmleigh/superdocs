@@ -5,7 +5,7 @@ import {
   DeclarationNodeOrChildNode,
 } from "../core/DeclarationCollection.js";
 import { FormatDeclaration } from "./FormatDeclaration.js";
-import { JSDoc } from "./JSDoc.js";
+import { JSDocMarkdown } from "./JSDocMarkdown.js";
 
 /**
  * Properties for {@link DeclarationInfo} component.
@@ -67,12 +67,10 @@ export function DeclarationInfo({
           node={declaration.node}
         />
       </code>
-      <div className="declaration-description">
-        <JSDoc
-          collection={declaration.collection}
-          comment={declaration.documentation}
-        />
-      </div>
+      <JSDocMarkdown
+        collection={declaration.collection}
+        node={declaration.documentation}
+      />
     </section>
   );
 }

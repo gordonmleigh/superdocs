@@ -78,6 +78,7 @@ export function defaultTheme({ theme }: PluginUtils): SuperdocsTheme {
 
       "--tw-superdocs-color-text": theme("colors.zinc.900"),
 
+      "--tw-superdocs-line-height": "1.75",
       "--tw-superdocs-font-size-sm": fontSize("sm").fontSize,
       "--tw-superdocs-font-size-base": fontSize("base").fontSize,
       "--tw-superdocs-font-size-lg": fontSize("lg").fontSize,
@@ -90,7 +91,7 @@ export function defaultTheme({ theme }: PluginUtils): SuperdocsTheme {
         color: "var(--tw-superdocs-color-text)",
       },
 
-      "code[class*='language-']": {
+      code: {
         backgroundColor: "var(--tw-superdocs-color-code-background)",
         borderColor: "var(--tw-superdocs-color-code-border)",
         borderRadius: theme("borderRadius.DEFAULT"),
@@ -98,6 +99,10 @@ export function defaultTheme({ theme }: PluginUtils): SuperdocsTheme {
         borderWidth: "1px",
         color: "var(--tw-superdocs-color-code)",
         fontSize: "var(--tw-superdocs-font-size-sm)",
+        padding: theme("spacing.1"),
+      },
+
+      "pre > code, code.block": {
         marginBottom: theme("spacing.4"),
         marginTop: theme("spacing.4"),
         padding: theme("spacing.2"),
@@ -113,8 +118,13 @@ export function defaultTheme({ theme }: PluginUtils): SuperdocsTheme {
         textDecoration: "underline",
       },
 
-      ".declaration-description": {
+      ".declaration-prose": {
+        lineHeight: "var(--tw-superdocs-line-height)",
         maxWidth: "65ch",
+
+        p: {
+          marginBottom: "1em",
+        },
       },
 
       ".declaration-heading": {
@@ -127,17 +137,6 @@ export function defaultTheme({ theme }: PluginUtils): SuperdocsTheme {
           fontSize: "var(--tw-superdocs-font-size-lg)",
           fontWeight: theme("fontWeight.semibold"),
         },
-      },
-
-      ".jsdoc-code-link": {
-        backgroundColor: "var(--tw-superdocs-color-code-background)",
-        borderColor: "var(--tw-superdocs-color-code-border)",
-        borderRadius: theme("borderRadius.DEFAULT"),
-        borderStyle: "solid",
-        borderWidth: "1px",
-        color: "var(--tw-superdocs-color-code)",
-        fontSize: "var(--tw-superdocs-font-size-sm)",
-        padding: theme("spacing.1"),
       },
 
       ".token": {
