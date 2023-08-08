@@ -4,10 +4,19 @@ import { ReactMarkdownOptions } from "react-markdown/lib/react-markdown";
 import remarkGfm from "remark-gfm";
 import { CodeBlock } from "./CodeBlock";
 
+/**
+ * Properties for the {@link Markdown} component.
+ * @group Components
+ */
 export interface MarkdownProps {
   children: string;
 }
 
+/**
+ * Render markdown with a few useful presets.
+ *
+ * @see {@link https://github.com/remarkjs/react-markdown | React Markdown GitHub} for more info.
+ */
 export function Markdown({
   children,
   components,

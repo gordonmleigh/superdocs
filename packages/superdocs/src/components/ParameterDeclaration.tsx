@@ -17,6 +17,7 @@ export function ParameterDeclaration({
     <>
       {node.dotDotDotToken && <Token operator text="..." />}
       <Token identifier>{name}</Token>
+      {node.questionToken && <Token operator text="?" />}
       <Token operator text=": " />
       {node.type ? (
         <TypeNode collection={collection} node={node.type} />

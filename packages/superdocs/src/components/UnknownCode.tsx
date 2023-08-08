@@ -1,4 +1,5 @@
 import chalk from "chalk";
+import clsx from "clsx";
 import ts from "typescript";
 import { DeclarationCollection } from "../core/DeclarationCollection";
 import { getSyntaxKindName } from "../internal/getSyntaxKindName";
@@ -28,13 +29,15 @@ export function UnknownCode({
   const kind = getSyntaxKindName(node.kind);
   const location = collection.getNodeLocation(node);
   const locationStr = `${location.path}:${location.line}:${location.char}`;
+  const warning = `unknown AST node ${kind} (${locationStr})`;
 
-  console.warn(
-    `- ${chalk.yellow("warn")} unknown AST node ${kind} (${locationStr})`,
-  );
+  console.warn(`- ${chalk.yellow("warn")} ${warning}`);
 
   return (
-    <Token className={className} unknown word={word}>
+    <Token className={clsx("group", className)} unknown word={word}>
+      <span className="hidden group-hover:block absolute drop-shadow-lg tooltip">
+        {warning}
+      </span>
       {node.getText()}
     </Token>
   );

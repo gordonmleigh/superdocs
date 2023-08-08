@@ -75,6 +75,8 @@ export function defaultTheme({ theme }: PluginUtils): SuperdocsTheme {
 
       "--tw-superdocs-color-code-background": theme("colors.zinc.100"),
       "--tw-superdocs-color-code-border": theme("colors.zinc.200"),
+      "--tw-superdocs-color-tooltip-background": theme("colors.zinc.100"),
+      "--tw-superdocs-color-tooltip-border": theme("colors.zinc.200"),
 
       "--tw-superdocs-color-text": theme("colors.zinc.900"),
 
@@ -122,6 +124,10 @@ export function defaultTheme({ theme }: PluginUtils): SuperdocsTheme {
         lineHeight: "var(--tw-superdocs-line-height)",
         maxWidth: "65ch",
 
+        a: {
+          textDecoration: "underline",
+        },
+
         p: {
           marginBottom: "1em",
         },
@@ -137,6 +143,16 @@ export function defaultTheme({ theme }: PluginUtils): SuperdocsTheme {
           fontSize: "var(--tw-superdocs-font-size-lg)",
           fontWeight: theme("fontWeight.semibold"),
         },
+      },
+
+      ".tooltip": {
+        backgroundColor: "var(--tw-superdocs-color-tooltip-background)",
+        borderColor: "var(--tw-superdocs-color-tooltip-border)",
+        borderRadius: theme("borderRadius.DEFAULT"),
+        borderStyle: "solid",
+        borderWidth: "1px",
+        fontSize: "var(--tw-superdocs-font-size-sm)",
+        padding: theme("spacing.1"),
       },
 
       ".token": {

@@ -3,20 +3,19 @@ import { dirname, posix, resolve } from "path";
 import ts from "typescript";
 import { NodeLocationMap } from "../internal/NodeLocationMap";
 import { assert } from "../internal/assert";
-import { getJSDocTagsByName } from "../internal/getJSDocTag";
 import { getPackageInfo } from "../internal/getPackageInfo";
 import { getParameterIndex } from "../internal/getParameterIndex";
 import { getSyntaxKindName } from "../internal/getSyntaxKindName";
 import { hash } from "../internal/hash";
+import {
+  JSDocNode,
+  getJSDocTagContentByName,
+  getJSDocTagsByName,
+  hasJSDocTag,
+} from "../internal/jsdoc";
 import { loadProgram } from "../internal/loadProgram";
 import { slugify } from "../internal/slugify";
 import { NodeLocation } from "./NodeLocation";
-
-/**
- * The union of valid AST nodes within a JSDoc.
- * @group Utilities
- */
-export type JSDocNode = ts.JSDoc | ts.JSDocTag | ts.JSDocComment | string;
 
 /**
  * Union of supported declaration AST node types.
@@ -81,6 +80,10 @@ export interface Declaration<
   node: Node;
   parameters?: Declaration<ts.ParameterDeclaration>[];
   parent?: Declaration;
+  remarks?: readonly JSDocNode[];
+  returns?: readonly JSDocNode[];
+  see?: readonly ts.JSDocTag[];
+  throws?: readonly ts.JSDocTag[];
   slug: string;
 }
 
@@ -129,7 +132,7 @@ const resolveExtensions = [".ts", ".d.ts"];
  * the declarations.
  *
  * @example
- * ```
+ * ```typescript
  * const collection = new DeclarationCollection({
  *   codeLinks: {
  *     sha: getGitSha(),
@@ -139,6 +142,7 @@ const resolveExtensions = [".ts", ".d.ts"];
  *   sourceRoot: getWorkspaceRoot(),
  * });
  * ```
+ *
  * @group Core
  */
 export class DeclarationCollection implements Iterable<Declaration> {
@@ -187,6 +191,13 @@ export class DeclarationCollection implements Iterable<Declaration> {
     return this.declarationsBySlug.values();
   }
 
+  /**
+   * Try to find a declaration for the given name.
+   * @param name - The name of the declaration.
+   * @param alias - True to try to follow the symbol to the original
+   * declaration.
+   * @returns The declaration if found, or `undefined`.
+   */
   public getDeclaration(
     name: ts.EntityName | ts.JSDocMemberName,
     alias = false,
@@ -289,6 +300,10 @@ export class DeclarationCollection implements Iterable<Declaration> {
       name: name ?? "Unnamed",
       node,
       parent,
+      remarks: getJSDocTagContentByName(node, "remarks"),
+      returns: getJSDocTagContentByName(node, "returns"),
+      see: getJSDocTagsByName(node, "see"),
+      throws: getJSDocTagsByName(node, "throws"),
       slug,
     };
     declaration.members = this.getMembers(declaration);
@@ -359,7 +374,11 @@ export class DeclarationCollection implements Iterable<Declaration> {
     for (const statement of source.statements) {
       if (ts.isExportDeclaration(statement)) {
         this.loadExport(statement, moduleSpecifier);
-      } else if (isDeclaration(statement) && isExported(statement)) {
+      } else if (
+        isDeclaration(statement) &&
+        isExported(statement) &&
+        !hasJSDocTag(statement, "internal")
+      ) {
         this.addDeclaration(statement, moduleSpecifier);
       }
     }

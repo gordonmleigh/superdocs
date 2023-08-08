@@ -1,5 +1,6 @@
 import ts from "typescript";
-import { JSDocNode } from "../core/DeclarationCollection";
+import { isArray } from "../internal/isArray";
+import { JSDocNode, isJSDocText } from "../internal/jsdoc";
 import { EntityName } from "./EntityName";
 import { NodeProps } from "./NodeProps";
 import { UnknownCode } from "./UnknownCode";
@@ -34,6 +35,28 @@ export function JSDoc({
   }
   if (ts.isJSDocLink(node)) {
     if (node.name) {
+      if (
+        node.name.getText() === "https" &&
+        !collection.getDeclaration(node.name)
+      ) {
+        // see https://github.com/microsoft/TypeScript/issues/49826#issuecomment-1189640717
+        // tsc parses @see tags wrongly so we have to do some manual work
+        let url: string;
+        let text: string;
+        const indexOfBar = node.text.lastIndexOf("|");
+        if (indexOfBar >= 0) {
+          url = "https:" + node.text.slice(0, indexOfBar);
+          text = node.text.slice(indexOfBar + 1);
+        } else {
+          url = "https:" + node.text;
+          text = url;
+        }
+        return (
+          <a href={url} rel="noopener noreferrer">
+            {text}
+          </a>
+        );
+      }
       return (
         <code className="jsdoc-code-link">
           <EntityName collection={collection} node={node.name} />
@@ -44,12 +67,4 @@ export function JSDoc({
     }
   }
   return <UnknownCode collection={collection} node={node} />;
-}
-
-function isArray(x: unknown): x is readonly any[] {
-  return Array.isArray(x);
-}
-
-function isJSDocText(x: ts.Node): x is ts.JSDocText {
-  return x.kind === ts.SyntaxKind.JSDocText;
 }

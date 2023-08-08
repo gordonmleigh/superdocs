@@ -9,6 +9,8 @@ export function darkTheme({ theme }: PluginUtils): SuperdocsTheme {
     base: {
       "--tw-superdocs-color-code-background": theme("colors.zinc.900"),
       "--tw-superdocs-color-code-border": theme("colors.zinc.800"),
+      "--tw-superdocs-color-tooltip-background": theme("colors.zinc.900"),
+      "--tw-superdocs-color-tooltip-border": theme("colors.zinc.800"),
 
       "--tw-superdocs-color-token-base": theme("colors.zinc.100"),
       "--tw-superdocs-color-token-literal": theme("colors.cyan.500"),

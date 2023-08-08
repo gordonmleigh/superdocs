@@ -54,25 +54,53 @@ export default function DeclarationPage({
             )}
           </div>
         )}
-        <DeclarationInfo
-          className="mb-16"
-          declaration={declaration}
-          title={declaration.parent ? undefined : "Details"}
-        />
-        {!!declaration.examples?.length && (
+        <div className="mb-16">
+          <DeclarationInfo
+            declaration={declaration}
+            title={declaration.parent ? undefined : "Details"}
+          />
+          {!!declaration.remarks?.length && (
+            <JSDocMarkdown collection={collection} node={declaration.remarks} />
+          )}
+        </div>
+        {!!declaration.examples?.length &&
+          declaration.examples.map(
+            (example) =>
+              example.comment && (
+                <div className="mb-16" key={example.pos}>
+                  <h3 className="text-base font-semibold">Example</h3>
+                  <JSDocMarkdown
+                    collection={collection}
+                    node={example.comment}
+                  />
+                </div>
+              ),
+          )}
+        {!!declaration.see?.length && (
+          <div className="mb-16 declaration-prose">
+            <h3 className="font-semibold text-xl">See also</h3>
+            {declaration.see.map((see) => (
+              <JSDocMarkdown collection={collection} node={see} key={see.pos} />
+            ))}
+          </div>
+        )}
+        {!!declaration.parameters?.length && (
           <div className="mb-16">
-            {declaration.examples.map(
-              (example) =>
-                example.comment && (
-                  <div key={example.pos}>
-                    <h3 className="text-base font-semibold">Example</h3>
-                    <JSDocMarkdown
-                      collection={collection}
-                      node={example.comment}
-                    />
-                  </div>
-                ),
-            )}
+            <h3 className="font-semibold text-xl mb-8">Parameters</h3>
+            {declaration.parameters.map((def) => (
+              <DeclarationInfo
+                className="mb-12"
+                child
+                key={def.slug}
+                declaration={def}
+              />
+            ))}
+          </div>
+        )}
+        {!!declaration.returns?.length && (
+          <div className="mb-16">
+            <h3 className="font-semibold text-xl mb-8">Returns</h3>
+            <JSDocMarkdown collection={collection} node={declaration.returns} />
           </div>
         )}
         {!!declaration.members?.length && (

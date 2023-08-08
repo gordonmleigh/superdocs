@@ -1,13 +1,20 @@
 import rehypeRaw from "rehype-raw";
-import ts from "typescript";
-import { JSDocNode } from "../core/DeclarationCollection";
+import { isArray } from "../internal/isArray";
+import {
+  JSDocNode,
+  isJSDocNodeWithComment,
+  isJSDocText,
+} from "../internal/jsdoc";
 import { JSDoc } from "./JSDoc";
 import { Markdown } from "./Markdown";
 import { NodeProps } from "./NodeProps";
 
+debugger;
+
 /**
  * Render JSDoc as markdown.
  *
+ * @remarks
  * This component first converts the {@link JSDocNode}s to a markdown string.
  * The nodes which can't be converted directly to text are converted to a
  * `js-doc` element instead so that they can be replaced again with the
@@ -59,7 +66,7 @@ class JSDocRenderer {
       }
     } else if (typeof node === "string") {
       this.text += node;
-    } else if (ts.isJSDoc(node)) {
+    } else if (isJSDocNodeWithComment(node)) {
       if (node.comment) {
         this.addComment(node.comment);
       }
@@ -70,12 +77,4 @@ class JSDocRenderer {
       this.nodes.push(node);
     }
   }
-}
-
-function isArray(x: unknown): x is readonly any[] {
-  return Array.isArray(x);
-}
-
-function isJSDocText(x: ts.Node): x is ts.JSDocText {
-  return x.kind === ts.SyntaxKind.JSDocText;
 }
