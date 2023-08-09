@@ -120,19 +120,6 @@ export function defaultTheme({ theme }: PluginUtils): SuperdocsTheme {
         textDecoration: "underline",
       },
 
-      ".declaration-prose": {
-        lineHeight: "var(--tw-superdocs-line-height)",
-        maxWidth: "65ch",
-
-        a: {
-          textDecoration: "underline",
-        },
-
-        p: {
-          marginBottom: "1em",
-        },
-      },
-
       ".declaration-heading": {
         fontSize: "var(--tw-superdocs-font-size-2xl)",
         fontWeight: theme("fontWeight.semibold"),

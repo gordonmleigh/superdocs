@@ -35,7 +35,6 @@ module.exports = ({ theme }) => ({
         paddingRight: theme("padding[1.5]"),
         paddingBottom: theme("padding.1"),
         paddingLeft: theme("padding[1.5]"),
-        boxShadow: "inset 0 0 0 1px var(--tw-prose-code-ring)",
         backgroundColor: "var(--tw-prose-code-bg)",
         fontSize: theme("fontSize.2xs"),
         fontWeight: theme("fontWeight.normal"),
@@ -46,6 +45,28 @@ module.exports = ({ theme }) => ({
       "a:has(code)": {
         textDecoration: "none",
       },
+    },
+  },
+
+  invert: {
+    css: {
+      "--tw-prose-body": theme("colors.zinc.400"),
+      "--tw-prose-headings": theme("colors.white"),
+      "--tw-prose-links": theme("colors.emerald.400"),
+      "--tw-prose-links-hover": theme("colors.emerald.500"),
+      "--tw-prose-links-underline": theme("colors.emerald.500 / 0.3"),
+      "--tw-prose-bold": theme("colors.white"),
+      "--tw-prose-counters": theme("colors.zinc.400"),
+      "--tw-prose-bullets": theme("colors.zinc.600"),
+      "--tw-prose-hr": theme("colors.white / 0.05"),
+      "--tw-prose-quotes": theme("colors.zinc.100"),
+      "--tw-prose-quote-borders": theme("colors.zinc.700"),
+      "--tw-prose-captions": theme("colors.zinc.400"),
+      "--tw-prose-code": theme("colors.white"),
+      "--tw-prose-code-bg": theme("colors.zinc.700 / 0.15"),
+      "--tw-prose-code-ring": theme("colors.white / 0.1"),
+      "--tw-prose-th-borders": theme("colors.zinc.600"),
+      "--tw-prose-td-borders": theme("colors.zinc.700"),
     },
   },
 });

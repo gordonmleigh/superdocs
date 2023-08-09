@@ -56,6 +56,7 @@ export default function DeclarationPage({
         )}
         <div className="mb-16">
           <DeclarationInfo
+            className="mb-4"
             declaration={declaration}
             title={declaration.parent ? undefined : "Details"}
           />
@@ -77,7 +78,7 @@ export default function DeclarationPage({
               ),
           )}
         {!!declaration.see?.length && (
-          <div className="mb-16 declaration-prose">
+          <div className="mb-16 prose dark:prose-invert">
             <h3 className="font-semibold text-xl">See also</h3>
             {declaration.see.map((see) => (
               <JSDocMarkdown collection={collection} node={see} key={see.pos} />

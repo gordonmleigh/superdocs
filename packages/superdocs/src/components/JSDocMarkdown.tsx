@@ -28,7 +28,7 @@ export function JSDocMarkdown({
 }: NodeProps<JSDocNode | readonly JSDocNode[]>): JSX.Element {
   const renderer = new JSDocRenderer(node);
   return (
-    <div className="declaration-prose">
+    <div className="prose dark:prose-invert">
       <Markdown
         components={
           {
