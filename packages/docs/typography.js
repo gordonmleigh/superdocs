@@ -28,22 +28,20 @@ module.exports = ({ theme }) => ({
       "code::before": {
         content: "none",
       },
-      "code:not(pre code)": {
-        color: "var(--tw-prose-code)",
-        borderRadius: theme("borderRadius.lg"),
-        paddingTop: theme("padding.1"),
-        paddingRight: theme("padding[1.5]"),
-        paddingBottom: theme("padding.1"),
-        paddingLeft: theme("padding[1.5]"),
-        backgroundColor: "var(--tw-prose-code-bg)",
-        fontSize: theme("fontSize.2xs"),
-        fontWeight: theme("fontWeight.normal"),
-      },
       "a code:hover": {
         backgroundColor: theme("colors.amber.50"),
       },
       "a:has(code)": {
         textDecoration: "none",
+      },
+      pre: {
+        backgroundColor: "transparent",
+        color: "unset",
+        margin: 0,
+        padding: 0,
+      },
+      code: {
+        fontWeight: "unset",
       },
     },
   },

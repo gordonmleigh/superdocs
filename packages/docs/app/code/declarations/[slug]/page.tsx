@@ -27,7 +27,7 @@ export default function DeclarationPage({
 
   return (
     <MainLayout>
-      <div className="superdocs dark:superdocs-dark">
+      <div>
         {declaration.parent ? (
           <div className="mb-12">
             <h1 className="text-2xl font-semibold">

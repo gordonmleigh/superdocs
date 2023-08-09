@@ -93,7 +93,7 @@ export function defaultTheme({ theme }: PluginUtils): SuperdocsTheme {
         color: "var(--tw-superdocs-color-text)",
       },
 
-      code: {
+      "code:not(pre > code)": {
         backgroundColor: "var(--tw-superdocs-color-code-background)",
         borderColor: "var(--tw-superdocs-color-code-border)",
         borderRadius: theme("borderRadius.DEFAULT"),
@@ -104,10 +104,17 @@ export function defaultTheme({ theme }: PluginUtils): SuperdocsTheme {
         padding: theme("spacing.1"),
       },
 
-      "pre > code, code.block": {
+      "pre[class*=language-], code.block": {
+        backgroundColor: "var(--tw-superdocs-color-code-background)",
+        borderColor: "var(--tw-superdocs-color-code-border)",
+        borderRadius: theme("borderRadius.DEFAULT"),
+        borderStyle: "solid",
+        borderWidth: "1px",
+        color: "var(--tw-superdocs-color-code)",
+        fontSize: "var(--tw-superdocs-font-size-sm)",
         marginBottom: theme("spacing.4"),
         marginTop: theme("spacing.4"),
-        padding: theme("spacing.2"),
+        padding: theme("spacing.4"),
       },
 
       ".declaration-code-link": {

@@ -25,7 +25,7 @@ export default function GroupPage({
 
   return (
     <MainLayout>
-      <div className="superdocs dark:superdocs-dark">
+      <div>
         <h1 className="text-3xl font-semibold mb-24">{group.name}</h1>
         {group.declarations.map((def) => (
           <div className="mb-24" key={def.slug}>
