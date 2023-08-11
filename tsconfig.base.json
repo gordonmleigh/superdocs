@@ -7,7 +7,7 @@
     "declarationMap": true,
     "esModuleInterop": true,
     "importHelpers": true,
-    "lib": ["ES2023"],
+    "lib": ["ES2023", "DOM"],
     "module": "ESNext",
     "moduleResolution": "Node",
     "noErrorTruncation": true,

@@ -58,7 +58,7 @@ export async function MainLayout({
       </Navigation>
 
       <div className="relative">
-        <main className="min-h-[100vh] px-4 pb-16 pt-28 sm:px-6 lg:px-8 superdocs dark:superdocs-dark">
+        <main className="min-h-[100vh] px-4 pb-16 pt-28 sm:px-6 lg:px-8">
           {children}
         </main>
       </div>

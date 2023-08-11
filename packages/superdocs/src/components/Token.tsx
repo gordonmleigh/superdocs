@@ -1,5 +1,13 @@
+"use client";
 import clsx from "clsx";
-import { ReactNode } from "react";
+import {
+  CSSProperties,
+  ReactNode,
+  cloneElement,
+  useRef,
+  useState,
+} from "react";
+import { createPortal } from "react-dom";
 
 const tokenKinds = [
   "atrule",
@@ -109,6 +117,7 @@ export interface TokenProps extends TokenQuickKinds {
   className?: string;
   kind?: TokenKind;
   text?: string;
+  tooltip?: React.ReactElement<{ style?: CSSProperties }>;
   word?: boolean;
 }
 
@@ -135,29 +144,54 @@ export function Token({
   className,
   kind: kindProp,
   text,
+  tooltip,
   word,
   ...quick
 }: TokenProps): JSX.Element {
+  const [position, setPosition] = useState<[number, number]>();
   const kind = kindProp ?? quickKind(quick);
-  const Container = word || (kind && wordKinds[kind]) ? CodeWord : "span";
+  const ref = useRef<HTMLSpanElement>(null);
+  const wordSpace = word || (kind && wordKinds[kind]);
 
-  return (
-    <Container className={clsx(className, "token", kind)}>
+  const token = (
+    <span
+      ref={ref}
+      className={clsx(className, "token", kind)}
+      onMouseEnter={() => {
+        if (!ref.current) {
+          return;
+        }
+        const bounds = ref.current.getBoundingClientRect();
+        setPosition([
+          bounds.left + document.body.scrollLeft,
+          bounds.top + document.body.scrollTop + bounds.height,
+        ]);
+      }}
+      onMouseLeave={() => setPosition(undefined)}
+    >
+      {position &&
+        tooltip &&
+        createPortal(
+          cloneElement(tooltip, {
+            style: {
+              left: position[0],
+              top: position[1],
+              position: "absolute",
+              zIndex: 100,
+            },
+          }),
+          document.body,
+        )}
       {text ?? children}
-    </Container>
+    </span>
   );
-}
 
-interface CodeWordProps {
-  children?: ReactNode;
-  className?: string;
-}
-
-function CodeWord({ className, children }: CodeWordProps): JSX.Element {
-  return (
+  return wordSpace ? (
     <span className="code-word-spacing">
       <span className="code-word-spacing-space"> </span>
-      <span className={className}>{children}</span>
+      {token}
     </span>
+  ) : (
+    token
   );
 }

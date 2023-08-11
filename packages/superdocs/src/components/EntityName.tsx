@@ -39,15 +39,14 @@ function ImportedIdentifier({
 }: ImportedIdentifierProps): JSX.Element {
   return (
     <Token
-      className={clsx(
-        "relative group",
-        !href && "underline decoration-dotted cursor-help",
-      )}
+      className={clsx(!href && "underline decoration-dotted cursor-help")}
       identifier
+      tooltip={
+        <code className="absolute language-typescript whitespace-nowrap drop-shadow-lg">
+          <FormatImport info={info} />
+        </code>
+      }
     >
-      <code className="hidden group-hover:block absolute top-0 left-0 language-typescript whitespace-nowrap drop-shadow-lg">
-        <FormatImport info={info} />
-      </code>
       {href ? <Link href={href}>{node.text}</Link> : node.text}
     </Token>
   );

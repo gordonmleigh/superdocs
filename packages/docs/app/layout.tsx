@@ -54,7 +54,11 @@ export default function RootLayout({
         />
       </head>
       <body
-        className={clsx("h-full bg-white dark:bg-zinc-900", inter.className)}
+        className={clsx(
+          "h-full bg-white dark:bg-zinc-900",
+          "superdocs dark:superdocs-dark",
+          inter.className,
+        )}
       >
         {children}
       </body>
