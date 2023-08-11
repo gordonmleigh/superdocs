@@ -60,13 +60,15 @@ export function SignatureDeclaration({
         <Token punctuation text=")" />
       )}
 
-      {ts.isTypeNode(node) ? (
-        <Token operator text=" => " />
-      ) : (
-        <Token operator text=": " />
-      )}
       {node.type ? (
-        <TypeNode collection={collection} node={node.type} />
+        <>
+          {ts.isTypeNode(node) ? (
+            <Token operator text=" => " />
+          ) : (
+            <Token operator text=": " />
+          )}
+          <TypeNode collection={collection} node={node.type} />
+        </>
       ) : ts.isTypeNode(node) ? (
         <Token builtin>unknown</Token>
       ) : undefined}
