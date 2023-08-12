@@ -88,6 +88,15 @@ export interface Declaration<
 }
 
 /**
+ * Represents the location of a node with an optional link to the source code in
+ * a repository.
+ * @group Utilities
+ */
+export interface NodeLocationWithLink extends NodeLocation {
+  codeLink?: string;
+}
+
+/**
  * Represents a function which can return a code link for a given source code
  * location.
  * @group Utilities
@@ -266,8 +275,12 @@ export class DeclarationCollection implements Iterable<Declaration> {
     return this.declarationsBySlug.get(slug);
   }
 
-  public getNodeLocation(node: ts.Node): NodeLocation {
-    return this.nodeLocations.getNodeLocation(node);
+  public getNodeLocation(node: ts.Node): NodeLocationWithLink {
+    const location = this.nodeLocations.getNodeLocation(node);
+    return {
+      ...location,
+      codeLink: this.getCodeLink?.(location),
+    };
   }
 
   private addDeclaration<T extends DeclarationNodeOrChildNode>(

@@ -42,7 +42,7 @@ function ImportedIdentifier({
       className={clsx(!href && "underline decoration-dotted cursor-help")}
       identifier
       tooltip={
-        <code className="absolute language-typescript whitespace-nowrap drop-shadow-lg">
+        <code className="tooltip language-typescript whitespace-nowrap drop-shadow-lg">
           <FormatImport info={info} />
         </code>
       }

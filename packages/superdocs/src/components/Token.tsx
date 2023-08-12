@@ -1,13 +1,7 @@
 "use client";
+import { autoPlacement, useFloating } from "@floating-ui/react-dom";
 import clsx from "clsx";
-import {
-  CSSProperties,
-  ReactNode,
-  cloneElement,
-  useRef,
-  useState,
-} from "react";
-import { createPortal } from "react-dom";
+import { CSSProperties, ReactNode, useState } from "react";
 
 const tokenKinds = [
   "atrule",
@@ -109,6 +103,15 @@ export interface TokenQuickKinds {
 }
 
 /**
+ * Properties for a tooltip of the {@link Token} element.
+ * @group Components
+ */
+export interface TokenTooltipProps {
+  ref: (el: HTMLElement | null) => void;
+  style: CSSProperties;
+}
+
+/**
  * Properties for the {@link Token} component.
  * @group Components
  */
@@ -117,7 +120,7 @@ export interface TokenProps extends TokenQuickKinds {
   className?: string;
   kind?: TokenKind;
   text?: string;
-  tooltip?: React.ReactElement<{ style?: CSSProperties }>;
+  tooltip?: ReactNode;
   word?: boolean;
 }
 
@@ -148,40 +151,30 @@ export function Token({
   word,
   ...quick
 }: TokenProps): JSX.Element {
-  const [position, setPosition] = useState<[number, number]>();
+  const [tooltipOpen, setTooltipOpen] = useState(false);
+  const { refs, floatingStyles } = useFloating({
+    middleware: [autoPlacement({ alignment: "start" })],
+    placement: "top-start",
+  });
   const kind = kindProp ?? quickKind(quick);
-  const ref = useRef<HTMLSpanElement>(null);
   const wordSpace = word || (kind && wordKinds[kind]);
 
   const token = (
     <span
-      ref={ref}
+      ref={refs.setReference}
       className={clsx(className, "token", kind)}
-      onMouseEnter={() => {
-        if (!ref.current) {
-          return;
-        }
-        const bounds = ref.current.getBoundingClientRect();
-        setPosition([
-          bounds.left + document.body.scrollLeft,
-          bounds.top + document.body.scrollTop + bounds.height,
-        ]);
-      }}
-      onMouseLeave={() => setPosition(undefined)}
+      onMouseEnter={() => setTooltipOpen(true)}
+      onMouseLeave={() => setTooltipOpen(false)}
     >
-      {position &&
-        tooltip &&
-        createPortal(
-          cloneElement(tooltip, {
-            style: {
-              left: position[0],
-              top: position[1],
-              position: "absolute",
-              zIndex: 100,
-            },
-          }),
-          document.body,
-        )}
+      {tooltip && tooltipOpen && (
+        <span
+          className="z-50 py-1.5"
+          ref={refs.setFloating}
+          style={floatingStyles}
+        >
+          {tooltip}
+        </span>
+      )}
       {text ?? children}
     </span>
   );
