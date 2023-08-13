@@ -71,6 +71,19 @@ export function TypeNode({ collection, node }: TypeNodeProps): JSX.Element {
       </>
     );
   }
+  if (ts.isTupleTypeNode(node)) {
+    return (
+      <>
+        <Token punctuation text="[" />
+        <Join
+          operator=", "
+          items={node.elements}
+          render={(x) => <TypeNode collection={collection} node={x} />}
+        />
+        <Token punctuation text="]" />
+      </>
+    );
+  }
   if (ts.isIndexedAccessTypeNode(node)) {
     return (
       <>
@@ -107,6 +120,7 @@ export function TypeNode({ collection, node }: TypeNodeProps): JSX.Element {
     return keyword ? (
       <>
         <Token keyword>{keyword}</Token>
+        <Token word />
         <TypeNode collection={collection} node={node.type} />
       </>
     ) : (

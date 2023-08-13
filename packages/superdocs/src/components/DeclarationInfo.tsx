@@ -1,9 +1,6 @@
 import clsx from "clsx";
 import Link from "next/link";
-import {
-  Declaration,
-  DeclarationNodeOrChildNode,
-} from "../core/DeclarationCollection.js";
+import { Declaration } from "../core/DeclarationCollection.js";
 import { FormatDeclaration } from "./FormatDeclaration.js";
 import { JSDocMarkdown } from "./JSDocMarkdown.js";
 
@@ -25,7 +22,7 @@ export interface DeclarationInfoProps {
   /**
    * The declaration to format.
    */
-  declaration: Declaration<DeclarationNodeOrChildNode>;
+  declaration: Declaration;
 
   /**
    * Optional title to show in place of the declaration name.

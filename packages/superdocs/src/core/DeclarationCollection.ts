@@ -4,9 +4,6 @@ import ts from "typescript";
 import { NodeLocationMap } from "../internal/NodeLocationMap";
 import { assert } from "../internal/assert";
 import { getPackageInfo } from "../internal/getPackageInfo";
-import { getParameterIndex } from "../internal/getParameterIndex";
-import { getSyntaxKindName } from "../internal/getSyntaxKindName";
-import { hash } from "../internal/hash";
 import {
   JSDocNode,
   getJSDocTagContentByName,
@@ -14,39 +11,14 @@ import {
   hasJSDocTag,
 } from "../internal/jsdoc";
 import { loadProgram } from "../internal/loadProgram";
-import { slugify } from "../internal/slugify";
+import {
+  getName,
+  getNodeId,
+  isExported,
+  isPrivateMember,
+  slugifyNode,
+} from "../internal/node";
 import { NodeLocation } from "./NodeLocation";
-
-/**
- * Union of supported declaration AST node types.
- * @group Utilities
- */
-export type DeclarationNode =
-  | ts.ClassDeclaration
-  | ts.FunctionDeclaration
-  | ts.InterfaceDeclaration
-  | ts.TypeAliasDeclaration;
-
-/**
- * Union of supported declaration AST node types which can be a child of
- * declaration node.
- * @group Utilities
- */
-export type DeclarationMemberNode = ts.ClassElement | ts.TypeElement;
-
-/**
- * Union of supported AST node types which are children of declarations.
- * @group Utilities
- */
-export type DeclarationChildNode =
-  | DeclarationMemberNode
-  | ts.ParameterDeclaration;
-
-/**
- * Union of supported declaration AST node types and their supported children.
- * @group Utilities
- */
-export type DeclarationNodeOrChildNode = DeclarationNode | DeclarationChildNode;
 
 /**
  * Represents a group of {@link Declaration} instances.
@@ -62,9 +34,7 @@ export interface DeclarationGroup {
  * Represents a declaration in a code file.
  * @group Core
  */
-export interface Declaration<
-  Node extends DeclarationNodeOrChildNode = DeclarationNodeOrChildNode,
-> {
+export interface Declaration<Node extends ts.Node = ts.Node> {
   codeLink?: string;
   collection: DeclarationCollection;
   documentation: readonly JSDocNode[];
@@ -75,7 +45,7 @@ export interface Declaration<
   importInfo?: ImportInfo;
   location: NodeLocation;
   moduleSpecifier: string;
-  members?: Declaration<DeclarationMemberNode>[];
+  members?: Declaration<ts.ClassElement | ts.TypeElement>[];
   name?: string;
   node: Node;
   parameters?: Declaration<ts.ParameterDeclaration>[];
@@ -156,10 +126,7 @@ const resolveExtensions = [".ts", ".d.ts"];
  */
 export class DeclarationCollection implements Iterable<Declaration> {
   private readonly checker: ts.TypeChecker;
-  private readonly declarationsByNode = new Map<
-    DeclarationNodeOrChildNode,
-    Declaration
-  >();
+  private readonly declarationsByNode = new Map<ts.Node, Declaration>();
   private readonly declarationsBySlug = new Map<string, Declaration>();
   private readonly documentationRoot: string;
   private readonly getCodeLink: CodeLinkFactory | undefined;
@@ -192,11 +159,7 @@ export class DeclarationCollection implements Iterable<Declaration> {
     }
   }
 
-  public [Symbol.iterator](): Iterator<
-    Declaration<DeclarationNodeOrChildNode>,
-    any,
-    undefined
-  > {
+  public [Symbol.iterator](): Iterator<Declaration, any, undefined> {
     return this.declarationsBySlug.values();
   }
 
@@ -283,10 +246,10 @@ export class DeclarationCollection implements Iterable<Declaration> {
     };
   }
 
-  private addDeclaration<T extends DeclarationNodeOrChildNode>(
+  private addDeclaration<T extends ts.Node>(
     node: T,
     moduleSpecifier: string,
-    parent?: Declaration<DeclarationNodeOrChildNode>,
+    parent?: Declaration,
   ): Declaration<T> {
     const location = this.nodeLocations.getNodeLocation(node);
     const slug = slugifyNode(node, parent?.node);
@@ -328,8 +291,8 @@ export class DeclarationCollection implements Iterable<Declaration> {
   }
 
   private getMembers(
-    parent: Declaration<DeclarationNodeOrChildNode>,
-  ): Declaration<DeclarationMemberNode>[] | undefined {
+    parent: Declaration,
+  ): Declaration<ts.ClassElement | ts.TypeElement>[] | undefined {
     const node = parent.node;
 
     if (ts.isClassDeclaration(node)) {
@@ -352,7 +315,7 @@ export class DeclarationCollection implements Iterable<Declaration> {
   }
 
   private getParameters(
-    parent: Declaration<DeclarationNodeOrChildNode>,
+    parent: Declaration,
   ): Declaration<ts.ParameterDeclaration>[] | undefined {
     const node = parent.node;
 
@@ -387,12 +350,14 @@ export class DeclarationCollection implements Iterable<Declaration> {
     for (const statement of source.statements) {
       if (ts.isExportDeclaration(statement)) {
         this.loadExport(statement, moduleSpecifier);
-      } else if (
-        isDeclaration(statement) &&
-        isExported(statement) &&
-        !hasJSDocTag(statement, "internal")
-      ) {
-        this.addDeclaration(statement, moduleSpecifier);
+      } else if (isExported(statement) && !hasJSDocTag(statement, "internal")) {
+        if (ts.isVariableStatement(statement)) {
+          for (const def of statement.declarationList.declarations) {
+            this.addDeclaration(def, moduleSpecifier);
+          }
+        } else {
+          this.addDeclaration(statement, moduleSpecifier);
+        }
       }
     }
   }
@@ -458,35 +423,8 @@ function getGroupName(node: ts.Node): string | undefined {
   }
 }
 
-function isDeclaration(node: ts.Node): node is DeclarationNode {
-  return (
-    ts.isClassDeclaration(node) ||
-    ts.isFunctionDeclaration(node) ||
-    ts.isInterfaceDeclaration(node) ||
-    ts.isTypeAliasDeclaration(node)
-  );
-}
-
-function isExported(node: DeclarationNode): boolean {
-  return !!node.modifiers?.find((x) => x.kind === ts.SyntaxKind.ExportKeyword);
-}
-
 function isLocal(path: string): boolean {
   return path.startsWith("./") || path.startsWith("../");
-}
-
-function isPrivateMember(node: ts.TypeElement | ts.ClassElement): boolean {
-  if (ts.canHaveModifiers(node) && node.modifiers) {
-    if (node.modifiers.some((x) => x.kind === ts.SyntaxKind.PrivateKeyword)) {
-      return true;
-    }
-  }
-  if ("name" in node && node.name) {
-    if (ts.isPrivateIdentifier(node.name)) {
-      return true;
-    }
-  }
-  return false;
 }
 
 function normaliseCodeLinkFactory(
@@ -505,49 +443,4 @@ function normaliseCodeLinkFactory(
     );
     return `${url.toString()}#L${location.line}`;
   };
-}
-
-function getName(node: DeclarationNodeOrChildNode): string | undefined {
-  if ("name" in node && node.name) {
-    if (ts.isIdentifier(node.name)) {
-      return node.name.text;
-    }
-    if (ts.isStringLiteral(node.name)) {
-      return `"${node.name.text}"`;
-    }
-    if (ts.isNumericLiteral(node.name)) {
-      return `${node.name.text}`;
-    }
-    if (ts.isComputedPropertyName(node.name)) {
-      return `${node.name.getText()}`;
-    }
-  }
-  if (ts.isParameter(node)) {
-    return `arg${getParameterIndex(node)}`;
-  }
-  if (
-    ts.isConstructSignatureDeclaration(node) ||
-    ts.isConstructorDeclaration(node)
-  ) {
-    return "constructor";
-  }
-  if (ts.isIndexSignatureDeclaration(node)) {
-    return `Index [${node.parameters.map((x) => x.getText()).join(", ")}]`;
-  }
-}
-
-function getNodeId(node: ts.Node): string {
-  const id = hash([node.getSourceFile().fileName, `${node.pos}`])?.slice(0, 5);
-  return `node-${id}`;
-}
-
-function slugifyNode(
-  node: DeclarationNodeOrChildNode,
-  parent?: DeclarationNodeOrChildNode,
-): string {
-  if (parent) {
-    return slugifyNode(parent) + "-" + slugifyNode(node);
-  }
-  const name = getName(node) ?? getNodeId(node);
-  return getSyntaxKindName(node.kind) + "-" + slugify(name);
 }

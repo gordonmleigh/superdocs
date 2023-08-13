@@ -9,8 +9,6 @@ import { JSDoc } from "./JSDoc";
 import { Markdown } from "./Markdown";
 import { NodeProps } from "./NodeProps";
 
-debugger;
-
 /**
  * Render JSDoc as markdown.
  *

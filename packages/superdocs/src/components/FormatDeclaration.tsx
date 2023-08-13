@@ -1,5 +1,4 @@
 import ts from "typescript";
-import { DeclarationNodeOrChildNode } from "../core/DeclarationCollection.js";
 import { ClassDeclaration } from "./ClassDeclaration.js";
 import { ClassElement } from "./ClassElement.js";
 import { FunctionDeclaration } from "./FunctionDeclaration.js";
@@ -9,12 +8,13 @@ import { ParameterDeclaration } from "./ParameterDeclaration.js";
 import { TypeAliasDeclaration } from "./TypeAliasDeclaration.js";
 import { TypeElement } from "./TypeElement.js";
 import { UnknownCode } from "./UnknownCode.js";
+import { VariableDeclaration } from "./VariableDeclaration.js";
 
 /**
  * Properties for the {@link FormatDeclaration} component.
  * @group Components
  */
-export type FormatDeclarationProps = NodeProps<DeclarationNodeOrChildNode>;
+export type FormatDeclarationProps = NodeProps<ts.Node>;
 
 /**
  * Properties for the {@link FormatDeclaration} component.
@@ -44,6 +44,9 @@ export function FormatDeclaration({
   }
   if (ts.isTypeElement(node)) {
     return <TypeElement collection={collection} node={node} />;
+  }
+  if (ts.isVariableDeclaration(node)) {
+    return <VariableDeclaration collection={collection} node={node} />;
   }
   return <UnknownCode collection={collection} node={node} />;
 }
