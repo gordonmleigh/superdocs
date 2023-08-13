@@ -5,6 +5,7 @@ import { CSSProperties, ReactNode, useState } from "react";
 
 /**
  * A list of valid token kinds.
+ * @group Utilities
  */
 export const tokenKinds = [
   "atrule",

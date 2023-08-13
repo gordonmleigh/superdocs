@@ -4,12 +4,14 @@ import { NodeProps } from "./NodeProps.js";
 import { Token } from "./Token.js";
 import { TypeNode } from "./TypeNode.js";
 
-export type ParameterDeclarationProps = NodeProps<ts.ParameterDeclaration>;
-
+/**
+ * Format a {@link ts.ParameterDeclaration} node in code.
+ * @group Components
+ */
 export function ParameterDeclaration({
   collection,
   node,
-}: ParameterDeclarationProps): JSX.Element {
+}: NodeProps<ts.ParameterDeclaration>): JSX.Element {
   const name = ts.isIdentifier(node.name)
     ? node.name.text
     : `arg${getParameterIndex(node)}`;

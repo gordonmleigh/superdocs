@@ -1,6 +1,7 @@
 import chalk from "chalk";
 import ts from "typescript";
 import { DeclarationCollection } from "../core/DeclarationCollection";
+import { formatLocation } from "../core/NodeLocation";
 import { getSyntaxKindName } from "../internal/getSyntaxKindName";
 import { Token } from "./Token";
 
@@ -16,7 +17,8 @@ export interface UnknownCodeProps {
 }
 
 /**
- * Formats a keyword type in code.
+ * Formats an unknown AST node in code. This shows the underlying text content
+ * of the node, with a blue wiggly underline in the default theme.
  * @group Components
  */
 export function UnknownCode({
@@ -27,7 +29,7 @@ export function UnknownCode({
 }: UnknownCodeProps): JSX.Element {
   const kind = getSyntaxKindName(node.kind);
   const location = collection.getNodeLocation(node);
-  const locationStr = `${location.path}:${location.line}:${location.char}`;
+  const locationStr = formatLocation(location);
   const warning = `unknown AST node ${kind} (${locationStr})`;
 
   console.warn(`- ${chalk.yellow("warn")} ${warning}`);

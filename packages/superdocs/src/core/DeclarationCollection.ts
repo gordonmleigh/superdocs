@@ -21,39 +21,95 @@ import {
 import { NodeLocation } from "./NodeLocation";
 
 /**
- * Represents a group of {@link Declaration} instances.
- * @group Core
- */
-export interface DeclarationGroup {
-  declarations: Declaration[];
-  name: string;
-  slug: string;
-}
-
-/**
  * Represents a declaration in a code file.
  * @group Core
  */
 export interface Declaration<Node extends ts.Node = ts.Node> {
+  /**
+   * A link to the node location in the source code file in the repository, if
+   * available.
+   */
   codeLink?: string;
+  /**
+   * The collection instance that created this instance.
+   */
   collection: DeclarationCollection;
+  /**
+   * The JSDoc summary associated with this declaration.
+   */
   documentation: readonly JSDocNode[];
+  /**
+   * A link to the documentation for this declaration.
+   */
   documentationLink: string;
+  /**
+   * A list of examples given in the JSDoc for this node, if any.
+   */
   examples?: readonly ts.JSDocTag[];
+  /**
+   * The value of the `@group` tag, if present.
+   */
   group?: string;
+  /**
+   * An unique identifier generated for this declaration.
+   */
   id: string;
+  /**
+   * A description of how this symbol can be imported.
+   */
   importInfo?: ImportInfo;
+  /**
+   * The location of this node in the source file, if source maps are present;
+   * otherwise, the location of this node in the declaration file.
+   */
   location: NodeLocation;
+  /**
+   * The module that this declaration is defined in.
+   */
   moduleSpecifier: string;
+  /**
+   * A list of members that this declaration defines, where relevant.
+   */
   members?: Declaration<ts.ClassElement | ts.TypeElement>[];
+  /**
+   * The name of this declaration.
+   */
   name?: string;
+  /**
+   * The AST node associated with this declaration.
+   */
   node: Node;
+  /**
+   * A list of parameters that this declaration defines, where relevant.
+   */
   parameters?: Declaration<ts.ParameterDeclaration>[];
+  /**
+   * The parent declaration for this declaration, where relevant. E.g. for
+   * parameters, this will point to the function declaration.
+   */
   parent?: Declaration;
+  /**
+   * Extended JSDoc documentation defined using the `@remarks` tag, if
+   * available.
+   */
   remarks?: readonly JSDocNode[];
+  /**
+   * Details about what is returned from this declaration, if it is a
+   * function-like node and the `@returns` tag has been provided.
+   */
   returns?: readonly JSDocNode[];
+  /**
+   * A list of links provided using the `@see` tag, if any.
+   */
   see?: readonly ts.JSDocTag[];
+  /**
+   * Documentation about values thrown by this declaration, if any, as
+   * documented using the `@throws` tag.
+   */
   throws?: readonly ts.JSDocTag[];
+  /**
+   * The URL slug for this declaration.
+   */
   slug: string;
 }
 
@@ -63,6 +119,10 @@ export interface Declaration<Node extends ts.Node = ts.Node> {
  * @group Utilities
  */
 export interface NodeLocationWithLink extends NodeLocation {
+  /**
+   * A link to the node location in the source code file in the repository, if
+   * available.
+   */
   codeLink?: string;
 }
 
@@ -78,7 +138,14 @@ export type CodeLinkFactory = (pos: NodeLocation) => string;
  * @group Utilities
  */
 export interface RepositoryInfo {
+  /**
+   * The SHA hash of the current commit, from which this documentation has been
+   * generated.
+   */
   sha: string;
+  /**
+   * The URL to the repository.
+   */
   url: string;
 }
 
@@ -87,9 +154,25 @@ export interface RepositoryInfo {
  * @group Core
  */
 export interface DeclarationCollectionOptions {
+  /**
+   * A function to generate links to the code in the repository, or information
+   * about the repository to use the default logic to create links.
+   */
   codeLinks?: RepositoryInfo | CodeLinkFactory;
+  /**
+   * The root path in the documentation to use as the base for documentation
+   * links. Defaults to `"/code/declarations"`.
+   */
   documentationRoot?: string;
+  /**
+   * The path to find the package.json file. You can also pass the name of a
+   * package to automatically resolve the package.
+   */
   packagePath: string;
+  /**
+   * The root path of the source code, used to generate relative paths to source
+   * code files
+   */
   sourceRoot?: string;
 }
 
@@ -98,9 +181,25 @@ export interface DeclarationCollectionOptions {
  * @group Core
  */
 export interface ImportInfo {
+  /**
+   * The kind of import:
+   * - `default`: `import X from 'module';`
+   * - `named`: `import { X } from 'module';`
+   * - `star`: `import * as X from 'module';`
+   */
   kind: "default" | "named" | "star";
+  /**
+   * The local name for named imports (e.g. `import { name as localName } from
+   * 'module';`).
+   */
   localName?: string;
+  /**
+   * The module specifier for the import.
+   */
   module: string;
+  /**
+   * The imported name.
+   */
   name: string;
 }
 
@@ -109,6 +208,20 @@ const resolveExtensions = [".ts", ".d.ts"];
 /**
  * A class which can parse package type declarations and generate metadata about
  * the declarations.
+ *
+ * @remarks
+ * The class will automatically resolve all of the entry-points available in the
+ * `exports` section of `package.json`, or choose either `module` or `main` as a
+ * single entry-point.
+ *
+ * For each of the entry-points, all declarations will be read and added as
+ * {@link Declaration} instances to the collection. If a re-export node (e.g.
+ * `export * from './module'`) is encountered, the path will be followed and the
+ * all of the Declarations from the referenced source file will be added,
+ * recursively. The code isn't currently smart enough to limit this only to
+ * named symbols specified in the export clause, or to track renames where the
+ * symbols are given a different alias (e.g. `export { name as aliasName } from
+ * './module'`).
  *
  * @example
  * ```typescript
@@ -134,10 +247,16 @@ export class DeclarationCollection implements Iterable<Declaration> {
   private readonly program: ts.Program;
   private readonly sourceRoot: string;
 
+  /**
+   * Get a copy of the list of {@link Declaration} elements in this collection.
+   */
   public get declarations(): Declaration[] {
     return [...this.declarationsByNode.values()];
   }
 
+  /**
+   * Create a new instance with the given options.
+   */
   constructor(opts: DeclarationCollectionOptions) {
     this.documentationRoot = opts.documentationRoot ?? "/code/declarations";
     this.getCodeLink = normaliseCodeLinkFactory(opts.codeLinks);
@@ -159,14 +278,19 @@ export class DeclarationCollection implements Iterable<Declaration> {
     }
   }
 
+  /**
+   * Implementation of the {@link Iterator} protocol, to return
+   * {@link Declaration} instances when this instance is iterated.
+   * @returns An iterator which returns {@link Declaration} instances.
+   */
   public [Symbol.iterator](): Iterator<Declaration, any, undefined> {
     return this.declarationsBySlug.values();
   }
 
   /**
    * Try to find a declaration for the given name.
-   * @param name - The name of the declaration.
-   * @param alias - True to try to follow the symbol to the original
+   * @param name The name of the declaration.
+   * @param alias True to try to follow the symbol to the original
    * declaration.
    * @returns The declaration if found, or `undefined`.
    */
@@ -191,6 +315,9 @@ export class DeclarationCollection implements Iterable<Declaration> {
     return this.declarationsByNode.get(def as any);
   }
 
+  /**
+   * Get the {@link ImportInfo} for the given name, if available.
+   */
   public getImportInfo(
     name: ts.EntityName | ts.JSDocMemberName,
   ): ImportInfo | undefined {
@@ -234,10 +361,17 @@ export class DeclarationCollection implements Iterable<Declaration> {
     }
   }
 
+  /**
+   * Find a declaration with the given URL slug, if it exists.
+   */
   public getDeclarationBySlug(slug: string): Declaration | undefined {
     return this.declarationsBySlug.get(slug);
   }
 
+  /**
+   * Get the source location of the given AST node, along with the link to the
+   * source code file in the source repository, if possible.
+   */
   public getNodeLocation(node: ts.Node): NodeLocationWithLink {
     const location = this.nodeLocations.getNodeLocation(node);
     return {
@@ -403,6 +537,11 @@ export class DeclarationCollection implements Iterable<Declaration> {
   }
 }
 
+/**
+ * For use as a sort function with {@link Array.prototype.sort}, in order to
+ * sort {@link Declaration} instances by name.
+ * @group Utilities
+ */
 export function sortDeclarationsByName(a: Declaration, b: Declaration): number {
   if (a.name) {
     if (b.name) {

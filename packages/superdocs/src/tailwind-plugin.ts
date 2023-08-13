@@ -4,7 +4,15 @@ import { SuperdocsThemes } from "./core/theme.js";
 import { darkTheme } from "./themes/dark.js";
 import { defaultTheme } from "./themes/default.js";
 
+/**
+ * The options for the superdocs plugin.
+ * @group Plugin
+ */
 export interface SuperdocsOptions {
+  /**
+   * The CSS class name, under which all of the other styles are defined.
+   * Defaults to `"superdocs"`.
+   */
   className?: string;
 }
 

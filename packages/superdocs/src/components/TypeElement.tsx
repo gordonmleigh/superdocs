@@ -4,6 +4,10 @@ import { PropertySignature } from "./PropertySignature";
 import { SignatureDeclaration } from "./SignatureDeclaration";
 import { UnknownCode } from "./UnknownCode";
 
+/**
+ * Format a {@link ts.TypeElement} node in code.
+ * @group Components
+ */
 export function TypeElement({
   collection,
   node,

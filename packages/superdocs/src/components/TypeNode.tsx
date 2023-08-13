@@ -11,16 +11,13 @@ import { TypeElement } from "./TypeElement.js";
 import { UnknownCode } from "./UnknownCode.js";
 
 /**
- * Properties for the {@link TypeNode} component.
+ * Format a {@link ts.TypeNode} node in code.
  * @group Components
  */
-export type TypeNodeProps = NodeProps<ts.TypeNode>;
-
-/**
- * Format a type node in code.
- * @group Components
- */
-export function TypeNode({ collection, node }: TypeNodeProps): JSX.Element {
+export function TypeNode({
+  collection,
+  node,
+}: NodeProps<ts.TypeNode>): JSX.Element {
   if (ts.isTypeReferenceNode(node)) {
     return (
       <>

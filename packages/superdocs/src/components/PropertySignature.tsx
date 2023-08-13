@@ -6,7 +6,7 @@ import { Token } from "./Token.js";
 import { TypeNode } from "./TypeNode.js";
 
 /**
- * Formats a property signature in code.
+ * Formats a {@link ts.PropertySignature} node in code.
  * @group Components
  */
 export function PropertySignature({

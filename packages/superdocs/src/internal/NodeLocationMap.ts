@@ -63,6 +63,7 @@ class NodeLocationFactoryWithSourceMap extends NodeLocationFactory {
   public override getNodeLocation(node: ts.Node): NodeLocation {
     const generatedPos = super.getNodeLocation(node);
     const originalPos = this.consumer.originalPositionFor({
+      bias: SourceMapConsumer.LEAST_UPPER_BOUND,
       column: generatedPos.char - 1,
       line: generatedPos.line,
     });

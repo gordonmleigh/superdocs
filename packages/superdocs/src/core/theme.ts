@@ -1,5 +1,9 @@
 import { CSSProperties } from "react";
 
+/**
+ * Represents a list of CSS rules.
+ * @group Plugin
+ */
 export interface CSSRuleObject {
   [selector: string]:
     | CSSProperties[keyof CSSProperties]
@@ -7,21 +11,31 @@ export interface CSSRuleObject {
     | CSSRuleObject;
 }
 
-type CSSFontSize = CSSProperties["fontSize"];
-
+/**
+ * Theme configuration for font sizes.
+ * @group Plugin
+ */
 export interface SuperdocsFontSizes {
-  sm?: CSSFontSize;
-  base?: CSSFontSize;
-  lg?: CSSFontSize;
-  xl?: CSSFontSize;
+  sm?: CSSProperties["fontSize"];
+  base?: CSSProperties["fontSize"];
+  lg?: CSSProperties["fontSize"];
+  xl?: CSSProperties["fontSize"];
 }
 
+/**
+ * Superdocs theme settings.
+ * @group Plugin
+ */
 export interface SuperdocsTheme {
   base?: CSSRuleObject;
   components?: CSSRuleObject;
   utilities?: CSSRuleObject;
 }
 
+/**
+ * Superdocs theme settings.
+ * @group Plugin
+ */
 export interface SuperdocsThemes {
   [key: string]: SuperdocsTheme;
 }

@@ -14,8 +14,8 @@ export interface MarkdownProps {
 
 /**
  * Render markdown with a few useful presets.
- *
  * @see {@link https://github.com/remarkjs/react-markdown | React Markdown GitHub} for more info.
+ * @group Components
  */
 export function Markdown({
   children,

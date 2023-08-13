@@ -3,6 +3,7 @@ import clsx from "clsx";
 import Link from "next/link";
 import ts from "typescript";
 import { ImportInfo } from "../core/DeclarationCollection.js";
+import { formatLocation } from "../core/NodeLocation.js";
 import { FormatImport } from "./FormatImport.js";
 import { NodeProps } from "./NodeProps.js";
 import { Token } from "./Token.js";
@@ -76,10 +77,9 @@ function LinkedIdentifier({
   if (importInfo) {
     if (importInfo.module.match(/^\.\.?\//)) {
       const location = collection.getNodeLocation(node);
-      const locationStr = `${location.path}:${location.line}:${location.char}`;
       console.warn(
         `- ${chalk.yellow("warn")} found unexported symbol` +
-          ` ${node.text} (${locationStr})`,
+          ` ${node.text} (${formatLocation(location)})`,
       );
       return (
         <Token

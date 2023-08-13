@@ -1,8 +1,4 @@
-import { NodeLocation } from "./NodeLocation";
-
-function formatLocation({ char, line, path }: NodeLocation): string {
-  return `${path}:${line}:${char}`;
-}
+import { NodeLocation, formatLocation } from "./NodeLocation";
 
 /**
  * An error thrown due to a syntax error or other issue with the code.

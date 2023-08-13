@@ -5,7 +5,7 @@ import { Token } from "./Token.js";
 import { TypeNode } from "./TypeNode.js";
 
 /**
- * Format type arguments in code.
+ * Format an array of {@link ts.TypeNode} in code.
  * @group Components
  */
 export function TypeArguments({

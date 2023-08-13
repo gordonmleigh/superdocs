@@ -6,7 +6,7 @@ import { TypeNode } from "./TypeNode.js";
 import { TypeParameters } from "./TypeParameter.js";
 
 /**
- * Format a type alias declaration in code.
+ * Format a {@link ts.TypeAliasDeclaration} in code.
  * @group Components
  */
 export function TypeAliasDeclaration({

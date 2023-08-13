@@ -6,7 +6,7 @@ import { TypeNode } from "./TypeNode.js";
 import { UnknownCode } from "./UnknownCode.js";
 
 /**
- * Format a type alias declaration in code.
+ * Format a {@link ts.VariableDeclaration} node in code.
  * @group Components
  */
 export function VariableDeclaration({

@@ -19,6 +19,8 @@ import { NodeProps } from "./NodeProps";
  * original nodes once the markdown is rendered. This two step process allows
  * the rendering of markdown which has other {@link JSDocNode} elements
  * throughout it.
+ *
+ * @group Components
  */
 export function JSDocMarkdown({
   collection,

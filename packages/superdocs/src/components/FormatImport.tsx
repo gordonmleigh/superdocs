@@ -1,10 +1,19 @@
 import { ImportInfo } from "../core/DeclarationCollection";
 import { Token } from "./Token";
 
+/**
+ * Properties for the {@link FormatImport} component.
+ * @group Components
+ */
 export interface FormatImportProps {
   info: ImportInfo;
 }
 
+/**
+ * Format an import statement according to the supplied {@link ImportInfo}
+ * value.
+ * @group Components
+ */
 export function FormatImport({ info }: FormatImportProps): JSX.Element {
   return (
     <>

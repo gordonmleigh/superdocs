@@ -6,7 +6,7 @@ import { Token } from "./Token.js";
 import { TypeNode } from "./TypeNode.js";
 
 /**
- * Format a type parameter in code.
+ * Format a {@link ts.TypeParameterDeclaration} node in code.
  * @group Components
  */
 export function TypeParameter({
@@ -33,7 +33,7 @@ export function TypeParameter({
 }
 
 /**
- * Format type parameters in code.
+ * Format an array of {@link ts.TypeParameter} nodes in code.
  * @group Components
  */
 export function TypeParameters({

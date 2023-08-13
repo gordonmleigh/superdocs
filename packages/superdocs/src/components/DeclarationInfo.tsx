@@ -13,17 +13,14 @@ export interface DeclarationInfoProps {
    * Additional styles to apply.
    */
   className?: string;
-
   /**
    * True to format this declaration as a child of another declaration.
    */
   child?: boolean;
-
   /**
    * The declaration to format.
    */
   declaration: Declaration;
-
   /**
    * Optional title to show in place of the declaration name.
    */

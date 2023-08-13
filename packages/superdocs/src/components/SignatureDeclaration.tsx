@@ -9,7 +9,8 @@ import { TypeNode } from "./TypeNode.js";
 import { TypeParameters } from "./TypeParameter.js";
 
 /**
- * Formats a function-like declaration in code.
+ * Formats a function-like declaration ({@link ts.SignatureDeclaration} node) in
+ * code.
  * @group Components
  */
 export function SignatureDeclaration({

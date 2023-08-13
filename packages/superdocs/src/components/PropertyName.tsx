@@ -4,7 +4,7 @@ import { Token } from "./Token.js";
 import { UnknownCode } from "./UnknownCode.js";
 
 /**
- * Formats a property name.
+ * Formats a {@link ts.PropertyName} node in code.
  * @group Components
  */
 export function PropertyName({
