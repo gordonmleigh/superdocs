@@ -13,6 +13,7 @@
   "dependencies": {
     "@floating-ui/react-dom": "^2.0.1",
     "chalk": "^5.3.0",
+    "clsx": "^2.0.0",
     "convert-source-map": "^2.0.0",
     "react-markdown": "^8.0.7",
     "react-syntax-highlighter": "^15.5.0",
@@ -35,5 +36,11 @@
     "./tailwind": {
       "default": "./lib/tailwind-plugin.js"
     }
+  },
+  "peerDependencies": {
+    "next": "^13.4",
+    "react": "^18",
+    "tailwindcss": "^3",
+    "typescript": "*"
   }
 }
