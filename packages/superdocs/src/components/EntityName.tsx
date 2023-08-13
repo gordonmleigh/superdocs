@@ -1,3 +1,4 @@
+import chalk from "chalk";
 import clsx from "clsx";
 import Link from "next/link";
 import ts from "typescript";
@@ -73,6 +74,23 @@ function LinkedIdentifier({
 
   const importInfo = collection.getImportInfo(node);
   if (importInfo) {
+    if (importInfo.module.match(/^\.\.?\//)) {
+      const location = collection.getNodeLocation(node);
+      const locationStr = `${location.path}:${location.line}:${location.char}`;
+      console.warn(
+        `- ${chalk.yellow("warn")} found unexported symbol` +
+          ` ${node.text} (${locationStr})`,
+      );
+      return (
+        <Token
+          className="unexported"
+          identifier
+          tooltip={<span className="tooltip">The symbol is not exported</span>}
+        >
+          {node.text}
+        </Token>
+      );
+    }
     return <ImportedIdentifier node={node} info={importInfo} />;
   }
 
