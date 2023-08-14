@@ -190,6 +190,52 @@ export function TypeNode({
       </>
     );
   }
+  if (ts.isMappedTypeNode(node)) {
+    return (
+      <>
+        <Token punctuation text="{ " />
+
+        {node.readonlyToken?.kind === ts.SyntaxKind.PlusToken && (
+          <Token operator text="+" />
+        )}
+        {node.readonlyToken?.kind === ts.SyntaxKind.MinusToken && (
+          <Token operator text="-" />
+        )}
+        {node.readonlyToken && <Token keyword>readonly</Token>}
+
+        <Token punctuation text=" [" />
+        <EntityName collection={collection} node={node.typeParameter.name} />
+        {node.typeParameter.constraint && (
+          <>
+            <Token keyword>in</Token>
+            <TypeNode
+              collection={collection}
+              node={node.typeParameter.constraint}
+            />
+          </>
+        )}
+        {node.nameType && (
+          <>
+            <Token keyword>as</Token>
+            <TypeNode collection={collection} node={node.nameType} />
+          </>
+        )}
+        <Token punctuation text="]" />
+
+        {node.questionToken?.kind === ts.SyntaxKind.PlusToken && (
+          <Token operator text="+" />
+        )}
+        {node.questionToken?.kind === ts.SyntaxKind.MinusToken && (
+          <Token operator text="-" />
+        )}
+        {node.questionToken && <Token operator text="?" />}
+
+        <Token punctuation text=": " />
+        <TypeNode collection={collection} node={node.type!} />
+        <Token punctuation text=" }" />
+      </>
+    );
+  }
   if (getSyntaxKindName(node.kind).endsWith("Keyword")) {
     return <Token builtin>{node.getText()}</Token>;
   }
