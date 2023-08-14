@@ -33,7 +33,7 @@ export function TypeParameter({
 }
 
 /**
- * Format an array of {@link ts.TypeParameter} nodes in code.
+ * Format an array of {@link ts.TypeParameterDeclaration} nodes in code.
  * @group Components
  */
 export function TypeParameters({

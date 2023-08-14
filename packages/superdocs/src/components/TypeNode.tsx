@@ -8,6 +8,7 @@ import { SignatureDeclaration } from "./SignatureDeclaration.js";
 import { Token, TokenProps } from "./Token.js";
 import { TypeArguments } from "./TypeArguments.js";
 import { TypeElement } from "./TypeElement.js";
+import { TypeParameter } from "./TypeParameter.js";
 import { UnknownCode } from "./UnknownCode.js";
 
 /**
@@ -165,6 +166,27 @@ export function TypeNode({
             <Token punctuation text=")" />
           </>
         )}
+      </>
+    );
+  }
+  if (ts.isConditionalTypeNode(node)) {
+    return (
+      <>
+        <TypeNode collection={collection} node={node.checkType} />
+        <Token keyword>extends</Token>
+        <TypeNode collection={collection} node={node.extendsType} />
+        <Token operator text=" ? " />
+        <TypeNode collection={collection} node={node.trueType} />
+        <Token operator text=" : " />
+        <TypeNode collection={collection} node={node.falseType} />
+      </>
+    );
+  }
+  if (ts.isInferTypeNode(node)) {
+    return (
+      <>
+        <Token keyword>infer</Token>
+        <TypeParameter collection={collection} node={node.typeParameter} />
       </>
     );
   }

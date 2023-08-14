@@ -12,3 +12,11 @@
  * @group Showcase
  */
 export type ImportedType = import("./core/DeclarationCollection").Declaration;
+
+/**
+ * This export is here to test features of the documentation generation.
+ * @group Showcase
+ */
+export type ConditionalType = ImportedType extends Iterable<infer R>
+  ? R
+  : never;
