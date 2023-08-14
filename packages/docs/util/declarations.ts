@@ -37,7 +37,7 @@ if (!getContext()) {
       sha: getGitSha(),
       url: SiteMeta.repo,
     },
-    packagePath: "superdocs",
+    packagePath: "@gordonmleigh/superdocs",
     sourceRoot: getWorkspaceRoot(),
   });
 
