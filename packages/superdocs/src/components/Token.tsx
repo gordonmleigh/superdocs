@@ -161,7 +161,7 @@ export function Token({
     placement: "top-start",
   });
   const kind = kindProp ?? quickKind(quick);
-  const wordSpace = word || (kind && wordKinds[kind]);
+  const wordSpace = word ?? (kind && wordKinds[kind]);
 
   const token = (
     <span

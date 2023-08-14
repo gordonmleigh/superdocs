@@ -236,6 +236,29 @@ export function TypeNode({
       </>
     );
   }
+  if (ts.isTemplateLiteralTypeNode(node)) {
+    return (
+      <>
+        <Token literal="string" word={false}>
+          `{node.head.text}
+        </Token>
+        {node.templateSpans.map((span) => (
+          <Fragment key={span.pos}>
+            <Token operator text="$" />
+            <Token punctuation text="{ " />
+            <TypeNode collection={collection} node={span.type} />
+            <Token punctuation text=" }" />
+            <Token literal="string" word={false}>
+              {span.literal.text}
+            </Token>
+          </Fragment>
+        ))}
+        <Token literal="string" word={false}>
+          `
+        </Token>
+      </>
+    );
+  }
   if (getSyntaxKindName(node.kind).endsWith("Keyword")) {
     return <Token builtin>{node.getText()}</Token>;
   }

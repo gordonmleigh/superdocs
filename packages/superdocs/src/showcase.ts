@@ -28,3 +28,9 @@ export type _ConditionalType = _ImportedType extends Iterable<infer R>
 export type _MappedType<Type> = {
   -readonly [Property in keyof Type as string]-?: () => Type[Property];
 };
+
+/**
+ * This export is here to test features of the documentation generation.
+ * @group Showcase
+ */
+export type _TemplateLiteral<Type extends string> = `template${Type}`;
