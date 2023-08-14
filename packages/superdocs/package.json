@@ -37,6 +37,15 @@
       "default": "./lib/tailwind-plugin.js"
     }
   },
+  "files": [
+    "lib/**/*.js",
+    "lib/**/*.d.ts",
+    "lib/**/*.map",
+    "!lib/**/*.test.*",
+    "!lib/testing/",
+    "src/**/*.ts",
+    "!src/**/*.test.ts"
+  ],
   "peerDependencies": {
     "next": "^13.4",
     "react": "^18",
