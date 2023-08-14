@@ -152,6 +152,22 @@ export function TypeNode({
   if (ts.isFunctionLike(node)) {
     return <SignatureDeclaration collection={collection} node={node} />;
   }
+  if (ts.isImportTypeNode(node)) {
+    return (
+      <>
+        {node.qualifier ? (
+          <EntityName collection={collection} node={node.qualifier} />
+        ) : (
+          <>
+            <Token keyword>import</Token>
+            <Token punctuation text="(" />
+            <TypeNode collection={collection} node={node.argument} />
+            <Token punctuation text=")" />
+          </>
+        )}
+      </>
+    );
+  }
   if (getSyntaxKindName(node.kind).endsWith("Keyword")) {
     return <Token builtin>{node.getText()}</Token>;
   }

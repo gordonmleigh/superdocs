@@ -33,6 +33,9 @@
       "types": "./lib/core/*.d.ts",
       "default": "./lib/core/*.js"
     },
+    "./showcase": {
+      "types": "./lib/showcase.d.ts"
+    },
     "./tailwind": {
       "default": "./lib/tailwind-plugin.js"
     }
