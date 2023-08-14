@@ -1,8 +1,8 @@
 import { MainLayout } from "@/components/MainLayout";
 import { fetchDeclarationGroups } from "@/util/declarations";
+import { DeclarationInfo } from "@gordonmleigh/superdocs/components/DeclarationInfo";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { DeclarationInfo } from "superdocs/components/DeclarationInfo";
 
 interface GroupPageParams {
   params: { slug: string };

@@ -5,7 +5,7 @@ import {
   Declaration,
   DeclarationCollection,
   sortDeclarationsByName,
-} from "superdocs/core/DeclarationCollection";
+} from "@gordonmleigh/superdocs/core/DeclarationCollection";
 import { assert } from "./assert";
 import { serverContext } from "./serverContext";
 import { slugify } from "./slugify";

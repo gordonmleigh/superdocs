@@ -1,10 +1,10 @@
 import { MainLayout } from "@/components/MainLayout";
 import { fetchDeclarationCollection } from "@/util/declarations";
+import { DeclarationInfo } from "@gordonmleigh/superdocs/components/DeclarationInfo";
+import { FormatImport } from "@gordonmleigh/superdocs/components/FormatImport";
+import { JSDocMarkdown } from "@gordonmleigh/superdocs/components/JSDocMarkdown";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { DeclarationInfo } from "superdocs/components/DeclarationInfo";
-import { FormatImport } from "superdocs/components/FormatImport";
-import { JSDocMarkdown } from "superdocs/components/JSDocMarkdown";
 
 interface DeclarationPageParams {
   params: { slug: string };
