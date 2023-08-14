@@ -2,6 +2,7 @@
   "name": "@w/root",
   "private": "true",
   "scripts": {
+    "build": "npm run clean && npm run compile && npm run lint",
     "clean": "rimraf --glob '**/*.tsbuildinfo' packages/docs/out packages/docs/.next packages/*/lib **/node_modules/.cache",
     "compile": "node tsbuild.mjs",
     "dev:docs": "NEXT_PUBLIC_BASE_PATH=/superdocs nodemon --exec 'npm run -w @w/docs dev' --watch packages/superdocs/lib",
