@@ -1,4 +1,5 @@
 import ts from "typescript";
+import { AmbientConstantExpression } from "./AmbientConstantExpression.js";
 import { NodeProps } from "./NodeProps.js";
 import { Token } from "./Token.js";
 import { UnknownCode } from "./UnknownCode.js";
@@ -30,6 +31,18 @@ export function PropertyName({
   }
   if (ts.isPrivateIdentifier(node)) {
     return <Token identifier="symbol">{node.text}</Token>;
+  }
+  if (ts.isComputedPropertyName(node)) {
+    return (
+      <>
+        <Token punctuation text="[" />
+        <AmbientConstantExpression
+          collection={collection}
+          node={node.expression}
+        />
+        <Token punctuation text="]" />
+      </>
+    );
   }
   return <UnknownCode collection={collection} node={node} word />;
 }

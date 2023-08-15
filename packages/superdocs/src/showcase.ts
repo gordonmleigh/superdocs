@@ -95,3 +95,12 @@ export enum _DerivedEnum {
  * @group Showcase
  */
 export const _ConstVariableEnum = _SimpleEnum.One;
+
+/**
+ * This export is here to test features of the documentation generation.
+ * @group Showcase
+ */
+export interface _ComputedProps {
+  [Symbol.iterator]: string;
+  [_StringEnum.One]: number;
+}
