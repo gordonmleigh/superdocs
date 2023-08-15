@@ -1,4 +1,5 @@
 import ts from "typescript";
+import { AmbientConstantExpression } from "./AmbientConstantExpression.js";
 import { Modifiers } from "./Modifier.js";
 import { NodeProps } from "./NodeProps.js";
 import { Token } from "./Token.js";
@@ -44,13 +45,10 @@ export function VariableDeclaration({
       ) : node.initializer ? (
         <>
           <Token operator text=" = " />
-          {ts.isStringLiteral(node.initializer) ? (
-            <Token literal="string">"{node.initializer.text}"</Token>
-          ) : ts.isNumericLiteral(node.initializer) ? (
-            <Token literal="number">{node.initializer.text}</Token>
-          ) : (
-            <UnknownCode collection={collection} node={node.initializer} />
-          )}
+          <AmbientConstantExpression
+            collection={collection}
+            node={node.initializer}
+          />
         </>
       ) : undefined}
     </>

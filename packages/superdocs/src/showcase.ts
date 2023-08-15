@@ -60,3 +60,38 @@ _LetVariable = 2;
  */
 // eslint-disable-next-line no-var
 export var _VarVariable = 1;
+
+/**
+ * This export is here to test features of the documentation generation.
+ * @group Showcase
+ */
+export enum _SimpleEnum {
+  One,
+  Two,
+  Zwei = Two,
+  Four = 4,
+}
+
+/**
+ * This export is here to test features of the documentation generation.
+ * @group Showcase
+ */
+export enum _StringEnum {
+  One = "one",
+  Two = "two",
+  Three = "three",
+}
+
+/**
+ * This export is here to test features of the documentation generation.
+ * @group Showcase
+ */
+export enum _DerivedEnum {
+  One = _StringEnum.One,
+}
+
+/**
+ * This export is here to test features of the documentation generation.
+ * @group Showcase
+ */
+export const _ConstVariableEnum = _SimpleEnum.One;

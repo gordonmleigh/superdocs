@@ -70,7 +70,7 @@ export interface Declaration<Node extends ts.Node = ts.Node> {
   /**
    * A list of members that this declaration defines, where relevant.
    */
-  members?: Declaration<ts.ClassElement | ts.TypeElement>[];
+  members?: Declaration<ts.ClassElement | ts.EnumMember | ts.TypeElement>[];
   /**
    * The name of this declaration.
    */
@@ -426,7 +426,9 @@ export class DeclarationCollection implements Iterable<Declaration> {
 
   private getMembers(
     parent: Declaration,
-  ): Declaration<ts.ClassElement | ts.TypeElement>[] | undefined {
+  ):
+    | Declaration<ts.ClassElement | ts.EnumMember | ts.TypeElement>[]
+    | undefined {
     const node = parent.node;
 
     if (ts.isClassDeclaration(node)) {
@@ -436,7 +438,7 @@ export class DeclarationCollection implements Iterable<Declaration> {
         this.addDeclaration(member, parent.moduleSpecifier, parent),
       );
     }
-    if (ts.isInterfaceDeclaration(node)) {
+    if (ts.isInterfaceDeclaration(node) || ts.isEnumDeclaration(node)) {
       return node.members?.map((member) =>
         this.addDeclaration(member, parent.moduleSpecifier, parent),
       );

@@ -7,6 +7,8 @@ import { slugify } from "./slugify";
 export type NamedNode =
   | ts.ClassDeclaration
   | ts.ClassElement
+  | ts.EnumDeclaration
+  | ts.EnumMember
   | ts.FunctionDeclaration
   | ts.InterfaceDeclaration
   | ts.ParameterDeclaration
@@ -23,6 +25,8 @@ export function isNamedNode(node: ts.Node): node is NamedNode {
   return (
     ts.isClassDeclaration(node) ||
     ts.isClassElement(node) ||
+    ts.isEnumDeclaration(node) ||
+    ts.isEnumMember(node) ||
     ts.isFunctionDeclaration(node) ||
     ts.isFunctionLike(node) ||
     ts.isInterfaceDeclaration(node) ||

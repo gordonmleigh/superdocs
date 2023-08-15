@@ -1,6 +1,8 @@
 import ts from "typescript";
 import { ClassDeclaration } from "./ClassDeclaration.js";
 import { ClassElement } from "./ClassElement.js";
+import { EnumDeclaration } from "./EnumDeclaration.js";
+import { EnumMember } from "./EnumMember.js";
 import { InterfaceDeclaration } from "./InterfaceDeclaration.js";
 import { NodeProps } from "./NodeProps.js";
 import { ParameterDeclaration } from "./ParameterDeclaration.js";
@@ -33,6 +35,12 @@ export function FormatDeclaration({
   }
   if (ts.isClassElement(node)) {
     return <ClassElement collection={collection} node={node} />;
+  }
+  if (ts.isEnumDeclaration(node)) {
+    return <EnumDeclaration collection={collection} node={node} />;
+  }
+  if (ts.isEnumMember(node)) {
+    return <EnumMember collection={collection} node={node} />;
   }
   if (ts.isFunctionDeclaration(node)) {
     return <SignatureDeclaration collection={collection} node={node} />;
