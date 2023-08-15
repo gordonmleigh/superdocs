@@ -3,11 +3,7 @@ import { autoPlacement, useFloating } from "@floating-ui/react-dom";
 import clsx from "clsx";
 import { CSSProperties, ReactNode, useState } from "react";
 
-/**
- * A list of valid token kinds.
- * @group Utilities
- */
-export const tokenKinds = [
+const tokenKinds = [
   "atrule",
   "attr-name",
   "attr-value",

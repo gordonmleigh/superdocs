@@ -34,3 +34,29 @@ export type _MappedType<Type> = {
  * @group Showcase
  */
 export type _TemplateLiteral<Type extends string> = `template${Type}`;
+
+/**
+ * This export is here to test features of the documentation generation.
+ * @group Showcase
+ */
+export const _ConstVariableNumber = 1;
+
+/**
+ * This export is here to test features of the documentation generation.
+ * @group Showcase
+ */
+export const _ConstVariableString = "String";
+
+/**
+ * This export is here to test features of the documentation generation.
+ * @group Showcase
+ */
+export let _LetVariable = 1;
+_LetVariable = 2;
+
+/**
+ * This export is here to test features of the documentation generation.
+ * @group Showcase
+ */
+// eslint-disable-next-line no-var
+export var _VarVariable = 1;

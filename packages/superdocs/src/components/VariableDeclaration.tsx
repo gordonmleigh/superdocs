@@ -17,20 +17,42 @@ export function VariableDeclaration({
     ts.isVariableStatement(node),
   ) as ts.VariableStatement | undefined;
 
+  const flags =
+    ts.findAncestor(node, (node) => ts.isVariableDeclarationList(node))
+      ?.flags ?? ts.NodeFlags.None;
+
   return (
     <>
       {statement?.modifiers && <Modifiers node={statement.modifiers} />}
+      {flags & ts.NodeFlags.Const ? (
+        <Token keyword>const</Token>
+      ) : flags & ts.NodeFlags.BlockScoped ? (
+        <Token keyword>let</Token>
+      ) : (
+        <Token keyword>var</Token>
+      )}
       {ts.isIdentifier(node.name) ? (
         <Token identifier>{node.name.text}</Token>
       ) : (
         <UnknownCode collection={collection} node={node.name} />
       )}
-      {node.type && (
+      {node.type ? (
         <>
           <Token operator text=": " />
           <TypeNode collection={collection} node={node.type} />
         </>
-      )}
+      ) : node.initializer ? (
+        <>
+          <Token operator text=" = " />
+          {ts.isStringLiteral(node.initializer) ? (
+            <Token literal="string">"{node.initializer.text}"</Token>
+          ) : ts.isNumericLiteral(node.initializer) ? (
+            <Token literal="number">{node.initializer.text}</Token>
+          ) : (
+            <UnknownCode collection={collection} node={node.initializer} />
+          )}
+        </>
+      ) : undefined}
     </>
   );
 }
