@@ -47,7 +47,8 @@
     "!lib/**/*.test.*",
     "!lib/testing/",
     "src/**/*.ts",
-    "!src/**/*.test.ts"
+    "!src/**/*.test.ts",
+    "static/**"
   ],
   "peerDependencies": {
     "next": "^13.4",
