@@ -1,8 +1,7 @@
+import { SiteMeta } from "@/util/metadata.js";
 import clsx from "clsx";
 import { Inter } from "next/font/google";
 import "./globals.css";
-
-import { SiteMeta } from "@/util/metadata.js";
 
 const inter = Inter({ subsets: ["latin"] });
 

@@ -36,7 +36,11 @@ export default async function DocsPage({
   return (
     <MainLayout>
       <Prose as="article">
-        {!meta.hideTitle && <h1>{meta.title}</h1>}
+        {!meta.hideTitle && (
+          <h1>
+            {meta.title} <i className="codicon codicon-github" />
+          </h1>
+        )}
         {content}
       </Prose>
     </MainLayout>

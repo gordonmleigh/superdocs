@@ -1,6 +1,7 @@
 import { fetchAllContent } from "@/util/content";
 import { fetchDeclarationGroups } from "@/util/declarations";
 import { styled } from "@/util/styled";
+import { SymbolIcon } from "@gordonmleigh/superdocs/components/SymbolIcon";
 import { ReactNode } from "react";
 import { Navigation } from "./Navigation";
 import { NavigationLink } from "./NavigationLink";
@@ -43,7 +44,12 @@ export async function MainLayout({
                 <NavigationLink
                   href={`/code/groups/${group.slug}#${def.slug}`}
                   key={def.slug}
-                  title={def.name}
+                  title={
+                    <>
+                      <SymbolIcon node={def.node} />
+                      &nbsp;{def.name}
+                    </>
+                  }
                 />
               ))}
             </NavigationLink>

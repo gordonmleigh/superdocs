@@ -1,4 +1,4 @@
-import { statSync } from "fs";
+import { existsSync } from "fs";
 import { basename, dirname, extname, join, resolve } from "path";
 import { wildcard } from "./wildcard";
 
@@ -27,12 +27,16 @@ export function normalisePackageExports(
   const output: Record<string, string> = {};
 
   if (!source.exports || typeof source.exports === "string") {
+    const path = getTypesPath(
+      packagePath,
+      source.types,
+      source.exports ?? source.module ?? source.main,
+    );
+    if (!path) {
+      throw new Error(`no types found for module: ${packagePath}`);
+    }
     return {
-      ".": getTypesPath(
-        packagePath,
-        source.types,
-        source.exports ?? source.module ?? source.main,
-      ),
+      ".": path,
     };
   }
 
@@ -47,14 +51,20 @@ export function normalisePackageExports(
     if (search.includes("*")) {
       const matches = wildcard(search, packagePath);
       for (const { path, replacement } of matches) {
-        output[key.replace("*", replacement)] = getTypesPath(
+        const typesPath = getTypesPath(
           packagePath,
           norm.types ? path : undefined,
           js,
         );
+        if (typesPath) {
+          output[key.replace("*", replacement)] = typesPath;
+        }
       }
     } else {
-      output[key] = getTypesPath(packagePath, norm.types, js);
+      const typesPath = getTypesPath(packagePath, norm.types, js);
+      if (typesPath) {
+        output[key] = typesPath;
+      }
     }
   }
 
@@ -65,20 +75,24 @@ function getTypesPath(
   packagePath: string,
   tsPath: string | undefined,
   jsPath: string | undefined,
-): string {
+): string | undefined {
   if (tsPath) {
     const fullPath = resolve(packagePath, tsPath);
-    statSync(fullPath);
+    if (!existsSync(fullPath)) {
+      return;
+    }
     return fullPath;
   }
   if (!jsPath) {
-    throw new Error(`nothing to import`);
+    return;
   }
 
   const fullPath = resolve(packagePath, jsPath);
   const dir = dirname(fullPath);
   const base = basename(fullPath, extname(fullPath));
   const resolvedTsPath = join(dir, base + ".d.ts");
-  statSync(resolvedTsPath);
-  return resolvedTsPath;
+
+  if (existsSync(resolvedTsPath)) {
+    return resolvedTsPath;
+  }
 }

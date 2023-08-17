@@ -3,6 +3,7 @@ import { fetchDeclarationCollection } from "@/util/declarations";
 import { DeclarationInfo } from "@gordonmleigh/superdocs/components/DeclarationInfo";
 import { FormatImport } from "@gordonmleigh/superdocs/components/FormatImport";
 import { JSDocMarkdown } from "@gordonmleigh/superdocs/components/JSDocMarkdown";
+import { SymbolIcon } from "@gordonmleigh/superdocs/components/SymbolIcon";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 
@@ -31,7 +32,12 @@ export default function DeclarationPage({
         {declaration.parent ? (
           <div className="mb-12">
             <h1 className="text-2xl font-semibold">
-              <Link href={declaration.parent.documentationLink}>
+              <Link
+                className="flex items-center"
+                href={declaration.parent.documentationLink}
+              >
+                <SymbolIcon node={declaration.parent.node} />
+                &nbsp;
                 {declaration.parent.name}
               </Link>
             </h1>
@@ -44,7 +50,10 @@ export default function DeclarationPage({
           </div>
         ) : (
           <div className="mb-12">
-            <h1 className="text-3xl font-semibold">{declaration.name}</h1>
+            <h1 className="text-3xl font-semibold flex items-center">
+              <SymbolIcon node={declaration.node} />
+              &nbsp;{declaration.name}
+            </h1>
             {declaration.importInfo && (
               <pre className="language-typescript my-4">
                 <code className="language-typescript">

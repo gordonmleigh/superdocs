@@ -3,6 +3,7 @@ import Link from "next/link";
 import { Declaration } from "../core/DeclarationCollection.js";
 import { FormatDeclaration } from "./FormatDeclaration.js";
 import { JSDocMarkdown } from "./JSDocMarkdown.js";
+import { SymbolIcon } from "./SymbolIcon.js";
 
 /**
  * Properties for {@link DeclarationInfo} component.
@@ -22,6 +23,10 @@ export interface DeclarationInfoProps {
    */
   declaration: Declaration;
   /**
+   * True to hide the icon.
+   */
+  noIcon?: boolean;
+  /**
    * Optional title to show in place of the declaration name.
    */
   title?: string;
@@ -36,13 +41,23 @@ export function DeclarationInfo({
   child,
   declaration,
   title,
+  noIcon = !!title,
 }: DeclarationInfoProps): JSX.Element {
   return (
     <section
       className={clsx("declaration", child && "declaration-child", className)}
     >
       <h2 className="declaration-heading" id={declaration.slug}>
-        <Link href={declaration.documentationLink}>
+        <Link
+          className="flex items-center"
+          href={declaration.documentationLink}
+        >
+          {!noIcon && (
+            <>
+              <SymbolIcon node={declaration.node} />
+              &nbsp;
+            </>
+          )}
           {title ?? declaration.name}
         </Link>
       </h2>

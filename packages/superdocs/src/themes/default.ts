@@ -7,6 +7,10 @@ export function defaultTheme({ theme }: PluginUtils): SuperdocsTheme {
 
   return {
     base: {
+      "--tw-superdocs-color-vs-blue": "#317ac6",
+      "--tw-superdocs-color-vs-orange": "#ca812d",
+      "--tw-superdocs-color-vs-purple": "#5e348b",
+
       "--tw-superdocs-color-token-base": theme("colors.zinc.900"),
       "--tw-superdocs-color-token-literal": theme("colors.blue.700"),
       "--tw-superdocs-color-token-keyword": theme("colors.red.500"),

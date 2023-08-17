@@ -104,3 +104,12 @@ export interface _ComputedProps {
   [Symbol.iterator]: string;
   [_StringEnum.One]: number;
 }
+
+/**
+ * This export is here to test features of the documentation generation.
+ * @group Showcase
+ */
+export interface _InterfaceAccessors {
+  get hello(): string;
+  set hello(value: string);
+}
