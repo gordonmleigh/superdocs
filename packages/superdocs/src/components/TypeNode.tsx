@@ -259,6 +259,24 @@ export function TypeNode({
       </>
     );
   }
+  if (ts.isTypePredicateNode(node)) {
+    return (
+      <>
+        {node.assertsModifier && <Token keyword>asserts</Token>}
+        {ts.isIdentifier(node.parameterName) ? (
+          <Token identifier>{node.parameterName.text}</Token>
+        ) : (
+          <Token keyword>this</Token>
+        )}
+        {node.type && (
+          <>
+            <Token keyword>is</Token>
+            <TypeNode collection={collection} node={node.type} />
+          </>
+        )}
+      </>
+    );
+  }
   if (getSyntaxKindName(node.kind).endsWith("Keyword")) {
     return <Token builtin>{node.getText()}</Token>;
   }
