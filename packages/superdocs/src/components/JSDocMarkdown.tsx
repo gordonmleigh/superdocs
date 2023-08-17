@@ -1,10 +1,10 @@
 import rehypeRaw from "rehype-raw";
-import { isArray } from "../internal/isArray";
 import {
   JSDocNode,
   isJSDocNodeWithComment,
   isJSDocText,
-} from "../internal/jsdoc";
+} from "../core/JSDocNode";
+import { isArray } from "../internal/isArray";
 import { JSDoc } from "./JSDoc";
 import { Markdown } from "./Markdown";
 import { NodeProps } from "./NodeProps";

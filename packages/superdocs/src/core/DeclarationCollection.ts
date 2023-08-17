@@ -4,12 +4,6 @@ import ts from "typescript";
 import { NodeLocationMap } from "../internal/NodeLocationMap";
 import { assert } from "../internal/assert";
 import { getPackageInfo } from "../internal/getPackageInfo";
-import {
-  JSDocNode,
-  getJSDocTagContentByName,
-  getJSDocTagsByName,
-  hasJSDocTag,
-} from "../internal/jsdoc";
 import { loadProgram } from "../internal/loadProgram";
 import {
   getName,
@@ -18,6 +12,12 @@ import {
   isPrivateMember,
   slugifyNode,
 } from "../internal/node";
+import {
+  JSDocNode,
+  getJSDocTagContentByName,
+  getJSDocTagsByName,
+  hasJSDocTag,
+} from "./JSDocNode";
 import { NodeLocation } from "./NodeLocation";
 
 /**

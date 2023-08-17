@@ -1,6 +1,6 @@
 import ts from "typescript";
+import { JSDocNode, isJSDocText } from "../core/JSDocNode";
 import { isArray } from "../internal/isArray";
-import { JSDocNode, isJSDocText } from "../internal/jsdoc";
 import { EntityName } from "./EntityName";
 import { NodeProps } from "./NodeProps";
 import { UnknownCode } from "./UnknownCode";
