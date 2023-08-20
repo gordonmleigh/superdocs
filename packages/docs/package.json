@@ -1,6 +1,6 @@
 {
   "name": "@w/docs",
-  "version": "0.1.8",
+  "version": "0.1.9",
   "private": true,
   "scripts": {
     "dev": "next dev",
@@ -11,7 +11,7 @@
   "dependencies": {
     "clsx": "^2.0.0",
     "next": "13.4.12",
-    "@gordonmleigh/superdocs": "^0.1.8"
+    "@gordonmleigh/superdocs": "^0.1.9"
   },
   "devDependencies": {
     "@heroicons/react": "^2.0.18",
