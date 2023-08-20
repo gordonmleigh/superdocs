@@ -113,3 +113,9 @@ export interface _InterfaceAccessors {
   get hello(): string;
   set hello(value: string);
 }
+
+/**
+ * This export is here to test features of the documentation generation.
+ * @group Showcase
+ */
+export type _RestType<T> = T extends [...infer R, any] ? R : never;

@@ -277,6 +277,14 @@ export function TypeNode({
       </>
     );
   }
+  if (ts.isRestTypeNode(node)) {
+    return (
+      <>
+        <Token operator text="..." />
+        <TypeNode collection={collection} node={node.type} />
+      </>
+    );
+  }
   if (getSyntaxKindName(node.kind).endsWith("Keyword")) {
     return <Token builtin>{node.getText()}</Token>;
   }
