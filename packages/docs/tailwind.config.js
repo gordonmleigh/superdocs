@@ -1,4 +1,5 @@
 const { join, dirname } = require("path");
+const plugin = require("tailwindcss/plugin");
 
 /** @type {import('tailwindcss').Config} */
 module.exports = {
@@ -9,6 +10,10 @@ module.exports = {
     "./app/**/*.{js,ts,jsx,tsx,mdx}",
     join(
       dirname(require.resolve("@gordonmleigh/superdocs/tailwind")),
+      "components/*.{js,ts,jsx,tsx,mdx}",
+    ),
+    join(
+      dirname(require.resolve("@gordonmleigh/superdocs-kit/tailwind")),
       "components/*.{js,ts,jsx,tsx,mdx}",
     ),
   ],
@@ -25,6 +30,7 @@ module.exports = {
   },
   plugins: [
     require("@gordonmleigh/superdocs/tailwind"),
+    require("@gordonmleigh/superdocs-kit/tailwind"),
     require("@tailwindcss/typography"),
   ],
 };

@@ -1,3 +1,4 @@
+"use client";
 import { ComponentPropsWithoutRef } from "react";
 
 function SunIcon(props: ComponentPropsWithoutRef<"svg">): JSX.Element {

@@ -1,8 +1,8 @@
 import ts from "typescript";
+import { slugify } from "../core/slugify";
 import { assert } from "./assert";
 import { getSyntaxKindName } from "./getSyntaxKindName";
 import { hash } from "./hash";
-import { slugify } from "./slugify";
 
 export type NamedNode =
   | ts.ClassDeclaration

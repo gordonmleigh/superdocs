@@ -1,3 +1,8 @@
+/**
+ * Generate a URL slug for the given text.
+ *
+ * @group Core
+ */
 export function slugify(text: string): string {
   return (
     text

@@ -9,9 +9,11 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@gordonmleigh/superdocs": "^0.1.9",
+    "@gordonmleigh/superdocs-kit": "^0.1.9",
     "clsx": "^2.0.0",
-    "next": "13.4.12",
-    "@gordonmleigh/superdocs": "^0.1.9"
+    "fast-glob": "^3.3.1",
+    "next": "13.4.12"
   },
   "devDependencies": {
     "@heroicons/react": "^2.0.18",

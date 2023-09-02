@@ -1,8 +1,7 @@
-import { MainLayout } from "@/components/MainLayout";
-import { Prose } from "@/components/Prose";
-import { fetchAllContent, fetchContentBySlug } from "@/util/content";
-import { SiteMeta } from "@/util/metadata";
+import { markdownContent } from "@/util/context";
+import { SiteMeta } from "@/util/SiteMeta";
 import { Metadata } from "next";
+import { notFound } from "next/navigation";
 
 interface DocsPageParams {
   params: { slug?: string[] };
@@ -11,38 +10,37 @@ interface DocsPageParams {
 export async function generateMetadata({
   params: { slug },
 }: DocsPageParams): Promise<Metadata> {
-  const { meta } = await fetchContentBySlug(slug);
+  const content = await markdownContent.current;
+  const page = content.getPage(slug);
+  if (!page) {
+    throw new Error(`can't find page with slug ${slug}`);
+  }
   return {
-    title: [SiteMeta.title, meta.pageTitle ?? meta.title]
-      .filter(Boolean)
-      .join(" – "),
+    title: [SiteMeta.title, page.meta.pageTitle].filter(Boolean).join(" – "),
   };
 }
 
 export async function generateStaticParams(): Promise<
   DocsPageParams["params"][]
 > {
-  const content = await fetchAllContent();
-  return content.map((x) => ({
-    slug: (x.meta.slug as string).split("/").filter(Boolean),
+  return [...(await markdownContent.current)].map((x) => ({
+    slug: x.meta.slug.split("/").filter(Boolean),
   }));
 }
 
 export default async function DocsPage({
   params: { slug },
 }: DocsPageParams): Promise<JSX.Element> {
-  const { content, meta } = await fetchContentBySlug(slug);
+  const collection = await markdownContent.current;
+  const page = collection.getPage(slug);
+  if (!page) {
+    return notFound();
+  }
 
   return (
-    <MainLayout>
-      <Prose as="article">
-        {!meta.hideTitle && (
-          <h1>
-            {meta.title} <i className="codicon codicon-github" />
-          </h1>
-        )}
-        {content}
-      </Prose>
-    </MainLayout>
+    <article className="prose dark:prose-invert">
+      {!page.meta.hideTitle && <h1>{page.meta.title}</h1>}
+      {page.content}
+    </article>
   );
 }
