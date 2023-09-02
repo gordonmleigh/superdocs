@@ -25,21 +25,6 @@ export default function RootLayout({
   return (
     <html lang="en" className="h-full scroll-pt-20 scroll-smooth">
       <head>
-        <link
-          rel="icon"
-          href={`${SiteMeta.basePath}/icon-32.png`}
-          sizes="32x32"
-        />
-        <link
-          rel="icon"
-          href={`${SiteMeta.basePath}/icon-128.png`}
-          sizes="128x128"
-        />
-        <link
-          rel="icon"
-          href={`${SiteMeta.basePath}/icon-256.png`}
-          sizes="256x256"
-        />
         <DarkModeScript />
       </head>
       <body

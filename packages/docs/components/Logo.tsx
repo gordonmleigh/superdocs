@@ -1,5 +1,6 @@
-import { SiteMeta } from "@/util/SiteMeta.js";
 import clsx from "clsx";
+import Image from "next/image";
+import logo from "../app/icon2.png";
 
 export interface LogoProps {
   className?: string;
@@ -8,7 +9,7 @@ export interface LogoProps {
 export function Logo({ className }: LogoProps): JSX.Element {
   return (
     <div className={clsx(className, "flex content-center gap-2")}>
-      <img alt="logo" src={`${SiteMeta.basePath}/icon-256.png`} />
+      <Image alt="logo" src={logo} width={24} height={24} />
     </div>
   );
 }
