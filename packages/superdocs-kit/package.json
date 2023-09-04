@@ -12,16 +12,57 @@
   "homepage": "https://gordonmleigh.github.io/superdocs",
   "license": "MIT",
   "scripts": {
+    "index": "node ../../makeIndex.mjs",
     "lint": "eslint src/ --ext=ts,tsx"
   },
   "exports": {
-    "./components/*": {
-      "types": "./lib/components/*.d.ts",
-      "default": "./lib/components/*.js"
+    "./components/MenuStateContext": {
+      "types": "./lib/components/MenuStateContext.d.ts",
+      "default": "./lib/components/MenuStateContext.js"
     },
-    "./content/*": {
-      "types": "./lib/content/*.d.ts",
-      "default": "./lib/content/*.js"
+    "./components/DarkModeScript": {
+      "types": "./lib/components/DarkModeScript.d.ts",
+      "default": "./lib/components/DarkModeScript.js"
+    },
+    "./components/DarkModeSwitch": {
+      "types": "./lib/components/DarkModeSwitch.d.ts",
+      "default": "./lib/components/DarkModeSwitch.js"
+    },
+    "./components/DeclarationSkeleton": {
+      "types": "./lib/components/DeclarationSkeleton.d.ts",
+      "default": "./lib/components/DeclarationSkeleton.js"
+    },
+    "./components/Invertocat": {
+      "types": "./lib/components/Invertocat.d.ts",
+      "default": "./lib/components/Invertocat.js"
+    },
+    "./components/MainLayout": {
+      "types": "./lib/components/MainLayout.d.ts",
+      "default": "./lib/components/MainLayout.js"
+    },
+    "./components/MenuButton": {
+      "types": "./lib/components/MenuButton.d.ts",
+      "default": "./lib/components/MenuButton.js"
+    },
+    "./components/Sidebar": {
+      "types": "./lib/components/Sidebar.d.ts",
+      "default": "./lib/components/Sidebar.js"
+    },
+    "./components/SidebarPanel": {
+      "types": "./lib/components/SidebarPanel.d.ts",
+      "default": "./lib/components/SidebarPanel.js"
+    },
+    "./components/TopNav": {
+      "types": "./lib/components/TopNav.d.ts",
+      "default": "./lib/components/TopNav.js"
+    },
+    "./content/declarations": {
+      "types": "./lib/content/declarations.d.ts",
+      "default": "./lib/content/declarations.js"
+    },
+    "./content/markdown": {
+      "types": "./lib/content/markdown.d.ts",
+      "default": "./lib/content/markdown.js"
     },
     "./tailwind": {
       "types": "./lib/tailwind-plugin.d.ts",
@@ -54,5 +95,29 @@
     "react": "^18",
     "tailwindcss": "^3",
     "typescript": "*"
+  },
+  "exportPatterns": {
+    "./components/*": {
+      "src": [
+        "./src/components/*.ts",
+        "./src/components/*.tsx"
+      ],
+      "types": "./lib/components/*.d.ts",
+      "default": "./lib/components/*.js"
+    },
+    "./content/*": {
+      "src": "./src/content/*.ts",
+      "types": "./lib/content/*.d.ts",
+      "default": "./lib/content/*.js"
+    },
+    "./tailwind": {
+      "types": "./lib/tailwind-plugin.d.ts",
+      "default": "./lib/tailwind-plugin.js"
+    },
+    "./util/*": {
+      "src": "./src/util/*.ts",
+      "types": "./lib/util/*.d.ts",
+      "default": "./lib/util/*.js"
+    }
   }
 }

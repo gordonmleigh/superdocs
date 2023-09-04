@@ -22,16 +22,157 @@
     "source-map": "^0.6.1"
   },
   "scripts": {
+    "index": "node ../../makeIndex.mjs",
     "lint": "eslint src/ --ext=ts,tsx"
   },
   "exports": {
-    "./components/*": {
-      "types": "./lib/components/*.d.ts",
-      "default": "./lib/components/*.js"
+    "./components/NodeProps": {
+      "types": "./lib/components/NodeProps.d.ts",
+      "default": "./lib/components/NodeProps.js"
     },
-    "./core/*": {
-      "types": "./lib/core/*.d.ts",
-      "default": "./lib/core/*.js"
+    "./components/AmbientConstantExpression": {
+      "types": "./lib/components/AmbientConstantExpression.d.ts",
+      "default": "./lib/components/AmbientConstantExpression.js"
+    },
+    "./components/ClassDeclaration": {
+      "types": "./lib/components/ClassDeclaration.d.ts",
+      "default": "./lib/components/ClassDeclaration.js"
+    },
+    "./components/ClassElement": {
+      "types": "./lib/components/ClassElement.d.ts",
+      "default": "./lib/components/ClassElement.js"
+    },
+    "./components/CodeBlock": {
+      "types": "./lib/components/CodeBlock.d.ts",
+      "default": "./lib/components/CodeBlock.js"
+    },
+    "./components/DeclarationInfo": {
+      "types": "./lib/components/DeclarationInfo.d.ts",
+      "default": "./lib/components/DeclarationInfo.js"
+    },
+    "./components/EntityName": {
+      "types": "./lib/components/EntityName.d.ts",
+      "default": "./lib/components/EntityName.js"
+    },
+    "./components/EnumDeclaration": {
+      "types": "./lib/components/EnumDeclaration.d.ts",
+      "default": "./lib/components/EnumDeclaration.js"
+    },
+    "./components/EnumMember": {
+      "types": "./lib/components/EnumMember.d.ts",
+      "default": "./lib/components/EnumMember.js"
+    },
+    "./components/FormatDeclaration": {
+      "types": "./lib/components/FormatDeclaration.d.ts",
+      "default": "./lib/components/FormatDeclaration.js"
+    },
+    "./components/FormatImport": {
+      "types": "./lib/components/FormatImport.d.ts",
+      "default": "./lib/components/FormatImport.js"
+    },
+    "./components/HeritageClause": {
+      "types": "./lib/components/HeritageClause.d.ts",
+      "default": "./lib/components/HeritageClause.js"
+    },
+    "./components/InterfaceDeclaration": {
+      "types": "./lib/components/InterfaceDeclaration.d.ts",
+      "default": "./lib/components/InterfaceDeclaration.js"
+    },
+    "./components/JSDoc": {
+      "types": "./lib/components/JSDoc.d.ts",
+      "default": "./lib/components/JSDoc.js"
+    },
+    "./components/JSDocMarkdown": {
+      "types": "./lib/components/JSDocMarkdown.d.ts",
+      "default": "./lib/components/JSDocMarkdown.js"
+    },
+    "./components/Join": {
+      "types": "./lib/components/Join.d.ts",
+      "default": "./lib/components/Join.js"
+    },
+    "./components/Markdown": {
+      "types": "./lib/components/Markdown.d.ts",
+      "default": "./lib/components/Markdown.js"
+    },
+    "./components/Modifier": {
+      "types": "./lib/components/Modifier.d.ts",
+      "default": "./lib/components/Modifier.js"
+    },
+    "./components/ParameterDeclaration": {
+      "types": "./lib/components/ParameterDeclaration.d.ts",
+      "default": "./lib/components/ParameterDeclaration.js"
+    },
+    "./components/PropertyName": {
+      "types": "./lib/components/PropertyName.d.ts",
+      "default": "./lib/components/PropertyName.js"
+    },
+    "./components/PropertySignature": {
+      "types": "./lib/components/PropertySignature.d.ts",
+      "default": "./lib/components/PropertySignature.js"
+    },
+    "./components/SignatureDeclaration": {
+      "types": "./lib/components/SignatureDeclaration.d.ts",
+      "default": "./lib/components/SignatureDeclaration.js"
+    },
+    "./components/SymbolIcon": {
+      "types": "./lib/components/SymbolIcon.d.ts",
+      "default": "./lib/components/SymbolIcon.js"
+    },
+    "./components/Token": {
+      "types": "./lib/components/Token.d.ts",
+      "default": "./lib/components/Token.js"
+    },
+    "./components/TypeAliasDeclaration": {
+      "types": "./lib/components/TypeAliasDeclaration.d.ts",
+      "default": "./lib/components/TypeAliasDeclaration.js"
+    },
+    "./components/TypeArguments": {
+      "types": "./lib/components/TypeArguments.d.ts",
+      "default": "./lib/components/TypeArguments.js"
+    },
+    "./components/TypeElement": {
+      "types": "./lib/components/TypeElement.d.ts",
+      "default": "./lib/components/TypeElement.js"
+    },
+    "./components/TypeNode": {
+      "types": "./lib/components/TypeNode.d.ts",
+      "default": "./lib/components/TypeNode.js"
+    },
+    "./components/TypeParameter": {
+      "types": "./lib/components/TypeParameter.d.ts",
+      "default": "./lib/components/TypeParameter.js"
+    },
+    "./components/UnknownCode": {
+      "types": "./lib/components/UnknownCode.d.ts",
+      "default": "./lib/components/UnknownCode.js"
+    },
+    "./components/VariableDeclaration": {
+      "types": "./lib/components/VariableDeclaration.d.ts",
+      "default": "./lib/components/VariableDeclaration.js"
+    },
+    "./core/CodeError": {
+      "types": "./lib/core/CodeError.d.ts",
+      "default": "./lib/core/CodeError.js"
+    },
+    "./core/DeclarationCollection": {
+      "types": "./lib/core/DeclarationCollection.d.ts",
+      "default": "./lib/core/DeclarationCollection.js"
+    },
+    "./core/JSDocNode": {
+      "types": "./lib/core/JSDocNode.d.ts",
+      "default": "./lib/core/JSDocNode.js"
+    },
+    "./core/NodeLocation": {
+      "types": "./lib/core/NodeLocation.d.ts",
+      "default": "./lib/core/NodeLocation.js"
+    },
+    "./core/slugify": {
+      "types": "./lib/core/slugify.d.ts",
+      "default": "./lib/core/slugify.js"
+    },
+    "./core/theme": {
+      "types": "./lib/core/theme.d.ts",
+      "default": "./lib/core/theme.js"
     },
     "./showcase": {
       "types": "./lib/showcase.d.ts"
@@ -56,5 +197,27 @@
     "react": "^18",
     "tailwindcss": "^3",
     "typescript": "*"
+  },
+  "exportPatterns": {
+    "./components/*": {
+      "src": [
+        "./src/components/*.ts",
+        "./src/components/*.tsx"
+      ],
+      "types": "./lib/components/*.d.ts",
+      "default": "./lib/components/*.js"
+    },
+    "./core/*": {
+      "src": "./src/core/*.ts",
+      "types": "./lib/core/*.d.ts",
+      "default": "./lib/core/*.js"
+    },
+    "./showcase": {
+      "types": "./lib/showcase.d.ts"
+    },
+    "./tailwind": {
+      "types": "./lib/tailwind-plugin.d.ts",
+      "default": "./lib/tailwind-plugin.js"
+    }
   }
 }
