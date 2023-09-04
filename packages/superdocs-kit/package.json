@@ -1,6 +1,6 @@
 {
   "name": "@gordonmleigh/superdocs-kit",
-  "version": "0.1.10",
+  "version": "0.1.11",
   "type": "module",
   "publishConfig": {
     "access": "public"
@@ -84,7 +84,7 @@
     "static/**"
   ],
   "dependencies": {
-    "@gordonmleigh/superdocs": "^0.1.10",
+    "@gordonmleigh/superdocs": "^0.1.11",
     "@heroicons/react": "^2.0.18",
     "fast-glob": "^3.3.1",
     "next-mdx-remote": "^4.4.1"
